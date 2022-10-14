@@ -18,7 +18,7 @@ app.use(express.json())
 
 // Pour recréer DB, à commenter sinon
 
-sequelize.initDb()
+// sequelize.initDb()
 
 const port = process.env.PORT || 5000
 app.listen(port, () => {
@@ -62,6 +62,13 @@ require('./routes/users/deleteUser')(app)
 
 require('./routes/auth/login')(app)
 require('./routes/auth/token')(app)
+
+require('./routes/role/createRole')(app)
+require('./routes/role/deleteRole')(app)
+require('./routes/role/findAllRole')(app)
+require('./routes/role/findRoleByName')(app)
+require('./routes/role/updateRole')(app)
+
 
 
 /////////////
