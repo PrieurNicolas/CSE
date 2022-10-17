@@ -7,7 +7,6 @@ import { employerTypes } from "../types/employer"
 import { degreeTypes } from "../types/degree"
 import { roleTypes } from "../types/role"
 import { periodTypes } from "../types/period"
-import { periodUserTypes } from "../types/periodUser"
 let users = require('../database/mock-user')
 let tokens = require('../database/mock-token')
 let localisations = require('../database/mock-localisation')
@@ -16,7 +15,6 @@ let employers = require('../database/mock-employer')
 let degrees = require('../database/mock-degree')
 let roles = require('../database/mock-role')
 let periods = require('../database/mock-period')
-let periodUsers = require('../database/mock-perioduser')
 const { Sequelize } = require('sequelize')
 const UserModel = require('../models/users')
 const TokenModel = require('../models/tokens')
@@ -27,6 +25,8 @@ const DegreeModel = require('../models/degrees')
 const RoleModel = require('../models/roles')
 const PeriodModel = require('../models/periods')
 const PeriodUserModel = require('../models/periodUsers')
+const DegreeUserModel = require('../models/degreeUsers')
+const RoleUserModel = require('../models/roleUsers')
 
 const sequelize = new Sequelize(
     'sequalize',
@@ -59,6 +59,8 @@ const Degree = DegreeModel(sequelize, DataTypes)
 const Role = RoleModel(sequelize, DataTypes)
 const Period = PeriodModel(sequelize, DataTypes)
 const PeriodUser = PeriodUserModel(sequelize, DataTypes)
+const DegreeUser = DegreeUserModel(sequelize, DataTypes)
+const RoleUser = RoleUserModel(sequelize, DataTypes)
 
 
 const initDb = () => {
@@ -75,11 +77,11 @@ const initDb = () => {
     User.hasOne(Employer, { constraints: false })
     Employer.belongsTo(User, { constraints: false })
     // doit peut être creer model etc pour ceux ci 
-    Degree.belongsToMany(User, { through: 'DegreeUser' })
-    User.belongsToMany(Degree, { through: 'DegreeUser' })
+    Degree.belongsToMany(User, { through: DegreeUser })
+    User.belongsToMany(Degree, { through: DegreeUser })
 
-    Role.belongsToMany(User, { through: 'RoleUser' })
-    User.belongsToMany(Role, { through: 'RoleUser' })
+    Role.belongsToMany(User, { through: RoleUser })
+    User.belongsToMany(Role, { through: RoleUser })
 
     Period.belongsToMany(User, { through: PeriodUser })
     User.belongsToMany(Period, { through: PeriodUser })
@@ -100,14 +102,9 @@ const initDb = () => {
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        users.map((user: userTypes) => {
-            User.create({
-                email: user.email,
-                phone: user.phone,
-                isActif: user.isActif,
-                password: user.password,
-                TokenId: user.TokenId,
-                LocalisationId: user.LocalisationId
+        periods.map((period: periodTypes) => {
+            Period.create({
+                periodname: period.periodname
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
@@ -128,13 +125,6 @@ const initDb = () => {
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        
-        periods.map((period: periodTypes) => {
-            Period.create({
-                periodname: period.periodname
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
         roles.map((role: roleTypes) => {
             Role.create({
                 role: role.role
@@ -147,14 +137,24 @@ const initDb = () => {
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        periodUsers.map((periodUser: periodUserTypes) => {
-            PeriodUser.create({
-                PeriodId: periodUser.PeriodId,
-                UserId: periodUser.UserId
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        users.map(async (user: userTypes, index: number) => {
+            let newUser = await User.create({
+                email: user.email,
+                phone: user.phone,
+                isActif: user.isActif,
+                password: user.password,
+                TokenId: user.TokenId,
+                LocalisationId: user.LocalisationId,
+            })
+            const periodRow = await Period.findByPk(index);
+            await newUser.addPeriod(periodRow, { through: PeriodUser })
+
+            const roleRow = await Role.findByPk(index);
+            await newUser.addRole(roleRow, { through: RoleUser })
+
+            const degreeRow = await Degree.findByPk(index);
+            await newUser.addDegree(degreeRow, { through: DegreeUser })
         })
-
-
 
         console.log('Database created')
     })
