@@ -1,4 +1,5 @@
 import { Application } from "express";
+let localisations = require('../../database/mock-localisation')
 
 /**
  * @swagger
@@ -25,3 +26,10 @@ import { Application } from "express";
   *        200:
   *          description: Create a new location.
   */
+
+ module.exports = (app: Application) => {
+  app.post('/api/localisations', (req, res) => {
+    localisations.push(req.body)
+    res.sendStatus(200)
+  })
+}

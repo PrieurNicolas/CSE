@@ -1,4 +1,5 @@
 import { Application } from "express";
+let degrees = require('../../database/mock-degree')
 
 /**
   * @openapi
@@ -23,3 +24,10 @@ import { Application } from "express";
   *        200:
   *          description: Update the degree of given id.
   */
+
+ module.exports = (app: Application) => {
+  app.put('/api/degrees/:id', (req, res) => {
+    degrees[Number(req.params.id) -1] = req.body
+    res.json(degrees[Number(req.params.id) - 1])
+  })
+}

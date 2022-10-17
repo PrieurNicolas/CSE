@@ -1,4 +1,5 @@
 import { Application } from "express";
+let localisations = require('../../database/mock-localisation')
 
 /**
   * @openapi
@@ -15,3 +16,11 @@ import { Application } from "express";
   *        200:
   *          description: Delete a location. 
   */
+
+ module.exports = (app: Application) => {
+  app.delete('/api/localisations/:id', (req, res) => {
+    localisations = localisations.filter((localisation:any, index:number) => index != Number(req.params.id) - 1)
+    res.json(localisations);
+    
+  })
+}

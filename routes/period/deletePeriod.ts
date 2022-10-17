@@ -1,4 +1,5 @@
 import { Application } from "express";
+let periods = require('../../database/mock-period')
 
 /**
   * @openapi
@@ -15,3 +16,11 @@ import { Application } from "express";
   *        200:
   *          description: Delete an period. 
   */
+
+ module.exports = (app: Application) => {
+  app.delete('/api/periods/:id', (req, res) => {
+    periods = periods.filter((role:any, index:number) => index != Number(req.params.id) - 1)
+    res.json(periods);
+    
+  })
+}

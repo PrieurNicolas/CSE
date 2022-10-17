@@ -1,4 +1,5 @@
 import { Application } from "express";
+let periods = require('../../database/mock-period')
 
 /**
  * @openapi
@@ -9,3 +10,10 @@ import { Application } from "express";
  *        200:
  *          description: Get the list of all period.
  */
+
+ module.exports = (app: Application) => {
+    app.get('/api/periods/:id', (req, res) => {
+        res.json(periods)
+
+    })
+}

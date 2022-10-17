@@ -1,4 +1,5 @@
 import { Application } from "express";
+let candidates = require('../../database/mock-candidate')
 
 /**
  * @openapi
@@ -15,3 +16,10 @@ import { Application } from "express";
  *        200:
  *          description: Get one specifique candidate.
  */
+
+ module.exports = (app: Application) => {
+    app.get('/api/candidates/:id', (req, res) => {
+        res.json(candidates.find((employer:any , index: number) => index == Number(req.params.id)-1))
+
+    })
+}

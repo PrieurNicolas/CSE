@@ -1,4 +1,5 @@
 import { Application } from "express";
+let degrees = require('../../database/mock-degree')
 
 /**
  * @openapi
@@ -9,3 +10,9 @@ import { Application } from "express";
  *        200:
  *          description: Get the list of all degree.
  */
+ module.exports = (app: Application) => {
+    app.get('/api/degrees', (req, res) => {
+        res.json(degrees)
+
+    })
+}

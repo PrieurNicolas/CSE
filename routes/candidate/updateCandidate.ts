@@ -1,4 +1,5 @@
 import { Application } from "express";
+let candidates = require('../../database/mock-candidate')
 
 /**
   * @openapi
@@ -23,3 +24,10 @@ import { Application } from "express";
   *        200:
   *          description: Update the candidate of given id.
   */
+
+ module.exports = (app: Application) => {
+  app.put('/api/candidates/:id', (req, res) => {
+    candidates[Number(req.params.id) -1] = req.body
+    res.json(candidates[Number(req.params.id) - 1])
+  })
+}

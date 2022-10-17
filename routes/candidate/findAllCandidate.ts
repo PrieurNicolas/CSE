@@ -1,4 +1,5 @@
 import { Application } from "express";
+let candidates = require('../../database/mock-candidate')
 
 /**
  * @openapi
@@ -9,3 +10,10 @@ import { Application } from "express";
  *        200:
  *          description: Get the list of all candidate.
  */
+
+ module.exports = (app: Application) => {
+    app.get('/api/candidates', (req, res) => {
+        res.json(candidates)
+
+    })
+}

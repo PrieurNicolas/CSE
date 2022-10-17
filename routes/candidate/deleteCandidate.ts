@@ -1,4 +1,5 @@
 import { Application } from "express";
+let candidates = require('../../database/mock-candidate')
 
 /**
   * @openapi
@@ -15,3 +16,11 @@ import { Application } from "express";
   *        200:
   *          description: Delete a candidate 
   */
+
+ module.exports = (app: Application) => {
+  app.delete('/api/candidates/:id', (req, res) => {
+    candidates = candidates.filter((employer:any, index:number) => index != Number(req.params.id) - 1)
+    res.json(candidates);
+    
+  })
+}

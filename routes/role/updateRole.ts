@@ -1,4 +1,5 @@
 import { Application } from "express";
+let roles = require('../../database/mock-role')
 
 /**
   * @openapi
@@ -26,6 +27,7 @@ import { Application } from "express";
 
  module.exports = (app: Application) => {
     app.put('/api/roles/:id', (req, res) => {
-
+      roles[Number(req.params.id) -1].role = req.body.role
+      res.json(roles[Number(req.params.id) - 1])
     })
 }

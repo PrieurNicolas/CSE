@@ -69,10 +69,10 @@ const initDb = () => {
     Localisation.hasOne(User)
     User.belongsTo(Localisation)
 
-    User.hasOne(Candidate , { constraints: false })
+    User.hasOne(Candidate, { constraints: false })
     Candidate.belongsTo(User, { constraints: false })
 
-    User.hasOne(Employer , { constraints: false })
+    User.hasOne(Employer, { constraints: false })
     Employer.belongsTo(User, { constraints: false })
     // doit peut être creer model etc pour ceux ci 
     Degree.belongsToMany(User, { through: 'DegreeUser' })
@@ -128,9 +128,10 @@ const initDb = () => {
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        degrees.map((degree: degreeTypes) => {
-            Degree.create({
-                degreename: degree.degreename
+        
+        periods.map((period: periodTypes) => {
+            Period.create({
+                periodname: period.periodname
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
@@ -140,20 +141,20 @@ const initDb = () => {
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        periods.map((period: periodTypes) => {
-            Period.create({
-                periodname: period.periodname
+        degrees.map((degree: degreeTypes) => {
+            Degree.create({
+                degreename: degree.degreename
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        // periodUsers.map((periodUser: periodUserTypes) => {
-        //     PeriodUser.create({
-        //         PeriodId: periodUser.PeriodId,
-        //         UserId: periodUser.UserId
-        //     }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        // })
+        periodUsers.map((periodUser: periodUserTypes) => {
+            PeriodUser.create({
+                PeriodId: periodUser.PeriodId,
+                UserId: periodUser.UserId
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
 
-        
+
 
         console.log('Database created')
     })

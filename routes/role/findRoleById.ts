@@ -1,4 +1,5 @@
 import { Application } from "express";
+let roles = require('../../database/mock-role')
 
 /**
  * @openapi
@@ -6,7 +7,7 @@ import { Application } from "express";
  *   get:
  *      tags: [Roles]
  *      parameters:
- *       - name: role
+ *       - name: id
  *         in: path
  *         required: true
  *         type: integer
@@ -17,7 +18,8 @@ import { Application } from "express";
  */
 
 module.exports = (app: Application) => {
-    app.get('/api/roles/:role', (req, res) => {
+    app.get('/api/roles/:id', (req, res) => {
+        res.json(roles.find((role:any , index: number) => index == Number(req.params.id)-1))
 
     })
 }

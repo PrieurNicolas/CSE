@@ -1,4 +1,5 @@
 import { Application } from "express";
+let degrees = require('../../database/mock-degree')
 
 /**
  * @swagger
@@ -25,3 +26,10 @@ import { Application } from "express";
   *        200:
   *          description: Create a new degree.
   */
+
+ module.exports = (app: Application) => {
+  app.post('/api/degrees', (req, res) => {
+    degrees.push(req.body)
+    res.sendStatus(200)
+  })
+}

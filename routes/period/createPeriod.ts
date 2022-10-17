@@ -1,5 +1,5 @@
 import { Application } from "express";
-
+let periods = require('../../database/mock-period')
 /**
  * @swagger
  * tags:
@@ -25,3 +25,10 @@ import { Application } from "express";
   *        200:
   *          description: Create a new period.
   */
+
+ module.exports = (app: Application) => {
+  app.post('/api/periods', (req, res) => {
+    periods.push(req.body)
+    res.sendStatus(200)
+  })
+}

@@ -1,4 +1,5 @@
 import { Application } from "express";
+let candidates = require('../../database/mock-candidate')
 
 /**
  * @swagger
@@ -25,3 +26,10 @@ import { Application } from "express";
   *        200:
   *          description: Create a new candidate.
   */
+
+ module.exports = (app: Application) => {
+  app.post('/api/candidates', (req, res) => {
+    candidates.push(req.body)
+    res.sendStatus(200)
+  })
+}

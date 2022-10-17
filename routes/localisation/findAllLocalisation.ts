@@ -1,4 +1,5 @@
 import { Application } from "express";
+let localisations = require('../../database/mock-localisation')
 
 /**
  * @openapi
@@ -9,3 +10,10 @@ import { Application } from "express";
  *        200:
  *          description: Get the list of all location.
  */
+
+ module.exports = (app: Application) => {
+    app.get('/api/localisations', (req, res) => {
+        res.json(localisations)
+
+    })
+}

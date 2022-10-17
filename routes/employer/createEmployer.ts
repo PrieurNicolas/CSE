@@ -1,3 +1,5 @@
+import { Application } from "express";
+let employers = require('../../database/mock-employer')
 
 /**
  * @swagger
@@ -24,3 +26,10 @@
   *        200:
   *          description: Create a new employer.
   */
+
+ module.exports = (app: Application) => {
+  app.post('/api/employers', (req, res) => {
+    employers.push(req.body)
+    res.sendStatus(200)
+  })
+}

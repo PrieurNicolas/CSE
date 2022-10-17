@@ -1,4 +1,5 @@
 import { Application } from "express";
+let periods = require('../../database/mock-period')
 
 /**
   * @openapi
@@ -23,3 +24,10 @@ import { Application } from "express";
   *        200:
   *          description: Update the role of given id.
   */
+
+ module.exports = (app: Application) => {
+  app.put('/api/periods/:id', (req, res) => {
+    periods[Number(req.params.id) -1].periodname = req.body.periodname
+    res.json(periods[Number(req.params.id) - 1])
+  })
+}

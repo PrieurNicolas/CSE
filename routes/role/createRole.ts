@@ -1,4 +1,6 @@
 import { Application } from "express";
+let roles = require('../../database/mock-role')
+
 
 /**
  * @swagger
@@ -28,6 +30,7 @@ import { Application } from "express";
 
  module.exports = (app: Application) => {
     app.post('/api/roles', (req, res) => {
-
+      roles.push(req.body)
+      res.sendStatus(200)
     })
 }

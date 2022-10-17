@@ -1,4 +1,5 @@
 import { Application } from "express";
+let employers = require('../../database/mock-employer')
 
 /**
   * @openapi
@@ -23,3 +24,10 @@ import { Application } from "express";
   *        200:
   *          description: Update the employer of given id.
   */
+ 
+ module.exports = (app: Application) => {
+  app.put('/api/employers/:id', (req, res) => {
+    employers[Number(req.params.id) -1] = req.body
+    res.json(employers[Number(req.params.id) - 1])
+  })
+}
