@@ -22,7 +22,7 @@ let localisations = require('../../database/mock-localisation')
   *         default: { "address": "address", "zipCode": "zipcode", "city": "city"}
   *      responses:
   *        200:
-  *          description: Update the location of given id.
+  *          description: Update the localisation of given id.
   */
 
  module.exports = (app: Application) => {

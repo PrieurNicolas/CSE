@@ -13,7 +13,7 @@ let localisations = require('../../database/mock-localisation')
   * /api/locations:
   *  post:
   *      tags: [Location]
-  *      description: Create a location
+  *      description: Create a localisation
   *      consumes:
   *       - application/json
   *      parameters:
@@ -24,7 +24,7 @@ let localisations = require('../../database/mock-localisation')
   *         default: { "address": "address", "zipCode": "zipcode", "city": "city" }
   *      responses:
   *        200:
-  *          description: Create a new location.
+  *          description: Create a new localisation.
   */
 
  module.exports = (app: Application) => {

@@ -13,7 +13,7 @@ const { Token } = require('../../database/connect')
  *      description: Welcome to swagger-jsdoc!
  *      responses:
  *        200:
- *          description: Get the list of all tokens.
+ *          description: Get the list of all tokenpush.
  */
 module.exports = (app : Application) => {
     app.get('/api/tokens', (req,res) => {

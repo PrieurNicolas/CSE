@@ -8,7 +8,7 @@ let localisations = require('../../database/mock-localisation')
  *      tags: [Location]
  *      responses:
  *        200:
- *          description: Get the list of all location.
+ *          description: Get the list of all localisation.
  */
 
  module.exports = (app: Application) => {

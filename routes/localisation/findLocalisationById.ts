@@ -14,7 +14,7 @@ let localisations = require('../../database/mock-localisation')
  *         default: 1
  *      responses:
  *        200:
- *          description: Get one specifique location.
+ *          description: Get one specifique localisation.
  */
  module.exports = (app: Application) => {
     app.get('/api/localisations/:id', (req, res) => {

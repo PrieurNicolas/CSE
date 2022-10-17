@@ -6,7 +6,7 @@ let localisations = require('../../database/mock-localisation')
   * /api/locations/{id}:
   *  delete:
   *      tags: [Location]
-  *      description: Delete a location
+  *      description: Delete a localisation
   *      parameters:
   *       - name: id
   *         in: path
@@ -14,7 +14,7 @@ let localisations = require('../../database/mock-localisation')
   *         type: integer
   *      responses:
   *        200:
-  *          description: Delete a location. 
+  *          description: Delete a localisation. 
   */
 
  module.exports = (app: Application) => {

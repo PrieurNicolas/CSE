@@ -146,13 +146,15 @@ const initDb = () => {
                 TokenId: user.TokenId,
                 LocalisationId: user.LocalisationId,
             })
-            const periodRow = await Period.findByPk(index);
-            await newUser.addPeriod(periodRow, { through: PeriodUser })
+            for(let i =0; i<10; i++){
+                const periodRow = await Period.findByPk(Math.floor(Math.random() * (8 - 1 + 1) + 1));
+                await newUser.addPeriod(periodRow, { through: PeriodUser })
+            }
 
-            const roleRow = await Role.findByPk(index);
+            const roleRow = await Role.findByPk(index + 1);
             await newUser.addRole(roleRow, { through: RoleUser })
 
-            const degreeRow = await Degree.findByPk(index);
+            const degreeRow = await Degree.findByPk(index +1);
             await newUser.addDegree(degreeRow, { through: DegreeUser })
         })
 
