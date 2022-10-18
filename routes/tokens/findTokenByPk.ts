@@ -18,7 +18,7 @@ const { Token } = require('../../database/connect')
   *         default: 1
   *      responses:
   *        200:
-  *          description: Get the token of given id.
+  *          description: Get the tokenpush of given id.
   */
 module.exports = (app : Application) => {
   app.get('/api/tokens/:id', (req, res) => {

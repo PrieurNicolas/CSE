@@ -32,20 +32,16 @@ const { User } = require('../../database/connect')
 module.exports = (app: Application) => {
   app.put("/api/users/:id", async (req, res) => {
     const id = req.params.id;
-    const { username, firstname, lastname, date_of_birth, biography, email, profile_picture } = req.body
+    const { phone, email, isActif } = req.body
 
     if (!req.body.password) return res.status(400).json({passwordRequired: true,message : 'Password is required.'})
     
     let hashedPassword = await bcrypt.hash(req.body.password, 10);
     User.update({ 
-        username : username, 
+        phone : phone, 
         password : hashedPassword, 
-        firstname : firstname, 
-        lastname : lastname, 
-        date_of_birth : date_of_birth, 
-        biography : biography,
-        email : email, 
-        profile_picture : profile_picture
+        email : email,
+        isActif: isActif
     }, {
       where: { id: id },
     })
