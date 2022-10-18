@@ -11,9 +11,9 @@ const TokenModel = require('../models/tokens')
 const LocalisationModel = require('../models/localisations')
 
 const sequelize = new Sequelize(
-    'sequalize',
-    'postgres',
-    'admin',
+    `${process.env.NAME_DATABASE}`,
+    `${process.env.HOST_DATABASE}`,
+    `${process.env.PASS_DATABASE}`,
     {
         host: 'localhost',
         dialect: 'postgres',
