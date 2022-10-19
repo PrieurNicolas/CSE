@@ -1,9 +1,11 @@
 import { Application } from "express";
-let employers = require('../../database/mock-employer')
+import { employerId } from "../../types/employer";
+import { ApiException } from "../../types/exception";
+const { User, Employer, Localisation} = require('../../database/connect')
 
 /**
   * @openapi
-  * /api/employer/{id}:
+  * /api/employers/{id}:
   *  delete:
   *      tags: [Employer]
   *      description: Delete an employer
@@ -18,8 +20,29 @@ let employers = require('../../database/mock-employer')
   */
  module.exports = (app: Application) => {
   app.delete('/api/employers/:id', (req, res) => {
-    employers = employers.filter((employer:any, index:number) => index != Number(req.params.id) - 1)
-    res.json(employers);
+    Employer.findByPk(req.params.id).then(async (employer: employerId) => {
+      if (employer === null) {
+        const message = "L'employeur demandé n'existe pas. Réessayer avec un autre identifiant."
+        return res.status(404).json({ message })
+      }
+
+      const candidatDeleted = employer;
+
+      let local = await User.findByPk(candidatDeleted.UserId)
+      return User.destroy({
+        where: { id: employer.UserId }
+      }).then(() => {
+        Localisation.destroy({
+          where: { id: local.LocalisationId }
+        })
+        const message = `L'employeur avec l'identifiant n°${candidatDeleted.id} a bien été supprimé.`
+        res.json({ message, data: candidatDeleted })
+      })
+    })
+      .catch((error: ApiException) => {
+        const message = `L'employeur n'a pas pu être supprimé. Réessayer dans quelques instants.`;
+        res.status(500).json({ message, data: error });
+      });
     
   })
 }

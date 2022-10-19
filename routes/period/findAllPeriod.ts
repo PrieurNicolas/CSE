@@ -1,5 +1,8 @@
 import { Application } from "express";
-let periods = require('../../database/mock-period')
+import { ApiException } from "../../types/exception";
+import { periodTypes } from "../../types/period";
+const { Period } = require('../../database/connect')
+
 
 /**
  * @openapi
@@ -12,8 +15,13 @@ let periods = require('../../database/mock-period')
  */
 
  module.exports = (app: Application) => {
-    app.get('/api/periods/:id', (req, res) => {
-        res.json(periods)
-
+    app.get('/api/periods', (req, res) => {
+        Period.findAll()
+            .then((periods: periodTypes) => {
+                res.status(200).json(periods)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
     })
 }

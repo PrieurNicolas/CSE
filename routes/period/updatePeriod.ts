@@ -1,5 +1,8 @@
 import { Application } from "express";
-let periods = require('../../database/mock-period')
+import { ValidationError } from "sequelize";
+import { ApiException } from "../../types/exception";
+const { Period } = require('../../database/connect')
+
 
 /**
   * @openapi
@@ -27,7 +30,18 @@ let periods = require('../../database/mock-period')
 
  module.exports = (app: Application) => {
   app.put('/api/periods/:id', (req, res) => {
-    periods[Number(req.params.id) -1].periodname = req.body.periodname
-    res.json(periods[Number(req.params.id) - 1])
+    return Period.update(req.body, {
+      where: { id: req.params.id }
+    }).then(() => {
+           const message = `localisation successfully updated`;
+           res.json({ message });
+         })
+     .catch((error: ApiException) => {
+       if(error instanceof ValidationError){
+         return res.status(400).json({message: error.message, data : error})
+       }
+       const message = `Could not update the localisation.`;
+       res.status(500).json({ message, data: error });
+     });
   })
 }

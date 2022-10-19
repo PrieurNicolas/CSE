@@ -1,18 +1,21 @@
 import { Application } from "express";
-let localisations = require('../../database/mock-localisation')
+import { ValidationError } from "sequelize";
+import { ApiException } from "../../types/exception";
+const { Localisation } = require('../../database/connect')
+
 
 /**
  * @swagger
  * tags:
- *      name: Location
- *      description: Manage location
+ *      name: localisations
+ *      description: Manage localisations
  */
 
 /**
   * @openapi
-  * /api/locations:
+  * /api/localisations:
   *  post:
-  *      tags: [Location]
+  *      tags: [localisations]
   *      description: Create a localisation
   *      consumes:
   *       - application/json
@@ -29,7 +32,15 @@ let localisations = require('../../database/mock-localisation')
 
  module.exports = (app: Application) => {
   app.post('/api/localisations', (req, res) => {
-    localisations.push(req.body)
-    res.sendStatus(200)
+    Localisation.create(req.body).then((degree: any) => {
+      const message: string = `degree successfully created.`;
+      res.json({ message, data: degree });
+    }).catch((error: ApiException) => {
+      if (error instanceof ValidationError) {
+        return res.status(400).json({ message: error.message, data: error })
+      }
+      const message = `Could not create new degree.`
+      res.status(500).json({ message, data: error })
+    })
   })
 }

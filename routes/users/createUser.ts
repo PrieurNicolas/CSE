@@ -1,5 +1,5 @@
 import { Application } from "express";
-import { UniqueConstraintError, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { ApiException } from "../../types/exception";
 import { userTypes } from "../../types/user";
 const bcrypt = require('bcrypt')
@@ -27,7 +27,7 @@ const { User } = require('../../database/connect')
   *         in: body
   *         required: true
   *         type: object
-  *         default: {    "username": "string","password":"string","firstname": "string","lastname": "string","date_of_birth": "date","email": "email","biography": "string","profile_picture": null}
+  *         default: { "password":"string","email": "email", "phone": 780372674}
   *      responses:
   *        200:
   *          description: Create a new user.
@@ -38,13 +38,8 @@ module.exports = (app: Application) => {
 
     if (!req.body.password) return res.status(400).json({passwordRequired: true,message : 'Password is required.'})
 
-    let hashedPassword = await bcrypt.hash(req.body.password, 10);
-    User.create({ 
-        password : hashedPassword, 
-        isActif: isActif,
-        email : email, 
-        phone : phone
-    }).then((user: userTypes) => {
+     req.body.password = await bcrypt.hash(req.body.password, 10);
+    User.create(req.body).then((user: userTypes) => {
         const message: string = `User successfully created.`;
         res.json({ message, data: user });
         })

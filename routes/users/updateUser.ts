@@ -24,7 +24,7 @@ const { User } = require('../../database/connect')
   *         in: body
   *         required: true
   *         type: object
-  *         default: {    "username": "string","password":"string","firstname": "string","lastname": "string","date_of_birth": "date","email": "email","biography": "string","profile_picture": null}
+  *         default: { "password":"string","email": "email", "phone": 780372674}
   *      responses:
   *        200:
   *          description: Update the user of given id.

@@ -2,7 +2,7 @@ export interface tokenTypes{
 
     refreshToken : string;
     tokenPush : string;
-
+    UserId: number;
 }
 
 

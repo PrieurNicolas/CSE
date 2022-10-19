@@ -1,5 +1,6 @@
 import { Application } from "express";
-let roles = require('../../database/mock-role')
+const { Role } = require('../../database/connect')
+
 
 /**
   * @openapi
@@ -19,8 +20,11 @@ let roles = require('../../database/mock-role')
 
 module.exports = (app: Application) => {
     app.delete('/api/roles/:id', (req, res) => {
-      roles = roles.filter((role:any, index:number) => index != Number(req.params.id) - 1)
-      res.json(roles);
-      
+      return Role.destroy({
+        where: { id: req.params.id }
+      }).then((period: any) => {
+        const message = `Le role avec l'identifiant n°${req.params.id} a bien été supprimé.`
+        res.json({ message, data: period })
+      })
     })
 }

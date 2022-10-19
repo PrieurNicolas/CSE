@@ -1,6 +1,12 @@
 export interface candidateTypes {
-    userId: number;
+    UserId: number;
     firstname: string;
     lastname: string;
     birthday: Date
   }
+
+  export interface candidateId extends candidateTypes {
+
+    id : number;
+
+}

@@ -99,6 +99,9 @@ require('./routes/candidate/findAllCandidate')(app)
 require('./routes/candidate/findCandidateById')(app)
 require('./routes/candidate/updateCandidate')(app)
 
+require('./routes/form/formUpdateCandidate')(app)
+require('./routes/form/formUpdateEmployer')(app)
+
 /////////////
 
 import { userTypes } from "./types/user";

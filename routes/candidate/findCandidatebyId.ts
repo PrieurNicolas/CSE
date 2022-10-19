@@ -1,5 +1,8 @@
 import { Application } from "express";
+import { candidateTypes } from "../../types/candidate";
+import { ApiException } from "../../types/exception";
 let candidates = require('../../database/mock-candidate')
+const { User, Candidate, Localisation, Degree, Period, Role } = require('../../database/connect')
 
 /**
  * @openapi
@@ -17,9 +20,41 @@ let candidates = require('../../database/mock-candidate')
  *          description: Get one specifique candidate.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/candidates/:id', (req, res) => {
-        res.json(candidates.find((employer:any , index: number) => index == Number(req.params.id)-1))
+        // res.json(candidates.find((employer:any , index: number) => index == Number(req.params.id)-1))
+        Candidate.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    required: false,
+                    include: [
+                        {
+                            model: Localisation,
+                            require: false
+                        },
+                        {
+                            model: Degree,
+                            require: false,
+                        },
+                        {
+                            model: Period,
+                            require: false,
+                        },
+                        {
+                            model: Role,
+                            require: false,
+                        }
+                    ]
+                }
+            ]
+        })
+            .then((candidates: candidateTypes) => {
+                res.status(200).json(candidates)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
 
     })
 }

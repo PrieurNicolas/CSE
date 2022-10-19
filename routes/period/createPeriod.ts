@@ -1,5 +1,8 @@
 import { Application } from "express";
-let periods = require('../../database/mock-period')
+import { ValidationError } from "sequelize";
+import { ApiException } from "../../types/exception";
+const { Period } = require('../../database/connect')
+
 /**
  * @swagger
  * tags:
@@ -9,7 +12,7 @@ let periods = require('../../database/mock-period')
 
 /**
   * @openapi
-  * /api/period:
+  * /api/periods:
   *  post:
   *      tags: [Period]
   *      description: Create a period
@@ -28,7 +31,15 @@ let periods = require('../../database/mock-period')
 
  module.exports = (app: Application) => {
   app.post('/api/periods', (req, res) => {
-    periods.push(req.body)
-    res.sendStatus(200)
+    Period.create(req.body).then((degree: any) => {
+      const message: string = `degree successfully created.`;
+      res.json({ message, data: degree });
+    }).catch((error: ApiException) => {
+      if (error instanceof ValidationError) {
+        return res.status(400).json({ message: error.message, data: error })
+      }
+      const message = `Could not create new degree.`
+      res.status(500).json({ message, data: error })
+    })
   })
 }

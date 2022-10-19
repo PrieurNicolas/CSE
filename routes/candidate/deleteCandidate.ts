@@ -1,5 +1,7 @@
 import { Application } from "express";
-let candidates = require('../../database/mock-candidate')
+import { candidateId } from "../../types/candidate";
+import { ApiException } from "../../types/exception";
+const { User, Candidate, Localisation } = require('../../database/connect')
 
 /**
   * @openapi
@@ -17,10 +19,31 @@ let candidates = require('../../database/mock-candidate')
   *          description: Delete a candidate 
   */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
   app.delete('/api/candidates/:id', (req, res) => {
-    candidates = candidates.filter((employer:any, index:number) => index != Number(req.params.id) - 1)
-    res.json(candidates);
-    
+    Candidate.findByPk(req.params.id).then(async (candidat: candidateId) => {
+      if (candidat === null) {
+        const message = "Le Candidat demandé n'existe pas. Réessayer avec un autre identifiant."
+        return res.status(404).json({ message })
+      }
+
+      const candidatDeleted = candidat;
+
+      console.log(candidatDeleted.UserId)
+      let local = await User.findByPk(candidatDeleted.UserId)
+      return User.destroy({
+        where: { id: candidat.UserId }
+      }).then(() => {
+        Localisation.destroy({
+          where: { id: local.LocalisationId }
+        })
+        const message = `Le Candidat avec l'identifiant n°${candidatDeleted.id} a bien été supprimé.`
+        res.json({ message, data: candidatDeleted })
+      })
+    })
+      .catch((error: ApiException) => {
+        const message = `Le Candidat n'a pas pu être supprimé. Réessayer dans quelques instants.`;
+        res.status(500).json({ message, data: error });
+      });
   })
 }

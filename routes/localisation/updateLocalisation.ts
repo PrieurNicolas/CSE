@@ -1,12 +1,14 @@
 import { Application } from "express";
-let localisations = require('../../database/mock-localisation')
+import { ValidationError } from "sequelize";
+import { ApiException } from "../../types/exception";
+const { Localisation } = require('../../database/connect')
 
 /**
   * @openapi
-  * /api/locations/{id}:
+  * /api/localisations/{id}:
   *  put:
-  *      tags: [Location]
-  *      description: Update a location
+  *      tags: [localisations]
+  *      description: Update a localisations
   *      consumes:
   *       - application/json
   *      parameters:
@@ -27,7 +29,18 @@ let localisations = require('../../database/mock-localisation')
 
  module.exports = (app: Application) => {
   app.put('/api/localisations/:id', (req, res) => {
-    localisations[Number(req.params.id) -1] = req.body
-    res.json(periods[Number(req.params.id) - 1])
+    return Localisation.update(req.body, {
+      where: { id: req.params.id }
+    }).then(() => {
+           const message = `localisation successfully updated`;
+           res.json({ message });
+         })
+     .catch((error: ApiException) => {
+       if(error instanceof ValidationError){
+         return res.status(400).json({message: error.message, data : error})
+       }
+       const message = `Could not update the localisation.`;
+       res.status(500).json({ message, data: error });
+     });
   })
 }

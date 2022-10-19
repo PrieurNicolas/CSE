@@ -1,7 +1,4 @@
 import { Application } from "express";
-import { ValidationError } from "sequelize";
-import { ApiException } from "../../types/exception";
-import { userTypes } from "../../types/user";
 import { tokenTypes } from "../../types/token";
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -43,7 +40,7 @@ module.exports = (app: Application) => {
         if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err : Error, user : any) => {
             if (err) return res.sendStatus(403)
-            const accessToken = jwt.sign({name: user.username}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15s'})
+            const accessToken = jwt.sign({name: user.id}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15s'})
             res.json({accessToken: accessToken})
             })
         })

@@ -1,5 +1,7 @@
 import { Application } from "express";
-let degrees = require('../../database/mock-degree')
+import { ValidationError } from "sequelize";
+import { ApiException } from "../../types/exception";
+const { Degree } = require('../../database/connect')
 
 /**
  * @swagger
@@ -10,7 +12,7 @@ let degrees = require('../../database/mock-degree')
 
 /**
   * @openapi
-  * /api/degree:
+  * /api/degrees:
   *  post:
   *      tags: [Degree]
   *      description: Create a degree
@@ -29,7 +31,15 @@ let degrees = require('../../database/mock-degree')
 
  module.exports = (app: Application) => {
   app.post('/api/degrees', (req, res) => {
-    degrees.push(req.body)
-    res.sendStatus(200)
+    Degree.create(req.body).then((degree: any) => {
+      const message: string = `degree successfully created.`;
+      res.json({ message, data: degree });
+    }).catch((error: ApiException) => {
+      if (error instanceof ValidationError) {
+        return res.status(400).json({ message: error.message, data: error })
+      }
+      const message = `Could not create new degree.`
+      res.status(500).json({ message, data: error })
+    })
   })
 }

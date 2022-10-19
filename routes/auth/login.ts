@@ -27,7 +27,7 @@ const { User } = require('../../database/connect')
   *         in: body
   *         required: true
   *         type: object
-  *         default: {"username": "string", "password": "string"}
+  *         default: {"email": "string", "password": "string"}
   *      responses:
   *        200:
   *          description: Login. Returns tokens if successful login.
@@ -47,9 +47,9 @@ module.exports = (app: Application) => {
         }
         if (await bcrypt.compare(req.body.password, user.password)) {
             message = "Good"
-            const accessToken = jwt.sign({ name: user.username }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15s'})
-            const refreshToken = jwt.sign({ name: user.username }, process.env.REFRESH_TOKEN_SECRET)
-            // refreshTokens.push(refreshToken)
+            const accessToken = jwt.sign({ name: user.id }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '15s'})
+            const refreshToken = jwt.sign({ name: user.id }, process.env.REFRESH_TOKEN_SECRET)
+            // refreshTokens.push(refreshToken)    
             return res.status(200).json({ successfullLogin : true, userId : user.id , accessToken : accessToken, refreshToken : refreshToken })
         } else {
             message = "Wrong password for this username."

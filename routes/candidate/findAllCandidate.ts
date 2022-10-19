@@ -1,5 +1,8 @@
 import { Application } from "express";
+import { candidateTypes } from "../../types/candidate";
+import { ApiException } from "../../types/exception"
 let candidates = require('../../database/mock-candidate')
+const { User, Candidate, Localisation } = require('../../database/connect')
 
 /**
  * @openapi
@@ -13,7 +16,23 @@ let candidates = require('../../database/mock-candidate')
 
  module.exports = (app: Application) => {
     app.get('/api/candidates', (req, res) => {
-        res.json(candidates)
+        // res.json(candidates)
+        Candidate.findAll({ include: [
+            {
+                model : User,
+                required : false,
+                include: {
+                    model : Localisation,
+                    require: false
+                }
+            }
+        ]})
+            .then((candidates: candidateTypes) => {
+                res.status(200).json(candidates)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
 
     })
 }

@@ -1,9 +1,10 @@
 import { Application } from "express";
-let periods = require('../../database/mock-period')
+const { Period } = require('../../database/connect')
+
 
 /**
   * @openapi
-  * /api/period/{id}:
+  * /api/periods/{id}:
   *  delete:
   *      tags: [Period]
   *      description: Delete a period
@@ -19,8 +20,11 @@ let periods = require('../../database/mock-period')
 
  module.exports = (app: Application) => {
   app.delete('/api/periods/:id', (req, res) => {
-    periods = periods.filter((role:any, index:number) => index != Number(req.params.id) - 1)
-    res.json(periods);
-    
+    return Period.destroy({
+      where: { id: req.params.id }
+    }).then((period: any) => {
+      const message = `La periode avec l'identifiant n°${req.params.id} a bien été supprimé.`
+      res.json({ message, data: period })
+    })
   })
 }

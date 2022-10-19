@@ -6,7 +6,16 @@ const degree = [
         degreename: "BAFD en cours",
     },
     {
+        degreename: "BAFA",
+    },
+    {
+        degreename: "stage pratique",
+    },
+    {
         degreename: "Non diplome",
+    },
+    {
+        degreename: "BPJEPS",
     },
   ];
   

@@ -31,7 +31,7 @@ const RoleUserModel = require('../models/roleUsers')
 const sequelize = new Sequelize(
     'sequalize',
     'postgres',
-    'admin',
+    'root',
     {
         host: 'localhost',
         dialect: 'postgres',
@@ -62,38 +62,29 @@ const PeriodUser = PeriodUserModel(sequelize, DataTypes)
 const DegreeUser = DegreeUserModel(sequelize, DataTypes)
 const RoleUser = RoleUserModel(sequelize, DataTypes)
 
+User.hasOne(Token,{ onDelete: 'cascade', hooks: true })
+Token.belongsTo(User,{ onDelete: 'cascade', hooks: true })
+
+Localisation.hasOne(User,{ onDelete: 'cascade', hooks: true })
+User.belongsTo(Localisation,{ onDelete: 'cascade', hooks: true })
+
+User.hasOne(Candidate, {foreignKey: 'UserId', onDelete: 'cascade', hooks: true })
+Candidate.belongsTo(User, {foreignKey: 'UserId', onDelete: 'cascade', hooks: true })
+
+User.hasOne(Employer,{ onDelete: 'cascade', hooks: true })
+Employer.belongsTo(User,{ onDelete: 'cascade', hooks: true })
+// doit peut être creer model etc pour ceux ci 
+Degree.belongsToMany(User, { through: DegreeUser  })
+User.belongsToMany(Degree, { through: DegreeUser  })
+
+Role.belongsToMany(User, { through: RoleUser  })
+User.belongsToMany(Role, { through: RoleUser  })
+
+Period.belongsToMany(User, { through: PeriodUser })
+User.belongsToMany(Period, { through: PeriodUser })
 
 const initDb = () => {
-
-    Token.hasOne(User)
-    User.belongsTo(Token)
-
-    Localisation.hasOne(User)
-    User.belongsTo(Localisation)
-
-    User.hasOne(Candidate, { constraints: false })
-    Candidate.belongsTo(User, { constraints: false })
-
-    User.hasOne(Employer, { constraints: false })
-    Employer.belongsTo(User, { constraints: false })
-    // doit peut être creer model etc pour ceux ci 
-    Degree.belongsToMany(User, { through: DegreeUser })
-    User.belongsToMany(Degree, { through: DegreeUser })
-
-    Role.belongsToMany(User, { through: RoleUser })
-    User.belongsToMany(Role, { through: RoleUser })
-
-    Period.belongsToMany(User, { through: PeriodUser })
-    User.belongsToMany(Period, { through: PeriodUser })
-
     return sequelize.sync({ force: true }).then(() => {
-        tokens.map((token: tokenTypes) => {
-            Token.create({
-                refreshToken: token.refreshToken,
-                tokenPush: token.tokenPush
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
         localisations.map((localisation: localisationTypes) => {
             Localisation.create({
                 address: localisation.address,
@@ -105,23 +96,6 @@ const initDb = () => {
         periods.map((period: periodTypes) => {
             Period.create({
                 periodname: period.periodname
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        candidates.map((candidate: candidateTypes) => {
-            Candidate.create({
-                UserId: candidate.userId,
-                firstname: candidate.firstname,
-                lastname: candidate.lastname,
-                birthday: candidate.birthday
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        employers.map((employer: employerTypes) => {
-            Employer.create({
-                UserId: employer.userId,
-                siret: employer.siret,
-                structurename: employer.structurename
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
@@ -137,25 +111,53 @@ const initDb = () => {
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        users.map(async (user: userTypes, index: number) => {
-            let newUser = await User.create({
+        users.map((user: userTypes, index: number) => {
+            User.create({
                 email: user.email,
                 phone: user.phone,
                 isActif: user.isActif,
                 password: user.password,
-                TokenId: user.TokenId,
                 LocalisationId: user.LocalisationId,
+            }).then(async(req : any) => {
+
+                for(let i =0; i<10; i++){
+                    const periodRow = await Period.findByPk(Math.floor(Math.random() * (Object.keys(Period).length - 1 + 1) + 1));
+                    await req.addPeriod(periodRow, { through: PeriodUser })
+                }
+    
+                const roleRow = await Role.findByPk(index + 1);
+                await req.addRole(roleRow, { through: RoleUser })
+    
+                const degreeRow = await Degree.findByPk(index +1);
+                await req.addDegree(degreeRow, { through: DegreeUser })
+
             })
-            for(let i =0; i<10; i++){
-                const periodRow = await Period.findByPk(Math.floor(Math.random() * (8 - 1 + 1) + 1));
-                await newUser.addPeriod(periodRow, { through: PeriodUser })
-            }
+            
+        })
 
-            const roleRow = await Role.findByPk(index + 1);
-            await newUser.addRole(roleRow, { through: RoleUser })
+        tokens.map((token: tokenTypes) => {
+            Token.create({
+                refreshToken: token.refreshToken,
+                tokenPush: token.tokenPush,
+                UserId: token.UserId
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
 
-            const degreeRow = await Degree.findByPk(index +1);
-            await newUser.addDegree(degreeRow, { through: DegreeUser })
+        candidates.map((candidate: candidateTypes, index: number) => {
+            Candidate.create({
+                firstname: candidate.firstname,
+                lastname: candidate.lastname,
+                birthday: candidate.birthday,
+                UserId: index + 1
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        employers.map((employer: employerTypes) => {
+            Employer.create({
+                UserId: 3,
+                siret: employer.siret,
+                structurename: employer.structurename
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
         console.log('Database created')
@@ -165,5 +167,14 @@ const initDb = () => {
 module.exports = {
     initDb,
     User,
-    Token
+    Token,
+    Role,
+    Candidate,
+    Employer,
+    Degree,
+    Localisation,
+    Period, 
+    DegreeUser,
+    PeriodUser,
+    RoleUser
 }

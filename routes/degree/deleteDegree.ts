@@ -1,9 +1,10 @@
 import { Application } from "express";
-let degrees = require('../../database/mock-degree')
+const { Degree } = require('../../database/connect')
+
 
 /**
   * @openapi
-  * /api/degree/{id}:
+  * /api/degrees/{id}:
   *  delete:
   *      tags: [Degree]
   *      description: Delete a degree
@@ -19,8 +20,11 @@ let degrees = require('../../database/mock-degree')
 
  module.exports = (app: Application) => {
   app.delete('/api/degrees/:id', (req, res) => {
-    degrees = degrees.filter((degree:any, index:number) => index != Number(req.params.id) - 1)
-    res.json(degrees);
-    
+    return Degree.destroy({
+      where: { id: req.params.id }
+    }).then((degree: any) => {
+      const message = `Le diplome avec l'identifiant n°${req.params.id} a bien été supprimé.`
+      res.json({ message, data: degree })
+    })
   })
 }
