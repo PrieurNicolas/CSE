@@ -1,8 +1,7 @@
 import { Application } from "express";
 import { candidateTypes } from "../../types/candidate";
-import { ApiException } from "../../types/exception"
-let candidates = require('../../database/mock-candidate')
-const { User, Candidate, Localisation } = require('../../database/connect')
+import { ApiException } from "../../types/exception";
+const { User, Candidate, Localisation } = require('../../database/connect');
 
 /**
  * @openapi
@@ -14,19 +13,20 @@ const { User, Candidate, Localisation } = require('../../database/connect')
  *          description: Get the list of all candidate.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/candidates', (req, res) => {
-        // res.json(candidates)
-        Candidate.findAll({ include: [
-            {
-                model : User,
-                required : false,
-                include: {
-                    model : Localisation,
-                    require: false
+        Candidate.findAll({
+            include: [
+                {
+                    model: User,
+                    required: false,
+                    include: {
+                        model: Localisation,
+                        require: false
+                    }
                 }
-            }
-        ]})
+            ]
+        })
             .then((candidates: candidateTypes) => {
                 res.status(200).json(candidates)
             })

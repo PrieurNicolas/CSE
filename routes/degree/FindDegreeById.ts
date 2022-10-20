@@ -19,7 +19,7 @@ const { Degree } = require('../../database/connect')
  *          description: Get one specifique degree.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/degrees/:id', (req, res) => {
         Degree.findByPk(req.params.id)
             .then((candidates: degreeTypes) => {

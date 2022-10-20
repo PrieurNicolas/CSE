@@ -18,7 +18,7 @@ const { User, Employer, Localisation, Period, Role } = require('../../database/c
  *          description: Get one specifique employer.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/employers/:id', (req, res) => {
         Employer.findByPk(req.params.id, {
             include: [

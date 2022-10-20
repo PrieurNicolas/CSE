@@ -1,9 +1,9 @@
 export interface roleTypes {
-    role: string;
-  }
+  role: string;
+}
 
-  export interface roleId extends roleTypes {
+export interface roleId extends roleTypes {
 
-    id: number;
-  
-  }
+  id: number;
+
+}

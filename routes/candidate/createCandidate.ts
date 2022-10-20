@@ -31,12 +31,10 @@ const { User, Candidate, Localisation, PeriodUser, Period, DegreeUser, Degree, R
   */
 
 module.exports = (app: Application) => {
-  app.post('/api/candidates',async (req, res) => {
-    console.log(req.body.candidate)
+  app.post('/api/candidates', async (req, res) => {
     req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
 
     User.create(req.body.users).then(async (user: any) => {
-
       Candidate.create(req.body.candidate).then((c: any) => {
         c.setUser(user)
       })
@@ -46,17 +44,17 @@ module.exports = (app: Application) => {
       })
 
       req.body.periods.map(async (period: any) => {
-        const periodRow = await  Period.findByPk(period.id)
+        const periodRow = await Period.findByPk(period.id)
         user.addPeriod(periodRow, { through: PeriodUser })
       })
 
       req.body.degrees.map(async (degree: any) => {
-        const degreeRow = await  Degree.findByPk(degree.id)
+        const degreeRow = await Degree.findByPk(degree.id)
         user.addDegree(degreeRow, { through: DegreeUser })
       })
 
       const roleRow = await Role.findByPk(2)
-      user.addRole(roleRow, { through: RoleUser})
+      user.addRole(roleRow, { through: RoleUser })
 
     }).then((candidates: any) => {
       const message: string = `candidate successfully created.`;

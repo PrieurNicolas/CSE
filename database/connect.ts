@@ -7,6 +7,7 @@ import { employerTypes } from "../types/employer"
 import { degreeTypes } from "../types/degree"
 import { roleTypes } from "../types/role"
 import { periodTypes } from "../types/period"
+
 let users = require('../database/mock-user')
 let tokens = require('../database/mock-token')
 let localisations = require('../database/mock-localisation')
@@ -15,6 +16,7 @@ let employers = require('../database/mock-employer')
 let degrees = require('../database/mock-degree')
 let roles = require('../database/mock-role')
 let periods = require('../database/mock-period')
+
 const { Sequelize } = require('sequelize')
 const UserModel = require('../models/users')
 const TokenModel = require('../models/tokens')
@@ -29,9 +31,9 @@ const DegreeUserModel = require('../models/degreeUsers')
 const RoleUserModel = require('../models/roleUsers')
 
 const sequelize = new Sequelize(
-    'sequalize',
-    'postgres',
-    'root',
+    process.env.DataBase,
+    process.env.User,
+    process.env.MDP,
     {
         host: 'localhost',
         dialect: 'postgres',
@@ -62,23 +64,23 @@ const PeriodUser = PeriodUserModel(sequelize, DataTypes)
 const DegreeUser = DegreeUserModel(sequelize, DataTypes)
 const RoleUser = RoleUserModel(sequelize, DataTypes)
 
-User.hasOne(Token,{ onDelete: 'cascade', hooks: true })
-Token.belongsTo(User,{ onDelete: 'cascade', hooks: true })
+User.hasOne(Token, { onDelete: 'cascade', hooks: true })
+Token.belongsTo(User, { onDelete: 'cascade', hooks: true })
 
-Localisation.hasOne(User,{ onDelete: 'cascade', hooks: true })
-User.belongsTo(Localisation,{ onDelete: 'cascade', hooks: true })
+Localisation.hasOne(User, { onDelete: 'cascade', hooks: true })
+User.belongsTo(Localisation, { onDelete: 'cascade', hooks: true })
 
-User.hasOne(Candidate, {foreignKey: 'UserId', onDelete: 'cascade', hooks: true })
-Candidate.belongsTo(User, {foreignKey: 'UserId', onDelete: 'cascade', hooks: true })
+User.hasOne(Candidate, { foreignKey: 'UserId', onDelete: 'cascade', hooks: true })
+Candidate.belongsTo(User, { foreignKey: 'UserId', onDelete: 'cascade', hooks: true })
 
-User.hasOne(Employer,{ onDelete: 'cascade', hooks: true })
-Employer.belongsTo(User,{ onDelete: 'cascade', hooks: true })
-// doit peut être creer model etc pour ceux ci 
-Degree.belongsToMany(User, { through: DegreeUser  })
-User.belongsToMany(Degree, { through: DegreeUser  })
+User.hasOne(Employer, { onDelete: 'cascade', hooks: true })
+Employer.belongsTo(User, { onDelete: 'cascade', hooks: true })
 
-Role.belongsToMany(User, { through: RoleUser  })
-User.belongsToMany(Role, { through: RoleUser  })
+Degree.belongsToMany(User, { through: DegreeUser })
+User.belongsToMany(Degree, { through: DegreeUser })
+
+Role.belongsToMany(User, { through: RoleUser })
+User.belongsToMany(Role, { through: RoleUser })
 
 Period.belongsToMany(User, { through: PeriodUser })
 User.belongsToMany(Period, { through: PeriodUser })
@@ -118,21 +120,21 @@ const initDb = () => {
                 isActif: user.isActif,
                 password: user.password,
                 LocalisationId: user.LocalisationId,
-            }).then(async(req : any) => {
+            }).then(async (req: any) => {
 
-                for(let i =0; i<10; i++){
+                for (let i = 0; i < 10; i++) {
                     const periodRow = await Period.findByPk(Math.floor(Math.random() * (Object.keys(Period).length - 1 + 1) + 1));
                     await req.addPeriod(periodRow, { through: PeriodUser })
                 }
-    
+
                 const roleRow = await Role.findByPk(index + 1);
                 await req.addRole(roleRow, { through: RoleUser })
-    
-                const degreeRow = await Degree.findByPk(index +1);
+
+                const degreeRow = await Degree.findByPk(index + 1);
                 await req.addDegree(degreeRow, { through: DegreeUser })
 
             })
-            
+
         })
 
         tokens.map((token: tokenTypes) => {
@@ -173,7 +175,7 @@ module.exports = {
     Employer,
     Degree,
     Localisation,
-    Period, 
+    Period,
     DegreeUser,
     PeriodUser,
     RoleUser

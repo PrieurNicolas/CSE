@@ -17,6 +17,6 @@ const degree = [
     {
         degreename: "BPJEPS",
     },
-  ];
-  
-  module.exports = degree;
+];
+
+module.exports = degree;

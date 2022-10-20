@@ -28,15 +28,15 @@ module.exports = (app: Application) => {
       }
 
       const candidatDeleted = candidat;
-
-      console.log(candidatDeleted.UserId)
       let local = await User.findByPk(candidatDeleted.UserId)
+
       return User.destroy({
         where: { id: candidat.UserId }
       }).then(() => {
         Localisation.destroy({
           where: { id: local.LocalisationId }
         })
+        
         const message = `Le Candidat avec l'identifiant n°${candidatDeleted.id} a bien été supprimé.`
         res.json({ message, data: candidatDeleted })
       })

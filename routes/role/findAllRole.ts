@@ -3,8 +3,6 @@ import { ApiException } from "../../types/exception";
 import { roleTypes } from "../../types/role";
 const { Role } = require('../../database/connect')
 
-
-
 /**
  * @openapi
  * /api/roles:
@@ -15,7 +13,7 @@ const { Role } = require('../../database/connect')
  *          description: Get the list of all roles.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/roles', (req, res) => {
         Role.findAll()
             .then((roles: roleTypes) => {

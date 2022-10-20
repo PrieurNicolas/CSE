@@ -12,7 +12,7 @@ const { Degree } = require('../../database/connect')
  *        200:
  *          description: Get the list of all degree.
  */
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/degrees', (req, res) => {
         Degree.findAll()
             .then((candidates: degreeTypes) => {

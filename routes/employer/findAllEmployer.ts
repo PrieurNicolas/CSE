@@ -12,18 +12,20 @@ const { User, Employer, Localisation } = require('../../database/connect')
  *        200:
  *          description: Get the list of all employer.
  */
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/employers', (req, res) => {
-        Employer.findAll({ include: [
-            {
-                model : User,
-                required : false,
-                include: {
-                    model : Localisation,
-                    require: false
+        Employer.findAll({
+            include: [
+                {
+                    model: User,
+                    required: false,
+                    include: {
+                        model: Localisation,
+                        require: false
+                    }
                 }
-            }
-        ]})
+            ]
+        })
             .then((employers: employerTypes) => {
                 res.status(200).json(employers)
             })

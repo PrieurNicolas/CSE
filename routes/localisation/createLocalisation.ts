@@ -1,8 +1,8 @@
 import { Application } from "express";
 import { ValidationError } from "sequelize";
 import { ApiException } from "../../types/exception";
-const { Localisation } = require('../../database/connect')
-
+import { localisationTypes } from "../../types/localisation";
+const { Localisation } = require('../../database/connect');
 
 /**
  * @swagger
@@ -30,16 +30,16 @@ const { Localisation } = require('../../database/connect')
   *          description: Create a new localisation.
   */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
   app.post('/api/localisations', (req, res) => {
-    Localisation.create(req.body).then((degree: any) => {
-      const message: string = `degree successfully created.`;
-      res.json({ message, data: degree });
+    Localisation.create(req.body).then((localisation: localisationTypes) => {
+      const message: string = `localisation successfully created.`;
+      res.json({ message, data: localisation });
     }).catch((error: ApiException) => {
       if (error instanceof ValidationError) {
         return res.status(400).json({ message: error.message, data: error })
       }
-      const message = `Could not create new degree.`
+      const message = `Could not create new localisation.`
       res.status(500).json({ message, data: error })
     })
   })

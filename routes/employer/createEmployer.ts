@@ -1,8 +1,9 @@
 import { Application } from "express";
 import { ValidationError } from "sequelize";
+import { employerTypes } from "../../types/employer";
 import { ApiException } from "../../types/exception";
 const bcrypt = require("bcrypt")
-const { User, Employer, Localisation, PeriodUser, Period, DegreeUser, Degree, Role, RoleUser } = require('../../database/connect')
+const { User, Employer, Localisation, PeriodUser, Period, Role, RoleUser } = require('../../database/connect')
 
 /**
  * @swagger
@@ -30,8 +31,8 @@ const { User, Employer, Localisation, PeriodUser, Period, DegreeUser, Degree, Ro
   *          description: Create a new employer.
   */
 
- module.exports = (app: Application) => {
-  app.post('/api/employers',async (req, res) => {
+module.exports = (app: Application) => {
+  app.post('/api/employers', async (req, res) => {
     req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
 
     User.create(req.body.users).then(async (user: any) => {
@@ -45,16 +46,16 @@ const { User, Employer, Localisation, PeriodUser, Period, DegreeUser, Degree, Ro
       })
 
       req.body.periods.map(async (period: any) => {
-        const periodRow = await  Period.findByPk(period.id)
+        const periodRow = await Period.findByPk(period.id)
         user.addPeriod(periodRow, { through: PeriodUser })
       })
 
       const roleRow = await Role.findByPk(3)
-      user.addRole(roleRow, { through: RoleUser})
+      user.addRole(roleRow, { through: RoleUser })
 
-    }).then((candidates: any) => {
+    }).then((employer: employerTypes) => {
       const message: string = `employeur successfully created.`;
-      res.json({ message, data: candidates });
+      res.json({ message, data: employer });
     })
       .catch((error: ApiException) => {
         if (error instanceof ValidationError) {

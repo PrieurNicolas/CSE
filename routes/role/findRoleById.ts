@@ -3,7 +3,6 @@ import { ApiException } from "../../types/exception";
 import { roleTypes } from "../../types/role";
 const { Role } = require('../../database/connect')
 
-
 /**
  * @openapi
  * /api/roles/{id}:
@@ -23,11 +22,11 @@ const { Role } = require('../../database/connect')
 module.exports = (app: Application) => {
     app.get('/api/roles/:id', (req, res) => {
         Role.findByPk(req.params.id)
-        .then((role: roleTypes) => {
-            res.status(200).json(role)
-        })
-        .catch((error: ApiException) => {
-            res.status(500).json(error)
-        })
+            .then((role: roleTypes) => {
+                res.status(200).json(role)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
     })
 }

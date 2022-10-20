@@ -1,7 +1,6 @@
 import { Application } from "express";
 const { Period } = require('../../database/connect')
 
-
 /**
   * @openapi
   * /api/periods/{id}:

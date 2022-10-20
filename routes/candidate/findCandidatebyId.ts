@@ -1,7 +1,6 @@
 import { Application } from "express";
 import { candidateTypes } from "../../types/candidate";
 import { ApiException } from "../../types/exception";
-let candidates = require('../../database/mock-candidate')
 const { User, Candidate, Localisation, Degree, Period, Role } = require('../../database/connect')
 
 /**
@@ -22,7 +21,6 @@ const { User, Candidate, Localisation, Degree, Period, Role } = require('../../d
 
 module.exports = (app: Application) => {
     app.get('/api/candidates/:id', (req, res) => {
-        // res.json(candidates.find((employer:any , index: number) => index == Number(req.params.id)-1))
         Candidate.findByPk(req.params.id, {
             include: [
                 {

@@ -1,6 +1,6 @@
 import { Application } from "express";
-import { UniqueConstraintError, ValidationError } from "sequelize";
-import {  candidateTypes } from "../../types/candidate";
+import { ValidationError } from "sequelize";
+import { candidateTypes } from "../../types/candidate";
 import { ApiException } from "../../types/exception";
 
 const { Candidate, User, Degree, Period, PeriodUser, DegreeUser, Localisation } = require("../../database/connect");
@@ -36,59 +36,59 @@ const { Candidate, User, Degree, Period, PeriodUser, DegreeUser, Localisation } 
   *          description: La requête s'est bien déroulé
   */
 module.exports = (app: Application) => {
-  app.put("/api/form/candidat/:id", (req, res) => {
-      console.log(req.body.candidate)
-    Candidate.update(req.body.candidate, {where : {id : req.params.id}}).then ((candidatmenfou : any) => {        
-        Candidate.findByPk(req.params.id).then((candidat: candidateTypes) => {
-            User.update(req.body.users, {where : {id : candidat.UserId}}).then((usermenfou : any) => {
-                User.findByPk(candidat.UserId).then((user: any) => {
+    app.put("/api/form/candidat/:id", (req, res) => {
+        console.log(req.body.candidate)
+        Candidate.update(req.body.candidate, { where: { id: req.params.id } }).then(() => {
+            Candidate.findByPk(req.params.id).then((candidat: candidateTypes) => {
+                User.update(req.body.users, { where: { id: candidat.UserId } }).then(() => {
+                    User.findByPk(candidat.UserId).then((user: any) => {
 
-                    PeriodUser.destroy({where: { UserId: user.id }})
-                    req.body.periods?.map( async (DispoMap : any) => {
-                        const DisponibiliteRow = await Period.findByPk(DispoMap.id);
-                        await user.addPeriod(DisponibiliteRow, { through: PeriodUser })
-                    })
-            
-                    DegreeUser.destroy({ where: { UserId: user.id }})
-                    req.body.degrees?.map( async (DiploMap : any) => {
-                        const DiplomeRow = await Degree.findByPk(DiploMap.id);
-                        await user.addDegree(DiplomeRow, { through: DegreeUser })
-                    })
+                        PeriodUser.destroy({ where: { UserId: user.id } })
+                        req.body.periods?.map(async (DispoMap: any) => {
+                            const DisponibiliteRow = await Period.findByPk(DispoMap.id);
+                            await user.addPeriod(DisponibiliteRow, { through: PeriodUser })
+                        })
 
-                    Localisation.update(req.body.localisation, {
-                        where: {id : user.LocalisationId}
+                        DegreeUser.destroy({ where: { UserId: user.id } })
+                        req.body.degrees?.map(async (DiploMap: any) => {
+                            const DiplomeRow = await Degree.findByPk(DiploMap.id);
+                            await user.addDegree(DiplomeRow, { through: DegreeUser })
+                        })
+
+                        Localisation.update(req.body.localisation, {
+                            where: { id: user.LocalisationId }
+                        })
                     })
                 })
             })
-        }) 
-    })
-    Candidate.findByPk(req.params.id, {
-        include : [
-            {
-                model : User,
-                required : false,
-                include: [
-                    {
-                        model : Degree,
-                        required : false
-                    },
-                    {
-                        model : Period,
-                        required : false
-                    }
-                ]
-            }
-        ]
-    }).then((candidats: any) => {
-      const message : string = 'Le candidat à bien été mis à jour'
-      res.json({message, data: candidats})
-    })
-    .catch((error : ApiException) => {
-      if(error instanceof ValidationError){
-        return res.status(400).json({message: error.message, data : error})
-      }
-      const message = `Le Candidat n'a pas pu être ajouté. Réessayer dans quelques instants.`
-      res.status(500).json({message, data : error})
-    })
-  });
+        })
+        Candidate.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    required: false,
+                    include: [
+                        {
+                            model: Degree,
+                            required: false
+                        },
+                        {
+                            model: Period,
+                            required: false
+                        }
+                    ]
+                }
+            ]
+        }).then((candidats: any) => {
+            const message: string = 'Le candidat à bien été mis à jour'
+            res.json({ message, data: candidats })
+        })
+            .catch((error: ApiException) => {
+                if (error instanceof ValidationError) {
+                    return res.status(400).json({ message: error.message, data: error })
+                }
+                const message = `Le Candidat n'a pas pu être ajouté. Réessayer dans quelques instants.`
+                res.status(500).json({ message, data: error })
+            })
+    });
 };

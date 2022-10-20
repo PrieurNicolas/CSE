@@ -27,20 +27,20 @@ const { Localisation } = require('../../database/connect')
   *          description: Update the localisation of given id.
   */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
   app.put('/api/localisations/:id', (req, res) => {
     return Localisation.update(req.body, {
       where: { id: req.params.id }
     }).then(() => {
-           const message = `localisation successfully updated`;
-           res.json({ message });
-         })
-     .catch((error: ApiException) => {
-       if(error instanceof ValidationError){
-         return res.status(400).json({message: error.message, data : error})
-       }
-       const message = `Could not update the localisation.`;
-       res.status(500).json({ message, data: error });
-     });
+      const message = `localisation successfully updated`;
+      res.json({ message });
+    })
+      .catch((error: ApiException) => {
+        if (error instanceof ValidationError) {
+          return res.status(400).json({ message: error.message, data: error })
+        }
+        const message = `Could not update the localisation.`;
+        res.status(500).json({ message, data: error });
+      });
   })
 }

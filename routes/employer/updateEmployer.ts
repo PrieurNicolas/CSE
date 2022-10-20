@@ -1,7 +1,7 @@
 import { Application } from "express";
 import { ValidationError } from "sequelize";
 import { ApiException } from "../../types/exception";
-const { Employer} = require('../../database/connect')
+const { Employer } = require('../../database/connect')
 
 /**
   * @openapi
@@ -26,8 +26,8 @@ const { Employer} = require('../../database/connect')
   *        200:
   *          description: Update the employer of given id.
   */
- 
- module.exports = (app: Application) => {
+
+module.exports = (app: Application) => {
   app.put('/api/employers/:id', (req, res) => {
     Employer.update(req.body, {
       where: { id: req.params.id }

@@ -1,5 +1,6 @@
 import { Application } from "express";
 import { ValidationError } from "sequelize";
+import { degreeTypes } from "../../types/degree";
 import { ApiException } from "../../types/exception";
 const { Degree } = require('../../database/connect')
 
@@ -29,9 +30,9 @@ const { Degree } = require('../../database/connect')
   *          description: Create a new degree.
   */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
   app.post('/api/degrees', (req, res) => {
-    Degree.create(req.body).then((degree: any) => {
+    Degree.create(req.body).then((degree: degreeTypes) => {
       const message: string = `degree successfully created.`;
       res.json({ message, data: degree });
     }).catch((error: ApiException) => {

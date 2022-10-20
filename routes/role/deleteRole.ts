@@ -1,7 +1,6 @@
 import { Application } from "express";
 const { Role } = require('../../database/connect')
 
-
 /**
   * @openapi
   * /api/roles/{id}:
@@ -19,12 +18,12 @@ const { Role } = require('../../database/connect')
   */
 
 module.exports = (app: Application) => {
-    app.delete('/api/roles/:id', (req, res) => {
-      return Role.destroy({
-        where: { id: req.params.id }
-      }).then((period: any) => {
-        const message = `Le role avec l'identifiant n°${req.params.id} a bien été supprimé.`
-        res.json({ message, data: period })
-      })
+  app.delete('/api/roles/:id', (req, res) => {
+    return Role.destroy({
+      where: { id: req.params.id }
+    }).then((role: any) => {
+      const message = `Le role avec l'identifiant n°${req.params.id} a bien été supprimé.`
+      res.json({ message, data: role })
     })
+  })
 }

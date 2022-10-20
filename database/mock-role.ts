@@ -8,6 +8,6 @@ const roles = [
     {
         role: "ENTREPRISE",
     },
-  ];
-  
-  module.exports = roles;
+];
+
+module.exports = roles;

@@ -13,7 +13,7 @@ const { Localisation } = require('../../database/connect')
  *          description: Get the list of all localisation.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/localisations', (req, res) => {
         Localisation.findAll()
             .then((localisations: localisationTypes) => {

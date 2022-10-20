@@ -3,7 +3,6 @@ import { ValidationError } from "sequelize";
 import { ApiException } from "../../types/exception";
 const { Period } = require('../../database/connect')
 
-
 /**
   * @openapi
   * /api/periods/{id}:
@@ -28,20 +27,20 @@ const { Period } = require('../../database/connect')
   *          description: Update the role of given id.
   */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
   app.put('/api/periods/:id', (req, res) => {
     return Period.update(req.body, {
       where: { id: req.params.id }
     }).then(() => {
-           const message = `localisation successfully updated`;
-           res.json({ message });
-         })
-     .catch((error: ApiException) => {
-       if(error instanceof ValidationError){
-         return res.status(400).json({message: error.message, data : error})
-       }
-       const message = `Could not update the localisation.`;
-       res.status(500).json({ message, data: error });
-     });
+      const message = `period successfully updated`;
+      res.json({ message });
+    })
+      .catch((error: ApiException) => {
+        if (error instanceof ValidationError) {
+          return res.status(400).json({ message: error.message, data: error })
+        }
+        const message = `Could not update the period.`;
+        res.status(500).json({ message, data: error });
+      });
   })
 }

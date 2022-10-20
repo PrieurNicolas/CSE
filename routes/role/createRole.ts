@@ -1,6 +1,7 @@
 import { Application } from "express";
 import { ValidationError } from "sequelize";
 import { ApiException } from "../../types/exception";
+import { roleTypes } from "../../types/role";
 const { Role } = require('../../database/connect')
 
 /**
@@ -29,17 +30,17 @@ const { Role } = require('../../database/connect')
   *          description: Create a new role.
   */
 
- module.exports = (app: Application) => {
-    app.post('/api/roles', (req, res) => {
-      Role.create(req.body).then((degree: any) => {
-        const message: string = `role successfully created.`;
-        res.json({ message, data: degree });
-      }).catch((error: ApiException) => {
-        if (error instanceof ValidationError) {
-          return res.status(400).json({ message: error.message, data: error })
-        }
-        const message = `Could not create new role.`
-        res.status(500).json({ message, data: error })
-      })
+module.exports = (app: Application) => {
+  app.post('/api/roles', (req, res) => {
+    Role.create(req.body).then((role: roleTypes) => {
+      const message: string = `role successfully created.`;
+      res.json({ message, data: role });
+    }).catch((error: ApiException) => {
+      if (error instanceof ValidationError) {
+        return res.status(400).json({ message: error.message, data: error })
+      }
+      const message = `Could not create new role.`
+      res.status(500).json({ message, data: error })
     })
+  })
 }

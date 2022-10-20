@@ -1,11 +1,11 @@
 export interface localisationTypes {
-    address: string;
-    zipCode: number;
-    city: Date
-  }
+  address: string;
+  zipCode: number;
+  city: Date
+}
 
-  export interface localisationId extends localisationTypes {
+export interface localisationId extends localisationTypes {
 
-    id: number;
-  
-  }
+  id: number;
+
+}

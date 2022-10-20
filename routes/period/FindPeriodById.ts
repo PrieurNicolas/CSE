@@ -3,7 +3,6 @@ import { ApiException } from "../../types/exception";
 import { periodTypes } from "../../types/period";
 const { Period } = require('../../database/connect')
 
-
 /**
  * @openapi
  * /api/periods/{id}:
@@ -20,14 +19,14 @@ const { Period } = require('../../database/connect')
  *          description: Get one specifique period.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/periods/:id', (req, res) => {
         Period.findByPk(req.params.id)
-        .then((period: periodTypes) => {
-            res.status(200).json(period)
-        })
-        .catch((error: ApiException) => {
-            res.status(500).json(error)
-        })
+            .then((period: periodTypes) => {
+                res.status(200).json(period)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
     })
 }

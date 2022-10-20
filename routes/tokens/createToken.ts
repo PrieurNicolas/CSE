@@ -1,9 +1,7 @@
 import { Application } from "express";
-import { UniqueConstraintError, ValidationError } from "sequelize";
+import { ValidationError } from "sequelize";
 import { ApiException } from "../../types/exception";
 import { tokenTypes } from "../../types/token";
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 
 const { Token } = require('../../database/connect')
 
@@ -27,26 +25,28 @@ const { Token } = require('../../database/connect')
   *         in: body
   *         required: true
   *         type: object
-  *         default: {    "refreshToken": "string"}
+  *         default: { "refreshToken": "string", "pushToken": "string"}
   *      responses:
   *        200:
   *          description: Create a new token.
   */
 module.exports = (app: Application) => {
   app.post("/api/tokens", async (req, res) => {
-    const { refreshToken } = req.body
-    Token.create({ 
-        refreshToken : refreshToken, 
+    const { refreshToken } = req.body.token
+    Token.create({
+      refreshToken: refreshToken,
+      tokenPush: refreshToken,
+      UserId: req.body.id
     }).then((token: tokenTypes) => {
-        const message: string = `Refresh token successfully created.`;
-        res.json({ message, data: token });
-        })
-        .catch((error : ApiException) => {
-        if(error instanceof ValidationError){
-            return res.status(400).json({message: error.message, data : error})
+      const message: string = `Refresh token successfully created.`;
+      res.json({ message, data: token });
+    })
+      .catch((error: ApiException) => {
+        if (error instanceof ValidationError) {
+          return res.status(400).json({ message: error.message, data: error })
         }
         const message = `Could not create new refresh token.`
-        res.status(500).json({message, data : error})
-    })
+        res.status(500).json({ message, data: error })
+      })
   });
 };

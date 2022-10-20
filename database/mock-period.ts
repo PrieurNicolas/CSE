@@ -23,6 +23,6 @@ const periods = [
     {
         periodname: "Samedi",
     },
-  ];
-  
-  module.exports = periods;
+];
+
+module.exports = periods;
