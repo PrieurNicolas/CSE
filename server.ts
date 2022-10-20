@@ -31,10 +31,10 @@ app.get("/", (req: Request, res: Response) => {
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: 'The Choice Is Yours API',
-            description: 'Red or Blue',
+            title: 'Centre Social Eclaté',
+            description: 'Swagger',
             contact: {
-                name: 'Best front-end dev EUW'
+                name: 'front-end dev EUW'
             },
             // servers: [{ url: '/api' }]
             servers: [{
