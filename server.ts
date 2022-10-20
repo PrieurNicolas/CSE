@@ -51,7 +51,7 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 require('./routes/tokens/findAllTokens')(app)
 require('./routes/tokens/findTokenByPk')(app)
-require('./routes/tokens/createToken')(app)
+// require('./routes/tokens/createToken')(app)
 require('./routes/tokens/deleteToken')(app)
 
 require('./routes/users/findAllUsers')(app)
