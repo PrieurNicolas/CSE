@@ -1,10 +1,12 @@
 import { Application } from "express";
+import { ValidationError } from "sequelize";
 import { ApiException } from "../../types/exception";
+import { tokenTypes } from "../../types/token";
 import { userTypes } from "../../types/user";
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const { User } = require('../../database/connect')
+const { User, Token } = require('../../database/connect')
 
 /**
  * @swagger
@@ -45,8 +47,22 @@ module.exports = (app: Application) => {
                 if (await bcrypt.compare(req.body.password, user.password)) {
                     message = "Good"
                     const accessToken = jwt.sign({ name: user.id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' })
-                    const refreshToken = jwt.sign({ name: user.id }, process.env.REFRESH_TOKEN_SECRET)
+                    const refreshToken = jwt.sign({ name: user.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1Y' })
+                    Token.findAll().then((tokens: any) => {
+                       const token = tokens.find((token: tokenTypes) => token.UserId == user.id)
 
+                       if (token == null) {
+                           Token.create({
+                               refreshToken: refreshToken,
+                               tokenPush: refreshToken,
+                               UserId: user.id
+                             })
+                       } else {
+                        Token.update({
+                            refreshToken: refreshToken
+                          }, { where: { UserId: user.id} })
+                       }
+                    })
                     return res.status(200).json({ successfullLogin: true, userId: user.id, accessToken: accessToken, refreshToken: refreshToken })
                 } else {
                     message = "Wrong password for this username."
