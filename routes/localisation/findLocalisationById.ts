@@ -1,11 +1,13 @@
 import { Application } from "express";
-let localisations = require('../../database/mock-localisation')
+import { ApiException } from "../../types/exception";
+import { localisationTypes } from "../../types/localisation";
+const { Localisation } = require('../../database/connect')
 
 /**
  * @openapi
- * /api/locations/{id}:
+ * /api/localisations/{id}:
  *   get:
- *      tags: [Location]
+ *      tags: [localisations]
  *      parameters:
  *       - name: id
  *         in: path
@@ -16,9 +18,14 @@ let localisations = require('../../database/mock-localisation')
  *        200:
  *          description: Get one specifique localisation.
  */
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/localisations/:id', (req, res) => {
-        res.json(localisations.find((localisation:any , index: number) => index == Number(req.params.id)-1))
-
+        Localisation.findByPk(req.params.id)
+            .then((localisation: localisationTypes) => {
+                res.status(200).json(localisation)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
     })
 }

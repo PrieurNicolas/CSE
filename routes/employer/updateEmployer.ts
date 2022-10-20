@@ -1,9 +1,11 @@
 import { Application } from "express";
-let employers = require('../../database/mock-employer')
+import { ValidationError } from "sequelize";
+import { ApiException } from "../../types/exception";
+const { Employer } = require('../../database/connect')
 
 /**
   * @openapi
-  * /api/employer/{id}:
+  * /api/employers/{id}:
   *  put:
   *      tags: [Employer]
   *      description: Update an employer
@@ -24,10 +26,24 @@ let employers = require('../../database/mock-employer')
   *        200:
   *          description: Update the employer of given id.
   */
- 
- module.exports = (app: Application) => {
+
+module.exports = (app: Application) => {
   app.put('/api/employers/:id', (req, res) => {
-    employers[Number(req.params.id) -1] = req.body
-    res.json(employers[Number(req.params.id) - 1])
+    Employer.update(req.body, {
+      where: { id: req.params.id }
+    }).then((employer: any) => {
+      if (employer === null) {
+        const message = "Requested employer does not exist."
+        return res.status(404).json({ message })
+      }
+      const message = `Employer successfully updated`;
+      res.json({ message, data: employer });
+    }).catch((error: ApiException) => {
+      if (error instanceof ValidationError) {
+        return res.status(400).json({ message: error.message, data: error })
+      }
+      const message = `Could not update the employer.`;
+      res.status(500).json({ message, data: error });
+    });
   })
 }

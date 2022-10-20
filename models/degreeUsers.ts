@@ -1,14 +1,7 @@
 
-import {  DataTypes, Sequelize, STRING } from "sequelize"
+import { Sequelize } from "sequelize"
 
-
-module.exports = (sequelize : Sequelize, dataTypes : typeof DataTypes) => {
-
-    const concatRequiredMessage = (data : string) => {
-        return `${data} is required`
-    }
-
+module.exports = (sequelize: Sequelize) => {
     return sequelize.define('DegreeUser', {
-        
     })
 }

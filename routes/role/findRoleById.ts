@@ -1,9 +1,11 @@
 import { Application } from "express";
-let roles = require('../../database/mock-role')
+import { ApiException } from "../../types/exception";
+import { roleTypes } from "../../types/role";
+const { Role } = require('../../database/connect')
 
 /**
  * @openapi
- * /api/roles/{role}:
+ * /api/roles/{id}:
  *   get:
  *      tags: [Roles]
  *      parameters:
@@ -19,7 +21,12 @@ let roles = require('../../database/mock-role')
 
 module.exports = (app: Application) => {
     app.get('/api/roles/:id', (req, res) => {
-        res.json(roles.find((role:any , index: number) => index == Number(req.params.id)-1))
-
+        Role.findByPk(req.params.id)
+            .then((role: roleTypes) => {
+                res.status(200).json(role)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
     })
 }

@@ -1,9 +1,11 @@
 import { Application } from "express";
-let degrees = require('../../database/mock-degree')
+import { degreeTypes } from "../../types/degree";
+import { ApiException } from "../../types/exception";
+const { Degree } = require('../../database/connect')
 
 /**
  * @openapi
- * /api/degree/{id}:
+ * /api/degrees/{id}:
  *   get:
  *      tags: [Degree]
  *      parameters:
@@ -17,9 +19,14 @@ let degrees = require('../../database/mock-degree')
  *          description: Get one specifique degree.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/degrees/:id', (req, res) => {
-        res.json(degrees.find((degree:any , index: number) => index == Number(req.params.id)-1))
-
+        Degree.findByPk(req.params.id)
+            .then((candidates: degreeTypes) => {
+                res.status(200).json(candidates)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
     })
 }

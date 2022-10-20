@@ -1,4 +1,4 @@
 export interface periodUserTypes {
-    UserId: number;
-    PeriodId: number;
-  }
+  UserId: number;
+  PeriodId: number;
+}

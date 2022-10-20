@@ -1,11 +1,11 @@
 import { Application } from "express";
-let localisations = require('../../database/mock-localisation')
+const { Localisation } = require('../../database/connect')
 
 /**
   * @openapi
-  * /api/locations/{id}:
+  * /api/localisations/{id}:
   *  delete:
-  *      tags: [Location]
+  *      tags: [localisations]
   *      description: Delete a localisation
   *      parameters:
   *       - name: id
@@ -17,10 +17,13 @@ let localisations = require('../../database/mock-localisation')
   *          description: Delete a localisation. 
   */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
   app.delete('/api/localisations/:id', (req, res) => {
-    localisations = localisations.filter((localisation:any, index:number) => index != Number(req.params.id) - 1)
-    res.json(localisations);
-    
+    return Localisation.destroy({
+      where: { id: req.params.id }
+    }).then((localisation: any) => {
+      const message = `La localisation avec l'identifiant n°${req.params.id} a bien été supprimé.`
+      res.json({ message, data: localisation })
+    })
   })
 }

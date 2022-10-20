@@ -6,8 +6,17 @@ const degree = [
         degreename: "BAFD en cours",
     },
     {
+        degreename: "BAFA",
+    },
+    {
+        degreename: "stage pratique",
+    },
+    {
         degreename: "Non diplome",
     },
-  ];
-  
-  module.exports = degree;
+    {
+        degreename: "BPJEPS",
+    },
+];
+
+module.exports = degree;

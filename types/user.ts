@@ -3,7 +3,6 @@ export interface userTypes {
   phone: number;
   isActif: boolean;
   password: string;
-  TokenId: number;
   LocalisationId: number;
 }
 

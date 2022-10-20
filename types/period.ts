@@ -1,9 +1,9 @@
 export interface periodTypes {
-    periodname: string;
-  }
+  periodname: string;
+}
 
-  export interface periodId extends periodTypes {
+export interface periodId extends periodTypes {
 
-    id: number;
-  
-  }
+  id: number;
+
+}

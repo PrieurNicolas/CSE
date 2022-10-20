@@ -1,9 +1,10 @@
 import { Application } from "express";
-let employers = require('../../database/mock-employer')
-
+import { employerTypes } from "../../types/employer";
+import { ApiException } from "../../types/exception";
+const { User, Employer, Localisation, Period, Role } = require('../../database/connect')
 /**
  * @openapi
- * /api/employer/{id}:
+ * /api/employers/{id}:
  *   get:
  *      tags: [Employer]
  *      parameters:
@@ -17,9 +18,36 @@ let employers = require('../../database/mock-employer')
  *          description: Get one specifique employer.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/employers/:id', (req, res) => {
-        res.json(employers.find((employer:any , index: number) => index == Number(req.params.id)-1))
+        Employer.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    required: false,
+                    include: [
+                        {
+                            model: Localisation,
+                            require: false
+                        },
+                        {
+                            model: Period,
+                            require: false,
+                        },
+                        {
+                            model: Role,
+                            require: false,
+                        }
+                    ]
+                }
+            ]
+        })
+            .then((employers: employerTypes) => {
+                res.status(200).json(employers)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
 
     })
 }

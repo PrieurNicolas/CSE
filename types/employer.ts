@@ -1,5 +1,11 @@
 export interface employerTypes {
-    userId: number;
-    siret: BigInt;
-    structurename: string;
-  }
+  UserId: number;
+  siret: BigInt;
+  structurename: string;
+}
+
+export interface employerId extends employerTypes {
+
+  id: number;
+
+}

@@ -1,6 +1,8 @@
 import { Application } from "express";
-let roles = require('../../database/mock-role')
-
+import { ValidationError } from "sequelize";
+import { ApiException } from "../../types/exception";
+import { roleTypes } from "../../types/role";
+const { Role } = require('../../database/connect')
 
 /**
  * @swagger
@@ -28,9 +30,17 @@ let roles = require('../../database/mock-role')
   *          description: Create a new role.
   */
 
- module.exports = (app: Application) => {
-    app.post('/api/roles', (req, res) => {
-      roles.push(req.body)
-      res.sendStatus(200)
+module.exports = (app: Application) => {
+  app.post('/api/roles', (req, res) => {
+    Role.create(req.body).then((role: roleTypes) => {
+      const message: string = `role successfully created.`;
+      res.json({ message, data: role });
+    }).catch((error: ApiException) => {
+      if (error instanceof ValidationError) {
+        return res.status(400).json({ message: error.message, data: error })
+      }
+      const message = `Could not create new role.`
+      res.status(500).json({ message, data: error })
     })
+  })
 }

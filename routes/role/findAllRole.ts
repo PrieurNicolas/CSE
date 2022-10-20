@@ -1,6 +1,7 @@
 import { Application } from "express";
-let roles = require('../../database/mock-role')
-
+import { ApiException } from "../../types/exception";
+import { roleTypes } from "../../types/role";
+const { Role } = require('../../database/connect')
 
 /**
  * @openapi
@@ -12,8 +13,14 @@ let roles = require('../../database/mock-role')
  *          description: Get the list of all roles.
  */
 
- module.exports = (app: Application) => {
+module.exports = (app: Application) => {
     app.get('/api/roles', (req, res) => {
-        return res.json(roles)
+        Role.findAll()
+            .then((roles: roleTypes) => {
+                res.status(200).json(roles)
+            })
+            .catch((error: ApiException) => {
+                res.status(500).json(error)
+            })
     })
 }
