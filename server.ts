@@ -11,10 +11,13 @@ import { ApiException } from './types/exception'
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 const sequelize = require('./database/connect')
-
+import passport from 'passport'
 import {Response, Request, NextFunction} from 'express'
 
 app.use(express.json())
+app.use(passport.initialize())
+require('./database/passport')
+
 
 // Pour recréer DB, à commenter sinon
 
@@ -63,6 +66,8 @@ require('./routes/users/deleteUser')(app)
 require('./routes/auth/login')(app)
 require('./routes/auth/token')(app)
 
+
+require('./routes/testForPassport')(app)
 
 /////////////
 

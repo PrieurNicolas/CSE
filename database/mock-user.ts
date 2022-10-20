@@ -3,7 +3,7 @@ const users = [
     email: "pierru@gmail.com",
     phone: 800000001,
     isActif: true,
-    password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",
+    password: "hash",
     TokenId: 1,
     LocalisationId: 1
   },
@@ -11,7 +11,7 @@ const users = [
     email: "test@gmail.com",
     phone: 111111111,
     isActif: true,
-    password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",
+    password: "hash",
     TokenId: 2,
     LocalisationId: 2
   },

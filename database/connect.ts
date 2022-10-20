@@ -9,6 +9,7 @@ const { Sequelize } = require('sequelize')
 const UserModel = require('../models/users')
 const TokenModel = require('../models/tokens')
 const LocalisationModel = require('../models/localisations')
+const bcrypt= require('bcrypt');
 
 const sequelize = new Sequelize(
     `${process.env.NAME_DATABASE}`,
@@ -61,14 +62,16 @@ const initDb = () => {
         })
 
         users.map((user: userTypes) => {
+        bcrypt.hash(user.password, 10).then((hash: typeof bcrypt) => {
             User.create({
                 email: user.email,
                 phone: user.phone,
                 isActif: user.isActif,
-                password: user.password,
+                password: hash,
                 TokenId: user.TokenId,
                 LocalisationId: user.LocalisationId
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
         })
 
 
