@@ -7,9 +7,9 @@ const candidates = [
   },
   {
     userId: 2,
-    firstname: "nicola",
+    firstname: "nicolas",
     lastname: "prieur",
-    birthday: "1997-05-15"
+    birthday: "2001-05-15"
   },
 ];
 
