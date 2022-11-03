@@ -7,6 +7,7 @@ import { employerTypes } from "../types/employer"
 import { degreeTypes } from "../types/degree"
 import { roleTypes } from "../types/role"
 import { periodTypes } from "../types/period"
+import { messageTypes } from "../types/message"
 
 let users = require('../database/mock-user')
 let tokens = require('../database/mock-token')
@@ -16,6 +17,7 @@ let employers = require('../database/mock-employer')
 let degrees = require('../database/mock-degree')
 let roles = require('../database/mock-role')
 let periods = require('../database/mock-period')
+let messages = require('../database/mock-message')
 
 const { Sequelize } = require('sequelize')
 const UserModel = require('../models/users')
@@ -29,6 +31,7 @@ const PeriodModel = require('../models/periods')
 const PeriodUserModel = require('../models/periodUsers')
 const DegreeUserModel = require('../models/degreeUsers')
 const RoleUserModel = require('../models/roleUsers')
+const MessageModel = require('../models/messages')
 
 const sequelize = new Sequelize(
     process.env.DataBase,
@@ -63,6 +66,8 @@ const Period = PeriodModel(sequelize, DataTypes)
 const PeriodUser = PeriodUserModel(sequelize, DataTypes)
 const DegreeUser = DegreeUserModel(sequelize, DataTypes)
 const RoleUser = RoleUserModel(sequelize, DataTypes)
+const Message = MessageModel(sequelize, DataTypes)
+
 
 User.hasOne(Token, { onDelete: 'cascade', hooks: true })
 Token.belongsTo(User, { onDelete: 'cascade', hooks: true })
@@ -84,6 +89,9 @@ User.belongsToMany(Role, { through: RoleUser })
 
 Period.belongsToMany(User, { through: PeriodUser })
 User.belongsToMany(Period, { through: PeriodUser })
+
+User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "to", foreignKey: "to" })
+User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "from", foreignKey: "from" })
 
 const initDb = () => {
     return sequelize.sync({ force: true }).then(() => {
@@ -132,38 +140,44 @@ const initDb = () => {
 
                 const degreeRow = await Degree.findByPk(index + 1);
                 await req.addDegree(degreeRow, { through: DegreeUser })
-
             })
-
         })
 
-        tokens.map((token: tokenTypes) => {
-            Token.create({
-                refreshToken: token.refreshToken,
-                tokenPush: token.tokenPush,
-                UserId: token.UserId
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        candidates.map((candidate: candidateTypes, index: number) => {
-            Candidate.create({
-                firstname: candidate.firstname,
-                lastname: candidate.lastname,
-                birthday: candidate.birthday,
-                UserId: index + 1
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        employers.map((employer: employerTypes) => {
-            Employer.create({
-                UserId: 3,
-                siret: employer.siret,
-                structurename: employer.structurename
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        console.log('Database created')
+    tokens.map((token: tokenTypes) => {
+        Token.create({
+            refreshToken: token.refreshToken,
+            tokenPush: token.tokenPush,
+            UserId: token.UserId
+        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
     })
+
+    candidates.map((candidate: candidateTypes, index: number) => {
+        Candidate.create({
+            firstname: candidate.firstname,
+            lastname: candidate.lastname,
+            birthday: candidate.birthday,
+            UserId: index + 1
+        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+    })
+
+    employers.map((employer: employerTypes) => {
+        Employer.create({
+            UserId: 3,
+            siret: employer.siret,
+            structurename: employer.structurename
+        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+    })
+
+    messages.map((message: messageTypes) => {
+        Message.create({
+            from: message.from,
+            to: message.to,
+            message: message.message
+        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+    })
+
+    console.log('Database created')
+})
 }
 
 module.exports = {
@@ -178,5 +192,6 @@ module.exports = {
     Period,
     DegreeUser,
     PeriodUser,
-    RoleUser
+    RoleUser,
+    Message
 }

@@ -30,14 +30,14 @@ const { Candidate, User, Degree, Period, PeriodUser, DegreeUser, Localisation } 
   *         in: body
   *         required: true  
   *         type: object
-  *         default: {"Candidat" : {"firstName": "Luc","lastName": "Vigneron","birthday": "27/04/1999"},"User": {"mail": "menfou@test.com","visibility": true,"password": "blabla","address": "9 rue du régiment de la chaudière","zipCode": 62200,"city": "Boulogne-sur Mer","role": "YEAH","image": "http://www.rien.com"},"Disponibilite": [{"id": 1},{"id": 4},{"id": 7}],"Diplome" : [{"id" : 2},{"id" : 4}]}
+  *         default: {"candidate": {"firstname": "luc","lastname": "fate","birthday": "1999-01-01"},"users": {"password": "string","email": "lucfate@test.com","phone": 780372674,"isActif": true,"TokenId": 1},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}],"degrees": [{"id":1}]}
   *      responses:
   *        200:
   *          description: La requête s'est bien déroulé
   */
 module.exports = (app: Application) => {
     app.put("/api/form/candidat/:id", (req, res) => {
-        console.log(req.body.candidate)
+        // console.log(req.body.candidate)
         Candidate.update(req.body.candidate, { where: { id: req.params.id } }).then(() => {
             Candidate.findByPk(req.params.id).then((candidat: candidateTypes) => {
                 User.update(req.body.users, { where: { id: candidat.UserId } }).then(() => {

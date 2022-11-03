@@ -18,7 +18,7 @@ app.use(express.json())
 
 // Pour recréer DB, à commenter sinon
 
-sequelize.initDb()
+// sequelize.initDb()
 
 const port = process.env.PORT || 5000
 app.listen(port, () => {
@@ -101,6 +101,9 @@ require('./routes/candidate/updateCandidate')(app)
 
 require('./routes/form/formUpdateCandidate')(app)
 require('./routes/form/formUpdateEmployer')(app)
+
+require('./routes/message/findByDiscussion')(app)
+require('./routes/message/createMessage')(app)
 
 /////////////
 
