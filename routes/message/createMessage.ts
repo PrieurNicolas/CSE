@@ -4,7 +4,6 @@ import { ApiException } from "../../types/exception";
 import { messageTypes } from "../../types/message";
 const { Message } = require('../../database/connect');
 
-
 /**
   * @openapi
   * /api/messages:

@@ -1,25 +1,33 @@
 require('dotenv').config()
-
-const cors = require('cors')
-const express = require("express")
-
-const app = express()
-
-app.use(cors())
-
 import { ApiException } from './types/exception'
+import { Response, Request, NextFunction } from 'express'
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 const sequelize = require('./database/connect')
+const cors = require('cors')
+const express = require("express")
+import { Server } from "socket.io";
+import { createServer } from "http";
 
-import { Response, Request, NextFunction } from 'express'
+const app = express()
+const httpServer = createServer(app);
+httpServer.listen(5001)
+export const io = new Server(httpServer, { /* path: "/api/messages" */
+    cors: {
+        origin: "http://localhost:19006"
+    }
+});
 
-app.use(express.json())
+io.on("connection", (socket) => {
+    socket.on("send message", (data) => {
+        socket.emit("private message", data.from, data.to);
+    })
+})
 
 // Pour recréer DB, à commenter sinon
-
 // sequelize.initDb()
-
+app.use(cors())
+app.use(express.json())
 const port = process.env.PORT || 5000
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`)
