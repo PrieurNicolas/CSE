@@ -6,23 +6,10 @@ const swaggerUi = require('swagger-ui-express')
 const sequelize = require('./database/connect')
 const cors = require('cors')
 const express = require("express")
-import { Server } from "socket.io";
-import { createServer } from "http";
+require("./socket")
 
 const app = express()
-const httpServer = createServer(app);
-httpServer.listen(5001)
-export const io = new Server(httpServer, { /* path: "/api/messages" */
-    cors: {
-        origin: "http://localhost:19006"
-    }
-});
-
-io.on("connection", (socket) => {
-    socket.on("send message", (data) => {
-        socket.emit("private message", data.from, data.to);
-    })
-})
+app.disable('x-powered-by');
 
 // Pour recréer DB, à commenter sinon
 // sequelize.initDb()
@@ -174,3 +161,5 @@ app.use(({ res: ApiException }: any) => {
     const message = 'Ressource not found.'
     return ApiException.status(404).json({ message })
 })
+
+export default app
