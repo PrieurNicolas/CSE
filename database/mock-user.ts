@@ -1,6 +1,6 @@
 const users = [
   {
-    email: "pierru@gmail.com",
+    email: "cse@cse.com",
     phone: 800000001,
     isActif: true,
     password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",

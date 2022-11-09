@@ -1,8 +1,8 @@
 const localisations = [
     {
-        address: "19 impasse de la cuesta",
-        zipCode: 62176,
-        city: "Camiers"
+        address: "cse",
+        zipCode: 62200,
+        city: "Boulogne"
     },
     {
         address: "test",
