@@ -43,12 +43,12 @@ module.exports = (app: Application) => {
         user.setLocalisation(local)
       })
 
-      req.body.periods.map(async (period: any) => {
+      req.body.periods?.map(async (period: any) => {
         const periodRow = await Period.findByPk(period.id)
         user.addPeriod(periodRow, { through: PeriodUser })
       })
 
-      req.body.degrees.map(async (degree: any) => {
+      req.body.degrees?.map(async (degree: any) => {
         const degreeRow = await Degree.findByPk(degree.id)
         user.addDegree(degreeRow, { through: DegreeUser })
       })

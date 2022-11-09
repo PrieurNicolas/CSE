@@ -45,7 +45,7 @@ module.exports = (app: Application) => {
         user.setLocalisation(local)
       })
 
-      req.body.periods.map(async (period: any) => {
+      req.body.periods?.map(async (period: any) => {
         const periodRow = await Period.findByPk(period.id)
         user.addPeriod(periodRow, { through: PeriodUser })
       })
