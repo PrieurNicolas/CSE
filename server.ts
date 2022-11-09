@@ -55,12 +55,15 @@ require('./routes/tokens/findTokenByPk')(app)
 require('./routes/tokens/deleteToken')(app)
 
 require('./routes/users/findAllUsers')(app)
+require('./routes/users/findAllUsersAdmin')(app)
 require('./routes/users/findUserByPk')(app)
-require('./routes/users/createUser')(app)
+// require('./routes/users/createUser')(app)
+require('./routes/users/createUserAdmin')(app)
 require('./routes/users/updateUser')(app)
 require('./routes/users/deleteUser')(app)
 
 require('./routes/auth/login')(app)
+require('./routes/auth/loginAdmin')(app)
 require('./routes/auth/token')(app)
 
 require('./routes/role/createRole')(app)
