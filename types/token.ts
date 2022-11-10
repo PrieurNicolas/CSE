@@ -1,13 +1,12 @@
-export interface tokenTypes{
-
-    refreshToken : string;
-    tokenPush : string;
-
+export interface tokenTypes {
+    refreshToken: string;
+    tokenPush: string;
+    UserId: number;
 }
 
 
 export interface tokenId extends tokenTypes {
 
-    id : number;
+    id: number;
 
 }

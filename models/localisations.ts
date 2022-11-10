@@ -1,33 +1,31 @@
 
-import {  DataTypes, Sequelize, STRING } from "sequelize"
+import { DataTypes, Sequelize } from "sequelize"
 
-
-module.exports = (sequelize : Sequelize, dataTypes : typeof DataTypes) => {
-
-    const concatRequiredMessage = (data : string) => {
+module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
+    const concatRequiredMessage = (data: string) => {
         return `${data} is required`
     }
 
     return sequelize.define('Localisation', {
 
         id: {
-        type: dataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true, 
+            type: dataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
         },
         address: {
             type: dataTypes.STRING,
             allowNull: false,
             validate: {
-                notNull: { msg : concatRequiredMessage('address')},
-                notEmpty : { msg : concatRequiredMessage('address')}
+                notNull: { msg: concatRequiredMessage('address') },
+                notEmpty: { msg: concatRequiredMessage('address') }
             }
         },
-        zipCode : {
+        zipCode: {
             type: dataTypes.INTEGER,
             allowNull: false
         },
-        city : {
+        city: {
             type: dataTypes.STRING,
             allowNull: false
         }

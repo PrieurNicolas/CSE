@@ -4,7 +4,6 @@ const users = [
     phone: 800000001,
     isActif: true,
     password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",
-    TokenId: 1,
     LocalisationId: 1
   },
   {
@@ -12,8 +11,14 @@ const users = [
     phone: 111111111,
     isActif: true,
     password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",
-    TokenId: 2,
     LocalisationId: 2
+  },
+  {
+    email: "simplon@gmail.com",
+    phone: 111111111,
+    isActif: true,
+    password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",
+    LocalisationId: 3
   },
 ];
 
