@@ -18,7 +18,7 @@ app.use(express.json())
 
 // Pour recréer DB, à commenter sinon
 
-// sequelize.initDb()
+ sequelize.initDb()
 
 const port = process.env.PORT || 5000
 app.listen(port, () => {
