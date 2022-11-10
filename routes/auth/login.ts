@@ -50,7 +50,7 @@ module.exports = (app: Application) => {
                     const refreshToken = jwt.sign({ name: user.id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1Y' })
                     Token.findAll().then((tokens: any) => {
                        const token = tokens.find((token: tokenTypes) => token.UserId == user.id)
-
+/////////////////
                        if (token == null) {
                            Token.create({
                                refreshToken: refreshToken,
