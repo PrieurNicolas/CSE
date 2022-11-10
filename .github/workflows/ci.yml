@@ -11,7 +11,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER_NAME }}
         key: ${{ secrets.PRIVATE_KEY }}
-        port: 3389
+        port: 22
         script: |
           cd ~/DevCda/CSE
           pwd
