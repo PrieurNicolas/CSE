@@ -15,7 +15,7 @@ jobs:
         script: |
           cd ~/DevCda/CSE
           pwd
-          git pull origin main
+          git pull origin master
           git status
           npm install
           npm run build
