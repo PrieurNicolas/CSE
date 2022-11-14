@@ -55,18 +55,18 @@ sequelize.authenticate()
     .catch((error: Error) => console.error(`Error: ${error}`)
     )
 
-const User = UserModel(sequelize, DataTypes)
-const Token = TokenModel(sequelize, DataTypes)
-const Localisation = LocalisationModel(sequelize, DataTypes)
-const Candidate = CandidateModel(sequelize, DataTypes)
-const Employer = EmployerModel(sequelize, DataTypes)
-const Degree = DegreeModel(sequelize, DataTypes)
-const Role = RoleModel(sequelize, DataTypes)
-const Period = PeriodModel(sequelize, DataTypes)
-const PeriodUser = PeriodUserModel(sequelize, DataTypes)
-const DegreeUser = DegreeUserModel(sequelize, DataTypes)
-const RoleUser = RoleUserModel(sequelize, DataTypes)
-const Message = MessageModel(sequelize, DataTypes)
+export const User = UserModel(sequelize, DataTypes)
+export const Token = TokenModel(sequelize, DataTypes)
+export const Localisation = LocalisationModel(sequelize, DataTypes)
+export const Candidate = CandidateModel(sequelize, DataTypes)
+export const Employer = EmployerModel(sequelize, DataTypes)
+export const Degree = DegreeModel(sequelize, DataTypes)
+export const Role = RoleModel(sequelize, DataTypes)
+export const Period = PeriodModel(sequelize, DataTypes)
+export const PeriodUser = PeriodUserModel(sequelize, DataTypes)
+export const DegreeUser = DegreeUserModel(sequelize, DataTypes)
+export const RoleUser = RoleUserModel(sequelize, DataTypes)
+export const Message = MessageModel(sequelize, DataTypes)
 
 
 User.hasOne(Token, { onDelete: 'cascade', hooks: true })
@@ -93,7 +93,7 @@ User.belongsToMany(Period, { through: PeriodUser })
 User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "to", foreignKey: "to" })
 User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "from", foreignKey: "from" })
 
-const initDb = () => {
+export const initDb = () => {
     return sequelize.sync({ force: true }).then(() => {
         localisations.map((localisation: localisationTypes) => {
             Localisation.create({
