@@ -1,4 +1,6 @@
-const users = [
+import { userTypes } from "../types/user";
+
+export const users: userTypes[] = [
   {
     email: "cse@cse.com",
     phone: 800000001,
@@ -21,5 +23,3 @@ const users = [
     LocalisationId: 3
   },
 ];
-
-module.exports = users;

@@ -3,8 +3,8 @@ import { ApiException } from './types/exception'
 import { Response, Request, NextFunction } from 'express';
 import { userTypes } from "./types/user";
 import { apiController } from './controllers/apiController';
+import { initDb } from './database/connect';
 const express = require("express")
-const sequelize = require('./database/connect')
 const cors = require('cors')
 require("./socket")
 
@@ -12,7 +12,8 @@ const app = express()
 app.disable('x-powered-by');
 
 // Pour recréer DB, à commenter sinon
-// sequelize.initDb()
+initDb()
+
 app.use(cors())
 app.use(express.json())
 const port = process.env.PORT || 5000

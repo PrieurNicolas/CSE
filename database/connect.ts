@@ -1,6 +1,7 @@
-import { DataTypes } from "sequelize"
+import { DataTypes, Sequelize } from "sequelize"
 import { tokenTypes } from "../types/token"
 import { userTypes } from "../types/user"
+import { users } from './mock-user'
 import { localisationTypes } from "../types/localisation"
 import { candidateTypes } from "../types/candidate"
 import { employerTypes } from "../types/employer"
@@ -8,18 +9,16 @@ import { degreeTypes } from "../types/degree"
 import { roleTypes } from "../types/role"
 import { periodTypes } from "../types/period"
 import { messageTypes } from "../types/message"
+import { candidates } from './mock-candidate'
 
-let users = require('../database/mock-user')
 let tokens = require('../database/mock-token')
 let localisations = require('../database/mock-localisation')
-let candidates = require('../database/mock-candidate')
 let employers = require('../database/mock-employer')
 let degrees = require('../database/mock-degree')
 let roles = require('../database/mock-role')
 let periods = require('../database/mock-period')
 let messages = require('../database/mock-message')
 
-const { Sequelize } = require('sequelize')
 const UserModel = require('../models/users')
 const TokenModel = require('../models/tokens')
 const LocalisationModel = require('../models/localisations')
@@ -33,9 +32,9 @@ const DegreeUserModel = require('../models/degreeUsers')
 const RoleUserModel = require('../models/roleUsers')
 const MessageModel = require('../models/messages')
 
-const sequelize = new Sequelize(
-    process.env.DataBase,
-    process.env.User,
+export const sequelize = new Sequelize(
+    process.env.DataBase!,
+    process.env.User!,
     process.env.MDP,
     {
         host: 'localhost',
@@ -90,8 +89,8 @@ User.belongsToMany(Role, { through: RoleUser })
 Period.belongsToMany(User, { through: PeriodUser })
 User.belongsToMany(Period, { through: PeriodUser })
 
-User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "to", foreignKey: "to" })
-User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "from", foreignKey: "from" })
+User.belongsToMany(User, { through: { model: Message, unique: false }, as: "to", foreignKey: "to" })
+User.belongsToMany(User, { through: { model: Message, unique: false }, as: "from", foreignKey: "from" })
 
 export const initDb = () => {
     return sequelize.sync({ force: true }).then(() => {
@@ -143,55 +142,39 @@ export const initDb = () => {
             })
         })
 
-    tokens.map((token: tokenTypes) => {
-        Token.create({
-            refreshToken: token.refreshToken,
-            tokenPush: token.tokenPush,
-            UserId: token.UserId
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        tokens.map((token: tokenTypes) => {
+            Token.create({
+                refreshToken: token.refreshToken,
+                tokenPush: token.tokenPush,
+                UserId: token.UserId
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        candidates.map((candidate: candidateTypes, index: number) => {
+            Candidate.create({
+                firstname: candidate.firstname,
+                lastname: candidate.lastname,
+                birthday: candidate.birthday,
+                UserId: index + 1
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        employers.map((employer: employerTypes) => {
+            Employer.create({
+                UserId: 3,
+                siret: employer.siret,
+                structurename: employer.structurename
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        messages.map((message: messageTypes) => {
+            Message.create({
+                from: message.from,
+                to: message.to,
+                message: message.message
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        console.log('Database created')
     })
-
-    candidates.map((candidate: candidateTypes, index: number) => {
-        Candidate.create({
-            firstname: candidate.firstname,
-            lastname: candidate.lastname,
-            birthday: candidate.birthday,
-            UserId: index + 1
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-    })
-
-    employers.map((employer: employerTypes) => {
-        Employer.create({
-            UserId: 3,
-            siret: employer.siret,
-            structurename: employer.structurename
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-    })
-
-    messages.map((message: messageTypes) => {
-        Message.create({
-            from: message.from,
-            to: message.to,
-            message: message.message
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-    })
-
-    console.log('Database created')
-})
-}
-
-module.exports = {
-    initDb,
-    User,
-    Token,
-    Role,
-    Candidate,
-    Employer,
-    Degree,
-    Localisation,
-    Period,
-    DegreeUser,
-    PeriodUser,
-    RoleUser,
-    Message
 }

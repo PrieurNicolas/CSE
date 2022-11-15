@@ -245,7 +245,7 @@ employerController.put('/:id', async (req, res) => {
   *         in: body
   *         required: true  
   *         type: object
-  *         default: {"employer": {"siret": "123456789","structurename": "name"},"users": {"password": "string","email": "lucfate@test.com","phone": 780372674,"isActif": true,"TokenId": 1},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}] }
+  *         default: {"employer": {"siret": "123456789","structurename": "name"},"users": {"password": "string","email": "lucfate@test.com","phone": 780372674,"isActif": true},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}] }
   *      responses:
   *        200:
   *          description: La requête s'est bien déroulé

@@ -31,6 +31,7 @@ const swaggerOptions = {
     apis: [`./controllers/*.ts`]
 }
 const swaggerDocs = swaggerJsDoc(swaggerOptions)
+
 apiController.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 apiController.use('/users', usersController)
 apiController.use('/tokens', tokenController)
@@ -41,4 +42,5 @@ apiController.use('/employers', employerController)
 apiController.use('/degrees', degreeController)
 apiController.use('/candidates', candidateController)
 apiController.use('/auth', authController)
+
 export { apiController }

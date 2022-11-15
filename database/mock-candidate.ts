@@ -1,16 +1,16 @@
-const candidates = [
+import { candidateTypes } from "../types/candidate";
+
+export const candidates: candidateTypes[] = [
   {
-    userId: 1,
+    UserId: 1,
     firstname: "gaetan",
     lastname: "pierru",
-    birthday: "2000-01-20"
+    birthday: new Date("2000-01-20")
   },
   {
-    userId: 2,
+    UserId: 2,
     firstname: "nicolas",
     lastname: "prieur",
-    birthday: "2001-05-15"
+    birthday: new Date("2001-05-15")
   },
 ];
-
-module.exports = candidates;
