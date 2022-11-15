@@ -1,4 +1,6 @@
-const localisations = [
+import { localisationTypes } from "../types/localisation";
+
+export const localisations: localisationTypes[] = [
     {
         address: "cse",
         zipCode: 62200,
@@ -15,5 +17,3 @@ const localisations = [
         city: "Boulogne  sur mer"
     }
 ];
-
-module.exports = localisations;

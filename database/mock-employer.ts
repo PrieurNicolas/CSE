@@ -1,8 +1,9 @@
-const employers = [
-  {
-    siret: 79279132900016,
-    structurename: "simplon",
-  },
-];
+import { employerTypes } from "../types/employer";
 
-module.exports = employers;
+export const employers: employerTypes[] = [
+  {
+    siret: BigInt(79279132900016),
+    structurename: "simplon",
+    UserId: 3
+  }
+];

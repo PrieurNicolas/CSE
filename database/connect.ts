@@ -10,14 +10,13 @@ import { roleTypes } from "../types/role"
 import { periodTypes } from "../types/period"
 import { messageTypes } from "../types/message"
 import { candidates } from './mock-candidate'
-
-let tokens = require('../database/mock-token')
-let localisations = require('../database/mock-localisation')
-let employers = require('../database/mock-employer')
-let degrees = require('../database/mock-degree')
-let roles = require('../database/mock-role')
-let periods = require('../database/mock-period')
-let messages = require('../database/mock-message')
+import { tokens } from './mock-token'
+import { localisations } from './mock-localisation'
+import { employers } from './mock-employer'
+import {degrees} from './mock-degree'
+import { roles } from './mock-role'
+import { periods } from './mock-period'
+import {messages } from './mock-message'
 
 const UserModel = require('../models/users')
 const TokenModel = require('../models/tokens')
