@@ -156,6 +156,7 @@ const initDb = () => {
             firstname: candidate.firstname,
             lastname: candidate.lastname,
             birthday: candidate.birthday,
+            wantToBe: candidate.wantToBe,
             UserId: index + 1
         }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
     })
