@@ -68,7 +68,6 @@ adminController.get('/all', async (req, res) => {
     })
         .then((users: any) => {
             let admins = users.filter((user: any) => user.Roles[0]?.id == 1)
-            console.log(users)
             res.status(200).json(admins)
         })
         .catch((error: ApiException) => {

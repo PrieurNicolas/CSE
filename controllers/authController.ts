@@ -105,7 +105,6 @@ authController.post('/token', async (req, res) => {
                 refreshTokens.push(token.refreshToken)
             })
 
-            console.log('All tokens', refreshTokens)
             if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
             jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err: Error, user: any) => {
                 if (err) return res.sendStatus(403)
