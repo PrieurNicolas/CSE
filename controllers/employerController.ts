@@ -33,6 +33,7 @@ const employerController = Router();
   *          description: Create a new employer.
   */
 employerController.post('/', async (req, res) => {
+  if (!req.body.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
   req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
 
   User.create(req.body.users).then(async (user: any) => {
