@@ -1,0 +1,22 @@
+name: CD
+on: [workflow_dispatch]
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER_NAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ~/DevCda/CSE
+          pwd
+          git pull origin master
+          git status
+          npm install
+          npm run build
+          pm2 start pm2.config.js 

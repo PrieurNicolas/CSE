@@ -31,10 +31,10 @@ const DegreeUserModel = require('../models/degreeUsers')
 const RoleUserModel = require('../models/roleUsers')
 const MessageModel = require('../models/messages')
 
-export const sequelize = new Sequelize(
-    process.env.DataBase!,
-    process.env.User!,
-    process.env.MDP,
+const sequelize = new Sequelize(
+    process.env.NAME_DATABASE!,
+    process.env.HOST_DATABASE!,
+    process.env.PASS_DATABASE,
     {
         host: 'localhost',
         dialect: 'postgres',
