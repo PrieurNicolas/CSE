@@ -1,6 +1,7 @@
-import { DataTypes } from "sequelize"
+import { DataTypes, Sequelize } from "sequelize"
 import { tokenTypes } from "../types/token"
 import { userTypes } from "../types/user"
+import { users } from './mock-user'
 import { localisationTypes } from "../types/localisation"
 import { candidateTypes } from "../types/candidate"
 import { employerTypes } from "../types/employer"
@@ -8,18 +9,15 @@ import { degreeTypes } from "../types/degree"
 import { roleTypes } from "../types/role"
 import { periodTypes } from "../types/period"
 import { messageTypes } from "../types/message"
+import { candidates } from './mock-candidate'
+import { tokens } from './mock-token'
+import { localisations } from './mock-localisation'
+import { employers } from './mock-employer'
+import {degrees} from './mock-degree'
+import { roles } from './mock-role'
+import { periods } from './mock-period'
+import {messages } from './mock-message'
 
-let users = require('../database/mock-user')
-let tokens = require('../database/mock-token')
-let localisations = require('../database/mock-localisation')
-let candidates = require('../database/mock-candidate')
-let employers = require('../database/mock-employer')
-let degrees = require('../database/mock-degree')
-let roles = require('../database/mock-role')
-let periods = require('../database/mock-period')
-let messages = require('../database/mock-message')
-
-const { Sequelize } = require('sequelize')
 const UserModel = require('../models/users')
 const TokenModel = require('../models/tokens')
 const LocalisationModel = require('../models/localisations')
@@ -34,8 +32,8 @@ const RoleUserModel = require('../models/roleUsers')
 const MessageModel = require('../models/messages')
 
 const sequelize = new Sequelize(
-    process.env.NAME_DATABASE,
-    process.env.HOST_DATABASE,
+    process.env.NAME_DATABASE!,
+    process.env.HOST_DATABASE!,
     process.env.PASS_DATABASE,
     {
         host: 'localhost',
@@ -55,18 +53,18 @@ sequelize.authenticate()
     .catch((error: Error) => console.error(`Error: ${error}`)
     )
 
-const User = UserModel(sequelize, DataTypes)
-const Token = TokenModel(sequelize, DataTypes)
-const Localisation = LocalisationModel(sequelize, DataTypes)
-const Candidate = CandidateModel(sequelize, DataTypes)
-const Employer = EmployerModel(sequelize, DataTypes)
-const Degree = DegreeModel(sequelize, DataTypes)
-const Role = RoleModel(sequelize, DataTypes)
-const Period = PeriodModel(sequelize, DataTypes)
-const PeriodUser = PeriodUserModel(sequelize, DataTypes)
-const DegreeUser = DegreeUserModel(sequelize, DataTypes)
-const RoleUser = RoleUserModel(sequelize, DataTypes)
-const Message = MessageModel(sequelize, DataTypes)
+export const User = UserModel(sequelize, DataTypes)
+export const Token = TokenModel(sequelize, DataTypes)
+export const Localisation = LocalisationModel(sequelize, DataTypes)
+export const Candidate = CandidateModel(sequelize, DataTypes)
+export const Employer = EmployerModel(sequelize, DataTypes)
+export const Degree = DegreeModel(sequelize, DataTypes)
+export const Role = RoleModel(sequelize, DataTypes)
+export const Period = PeriodModel(sequelize, DataTypes)
+export const PeriodUser = PeriodUserModel(sequelize, DataTypes)
+export const DegreeUser = DegreeUserModel(sequelize, DataTypes)
+export const RoleUser = RoleUserModel(sequelize, DataTypes)
+export const Message = MessageModel(sequelize, DataTypes)
 
 
 User.hasOne(Token, { onDelete: 'cascade', hooks: true })
@@ -90,10 +88,10 @@ User.belongsToMany(Role, { through: RoleUser })
 Period.belongsToMany(User, { through: PeriodUser })
 User.belongsToMany(Period, { through: PeriodUser })
 
-User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "to", foreignKey: "to" })
-User.belongsToMany(User, { through: {model: Message, unique: false} ,as: "from", foreignKey: "from" })
+User.belongsToMany(User, { through: { model: Message, unique: false }, as: "to", foreignKey: "to" })
+User.belongsToMany(User, { through: { model: Message, unique: false }, as: "from", foreignKey: "from" })
 
-const initDb = () => {
+export const initDb = () => {
     return sequelize.sync({ force: true }).then(() => {
         localisations.map((localisation: localisationTypes) => {
             Localisation.create({
@@ -143,13 +141,13 @@ const initDb = () => {
             })
         })
 
-    tokens.map((token: tokenTypes) => {
-        Token.create({
-            refreshToken: token.refreshToken,
-            tokenPush: token.tokenPush,
-            UserId: token.UserId
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-    })
+        tokens.map((token: tokenTypes) => {
+            Token.create({
+                refreshToken: token.refreshToken,
+                tokenPush: token.tokenPush,
+                UserId: token.UserId
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
 
     candidates.map((candidate: candidateTypes, index: number) => {
         Candidate.create({
@@ -161,38 +159,22 @@ const initDb = () => {
         }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
     })
 
-    employers.map((employer: employerTypes) => {
-        Employer.create({
-            UserId: 3,
-            siret: employer.siret,
-            structurename: employer.structurename
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        employers.map((employer: employerTypes) => {
+            Employer.create({
+                UserId: 3,
+                siret: employer.siret,
+                structurename: employer.structurename
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        messages.map((message: messageTypes) => {
+            Message.create({
+                from: message.from,
+                to: message.to,
+                message: message.message
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        console.log('Database created')
     })
-
-    messages.map((message: messageTypes) => {
-        Message.create({
-            from: message.from,
-            to: message.to,
-            message: message.message
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-    })
-
-    console.log('Database created')
-})
-}
-
-module.exports = {
-    initDb,
-    User,
-    Token,
-    Role,
-    Candidate,
-    Employer,
-    Degree,
-    Localisation,
-    Period,
-    DegreeUser,
-    PeriodUser,
-    RoleUser,
-    Message
 }

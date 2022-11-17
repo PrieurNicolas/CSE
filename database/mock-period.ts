@@ -1,4 +1,6 @@
-const periods = [
+import { periodTypes } from "../types/period";
+
+export const periods: periodTypes[] = [
     {
         periodname: "Vacances de février",
     },
@@ -22,7 +24,5 @@ const periods = [
     },
     {
         periodname: "Samedi",
-    },
+    }
 ];
-
-module.exports = periods;

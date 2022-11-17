@@ -1,4 +1,6 @@
-const roles = [
+import { roleTypes } from "../types/role";
+
+export const roles: roleTypes[] = [
     {
         role: "ADMIN",
     },
@@ -9,5 +11,3 @@ const roles = [
         role: "ENTREPRISE",
     },
 ];
-
-module.exports = roles;

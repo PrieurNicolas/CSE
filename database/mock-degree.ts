@@ -1,4 +1,6 @@
-const degree = [
+import { degreeTypes } from "../types/degree";
+
+export const degrees: degreeTypes[] = [
     {
         degreename: "BAFD",
     },
@@ -16,7 +18,5 @@ const degree = [
     },
     {
         degreename: "BPJEPS",
-    },
+    }
 ];
-
-module.exports = degree;

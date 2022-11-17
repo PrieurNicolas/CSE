@@ -1,7 +1,7 @@
 export interface localisationTypes {
   address: string;
   zipCode: number;
-  city: Date
+  city: string
 }
 
 export interface localisationId extends localisationTypes {

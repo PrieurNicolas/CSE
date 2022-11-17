@@ -1,5 +1,5 @@
 export interface messageTypes {
-    message: Text;
+    message: string;
     createdAt: Date;
     to: number;
     from: number;
