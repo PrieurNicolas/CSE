@@ -10,7 +10,7 @@ export const users: userTypes[] = [
   },
   {
     email: "test@gmail.com",
-    phone: 111111111,
+    phone: 111111112,
     isActif: true,
     password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",
     LocalisationId: 2

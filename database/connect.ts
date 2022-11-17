@@ -149,14 +149,15 @@ export const initDb = () => {
             }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
         })
 
-        candidates.map((candidate: candidateTypes, index: number) => {
-            Candidate.create({
-                firstname: candidate.firstname,
-                lastname: candidate.lastname,
-                birthday: candidate.birthday,
-                UserId: index + 1
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
+    candidates.map((candidate: candidateTypes, index: number) => {
+        Candidate.create({
+            firstname: candidate.firstname,
+            lastname: candidate.lastname,
+            birthday: candidate.birthday,
+            wantToBe: candidate.wantToBe,
+            UserId: index + 1
+        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+    })
 
         employers.map((employer: employerTypes) => {
             Employer.create({

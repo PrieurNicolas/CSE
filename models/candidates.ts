@@ -31,5 +31,13 @@ module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 notEmpty: { msg: concatRequiredMessage('birthday date') }
             }
         },
+        wantToBe: {
+            type: dataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notNull: { msg: concatRequiredMessage('wantToBe missing') },
+                notEmpty: { msg: concatRequiredMessage('wantToBe missing') }
+            }
+        },
     })
 }
