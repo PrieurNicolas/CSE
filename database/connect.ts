@@ -35,6 +35,7 @@ const sequelize = new Sequelize(
     process.env.NAME_DATABASE!,
     process.env.HOST_DATABASE!,
     process.env.PASS_DATABASE,
+    
     {
         host: 'localhost',
         dialect: 'postgres',
