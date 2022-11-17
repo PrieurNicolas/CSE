@@ -24,7 +24,7 @@ const { User, Candidate, Localisation, PeriodUser, Period, DegreeUser, Degree, R
   *         in: body
   *         required: true
   *         type: object
-  *         default: {"candidate": {"firstname": "luc","lastname": "fate","birthday": "1999-01-01"},"users": {"password": "string","email": "lucfate@test.com","phone": 780372674,"isActif": true,"TokenId": 1},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}],"degrees": [{"id":1}]}
+  *         default: {"candidate": {"firstname": "luc","lastname": "fate","birthday": "1999-01-01", "wantToBe": "animateur"},"users": {"password": "string","email": "lucfate@test.com","phone": 780372674,"isActif": true,"TokenId": 1},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}],"degrees": [{"id":1}]}
   *      responses:
   *        200:
   *          description: Create a new candidate.
