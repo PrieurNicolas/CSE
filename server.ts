@@ -12,7 +12,7 @@ const app = express()
 app.disable('x-powered-by');
 
 // Pour recréer DB, à commenter sinon
-initDb()
+// initDb()
 
 app.use(cors())
 app.use(express.json())
@@ -46,22 +46,6 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
     })
 }
 
-/**
-  * @openapi
-  * /api/users/test/{id}:
-  *  get:
-  *      tags: [Users]
-  *      description: Get an template by id
-  *      parameters:
-  *       - name: id
-  *         in: path
-  *         required: true
-  *         type: integer
-  *         default: 1
-  *      responses:
-  *        200:
-  *          description: test
-  */
 app.get('/api/users/test/:id', authenticateToken, (req: Request, res: Response) => {
     User.findByPk(req.params.id)
         .then((user: userTypes) => {

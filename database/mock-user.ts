@@ -16,7 +16,7 @@ export const users: userTypes[] = [
     LocalisationId: 2
   },
   {
-    email: "simplon@gmail.com",
+    email: "s@gmail.com",
     phone: 111111111,
     isActif: true,
     password: "$2b$10$NUOQNvbDfEO8EnvvRmI8oOhBjNPyARSE3H2Bya73s7U7wd7vkZGYm",
