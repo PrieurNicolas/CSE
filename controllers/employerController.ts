@@ -27,44 +27,51 @@ const employerController = Router();
   *         in: body
   *         required: true
   *         type: object
-  *         default: {"employer": {"siret": "123456789","structurename": "name"},"users": {"password": "string","email": "lucfate@test.com","phone": 780372674,"isActif": true,"TokenId": 1},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}] }
+  *         default: {"employer": {"siret": "123456789","structurename": "name"},"users": {"password": "string", "passwordconf": "string","email": "lucfate@test.com","phone": 777777,"isActif": true},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}] }
   *      responses:
   *        200:
   *          description: Create a new employer.
   */
 employerController.post('/', async (req, res) => {
-  if (!req.body.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
+  if (!req.body.users.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
+  if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
+
+
   req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
 
-  User.create(req.body.users).then(async (user: any) => {
+  try {
+    User.create(req.body.users).then(async (user: any) => {
 
-    Employer.create(req.body.employer).then((e: any) => {
-      e.setUser(user)
+      Employer.create(req.body.employer).then((e: any) => {
+        e.setUser(user)
+      })
+
+      Localisation.create(req.body.localisation).then((local: any) => {
+        user.setLocalisation(local)
+      })
+
+      req.body.periods.map(async (period: any) => {
+        const periodRow = await Period.findByPk(period.id)
+        user.addPeriod(periodRow, { through: PeriodUser })
+      })
+
+      const roleRow = await Role.findByPk(3)
+      user.addRole(roleRow, { through: RoleUser })
+
+    }).then((employer: employerTypes) => {
+      const message: string = `employeur créé avec succes.`;
+      res.json({ message, data: employer });
     })
-
-    Localisation.create(req.body.localisation).then((local: any) => {
-      user.setLocalisation(local)
-    })
-
-    req.body.periods.map(async (period: any) => {
-      const periodRow = await Period.findByPk(period.id)
-      user.addPeriod(periodRow, { through: PeriodUser })
-    })
-
-    const roleRow = await Role.findByPk(3)
-    user.addRole(roleRow, { through: RoleUser })
-
-  }).then((employer: employerTypes) => {
-    const message: string = `employeur créé avec succes.`;
-    res.json({ message, data: employer });
-  })
-    .catch((error: ApiException) => {
-      if (error instanceof ValidationError) {
-        return res.status(400).json({ message: error.message, data: error })
-      }
-      const message = `Echec lors de la création de l'employeur.`
-      res.status(500).json({ message, data: error })
-    })
+      .catch((error: ApiException) => {
+        if (error instanceof ValidationError) {
+          return res.status(400).json({ message: error.message, data: error })
+        }
+        const message = `Echec lors de la création de l'employeur.`
+        res.status(500).json({ message, data: error })
+      })
+  } catch (error) {
+    return res.json(error)
+  }
 })
 
 /**
@@ -246,54 +253,61 @@ employerController.put('/:id', async (req, res) => {
   *         in: body
   *         required: true  
   *         type: object
-  *         default: {"employer": {"siret": "123456789","structurename": "name"},"users": {"password": "string","email": "lucfate@test.com","phone": 780372674,"isActif": true},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}] }
+  *         default: {"employer": {"siret": "123456789","structurename": "name"},"users": {"password": "string", "passwordconf": "string","email": "lucfate@test.com","phone": 45678912,"isActif": true},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}] }
   *      responses:
   *        200:
   *          description: La requête s'est bien déroulé
   */
 employerController.put('/form/:id', async (req, res) => {
-  Employer.update(req.body.employer, { where: { id: req.params.id } }).then(() => {
-    Employer.findByPk(req.params.id).then((employer: employerTypes) => {
-      User.update(req.body.users, { where: { id: employer.UserId } }).then(() => {
-        User.findByPk(employer.UserId).then((user: any) => {
+  if (!req.body.users.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
+  if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
 
-          PeriodUser.destroy({ where: { UserId: user.id } })
-          req.body.periods?.map(async (DispoMap: any) => {
-            const DisponibiliteRow = await Period.findByPk(DispoMap.id);
-            await user.addPeriod(DisponibiliteRow, { through: PeriodUser })
-          })
+  try {
+    Employer.update(req.body.employer, { where: { id: req.params.id } }).then(() => {
+      Employer.findByPk(req.params.id).then((employer: employerTypes) => {
+        User.update(req.body.users, { where: { id: employer.UserId } }).then(() => {
+          User.findByPk(employer.UserId).then((user: any) => {
 
-          Localisation.update(req.body.localisation, {
-            where: { id: user.LocalisationId }
+            PeriodUser.destroy({ where: { UserId: user.id } })
+            req.body.periods?.map(async (DispoMap: any) => {
+              const DisponibiliteRow = await Period.findByPk(DispoMap.id);
+              await user.addPeriod(DisponibiliteRow, { through: PeriodUser })
+            })
+
+            Localisation.update(req.body.localisation, {
+              where: { id: user.LocalisationId }
+            })
           })
         })
       })
     })
-  })
-  Employer.findByPk(req.params.id, {
-    include: [
-      {
-        model: User,
-        required: false,
-        include: [
-          {
-            model: Period,
-            required: false
-          }
-        ]
-      }
-    ]
-  }).then((employer: any) => {
-    const message: string = 'L\'employeur à bien été mis à jour'
-    res.json({ message, data: employer })
-  })
-    .catch((error: ApiException) => {
-      if (error instanceof ValidationError) {
-        return res.status(400).json({ message: error.message, data: error })
-      }
-      const message = `L\'employeur n'a pas pu être ajouté. Réessayer dans quelques instants.`
-      res.status(500).json({ message, data: error })
+    Employer.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          required: false,
+          include: [
+            {
+              model: Period,
+              required: false
+            }
+          ]
+        }
+      ]
+    }).then((employer: any) => {
+      const message: string = 'L\'employeur à bien été mis à jour'
+      res.json({ message, data: employer })
     })
+      .catch((error: ApiException) => {
+        if (error instanceof ValidationError) {
+          return res.status(400).json({ message: error.message, data: error })
+        }
+        const message = `L\'employeur n'a pas pu être ajouté. Réessayer dans quelques instants.`
+        res.status(500).json({ message, data: error })
+      })
+  } catch (error) {
+    return res.json(error)
+  }
 })
 
 
