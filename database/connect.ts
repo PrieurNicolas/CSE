@@ -32,9 +32,12 @@ const RoleUserModel = require('../models/roleUsers')
 const MessageModel = require('../models/messages')
 
 const sequelize = new Sequelize(
-   "DatabaseCse",
-    'alexis',
-    '123456',
+//    "DatabaseCse",
+//     'alexis',
+//     '123456',
+    `${process.env.NAME_DATABASE}`,
+    `${process.env.HOST_DATABASE}`,
+    `${process.env.PASS_DATABASE}`,
     {
         host: 'localhost',
         dialect: 'postgres',

@@ -1,4 +1,4 @@
-require('dotenv').config()
+import 'dotenv/config'
 import { ApiException } from './types/exception'
 import { Response, Request, NextFunction } from 'express';
 import { userTypes } from "./types/user";

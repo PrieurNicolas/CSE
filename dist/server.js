@@ -614,9 +614,9 @@ var init_connect = __esm({
     RoleUserModel = require_roleUsers();
     MessageModel = require_messages();
     sequelize = new import_sequelize.Sequelize(
-      "DatabaseCse",
-      "alexis",
-      "123456",
+      `${process.env.NAME_DATABASE}`,
+      `${process.env.HOST_DATABASE}`,
+      `${process.env.PASS_DATABASE}`,
       {
         host: "localhost",
         dialect: "postgres",
