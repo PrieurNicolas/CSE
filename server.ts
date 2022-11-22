@@ -14,14 +14,9 @@ app.disable('x-powered-by');
 // Pour recréer DB, à commenter sinon
 initDb()
 
+//
 
-const allowedOrigins = ['http://localhost:3000'];
-
-const options: cors.CorsOptions = {
-  origin: allowedOrigins
-};
-
-app.use(cors(options))
+app.use(cors())
 app.use(express.json())
 
 
