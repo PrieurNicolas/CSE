@@ -5,7 +5,7 @@ import { userTypes } from "./types/user";
 import { apiController } from './controllers/apiController';
 import { initDb } from './database/connect';
 const express = require("express")
-const cors = require('cors')
+import cors from 'cors';
 require("./socket")
 
 const app = express()
@@ -14,8 +14,17 @@ app.disable('x-powered-by');
 // Pour recréer DB, à commenter sinon
 initDb()
 
-app.use(cors())
+
+const allowedOrigins = ['http://localhost:3000'];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
+
+app.use(cors(options))
 app.use(express.json())
+
+
 const port = process.env.PORT || 5000
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`)
