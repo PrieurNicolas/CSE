@@ -134,6 +134,7 @@ candidateController.get('/', async (req, res) => {
             {
                 model: User,
                 required: false,
+                attributes: {exclude: ['password']},
                 include: {
                     model: Localisation,
                     require: false
@@ -171,6 +172,7 @@ candidateController.get('/:id', async (req, res) => {
             {
                 model: User,
                 required: false,
+                attributes: {exclude: ['password']},
                 include: [
                     {
                         model: Localisation,
@@ -269,6 +271,7 @@ candidateController.put('/form/:id', async (req, res) => {
     if (!req.body.users.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
     if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
 
+    req.body.users.password && (req.body.users.password = await bcrypt.hash(req.body.users.password, 10))
 
     try {
         Candidate.update(req.body.candidate, { where: { id: req.params.id } }).then(() => {

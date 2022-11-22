@@ -28,6 +28,7 @@ const usersController = Router();
  */
 usersController.get("/", async (req, res) => {
     User.findAll({
+        attributes: {exclude: ['password']},
         include: [
             {
                 model: Degree,
@@ -144,7 +145,7 @@ usersController.delete("/:id", (req, res) => {
  *          description: Get the user of given id.
  */
 usersController.get('/:id', async (req, res) => {
-    User.findByPk(req.params.id)
+    User.findByPk(req.params.id, {attributes: {exclude: ['password']}})
         .then((user: userTypes) => {
             if (user === null) {
                 const message = "L'utilisateur n'existe pas."

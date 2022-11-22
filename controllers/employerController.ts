@@ -132,6 +132,7 @@ employerController.get('/', async (req, res) => {
       {
         model: User,
         required: false,
+        attributes: {exclude: ['password']},
         include: {
           model: Localisation,
           require: false
@@ -168,6 +169,7 @@ employerController.get('/:id', async (req, res) => {
       {
         model: User,
         required: false,
+        attributes: {exclude: ['password']},
         include: [
           {
             model: Localisation,
@@ -261,6 +263,8 @@ employerController.put('/:id', async (req, res) => {
 employerController.put('/form/:id', async (req, res) => {
   if (!req.body.users.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
   if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
+
+  req.body.users.password && (req.body.users.password = await bcrypt.hash(req.body.users.password, 10))
 
   try {
     Employer.update(req.body.employer, { where: { id: req.params.id } }).then(() => {

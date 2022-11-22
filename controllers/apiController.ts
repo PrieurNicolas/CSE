@@ -16,8 +16,8 @@ const port = process.env.PORT || 5000
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
-            title: 'The Choice Is Yours API',
-            description: 'Red or Blue',
+            title: 'API CSE',
+            description: 'Swagger CSE',
             contact: {
                 name: 'Best front-end dev EUW'
             },
