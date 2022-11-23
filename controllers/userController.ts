@@ -72,24 +72,24 @@ usersController.get("/", async (req, res) => {
   *        200:
   *          description: Create a new user.
   */
-usersController.post("/", async (req, res) => {
-    const { phone, email, isActif } = req.body
+// usersController.post("/", async (req, res) => {
+//     const { phone, email, isActif } = req.body
 
-    if (!req.body.password) return res.status(400).json({ passwordRequired: true, message: 'Password is required.' })
+//     if (!req.body.password) return res.status(400).json({ passwordRequired: true, message: 'Password is required.' })
 
-    req.body.password = await bcrypt.hash(req.body.password, 10);
-    User.create(req.body).then((user: userTypes) => {
-        const message: string = `Utilisateur créé avec succes.`;
-        res.json({ message, data: user });
-    })
-        .catch((error: ApiException) => {
-            if (error instanceof ValidationError) {
-                return res.status(400).json({ message: error.message, data: error })
-            }
-            const message = `Echec Utilisateur non créé.`
-            res.status(500).json({ message, data: error })
-        })
-})
+//     req.body.password = await bcrypt.hash(req.body.password, 10);
+//     User.create(req.body).then((user: userTypes) => {
+//         const message: string = `Utilisateur créé avec succes.`;
+//         res.json({ message, data: user });
+//     })
+//         .catch((error: ApiException) => {
+//             if (error instanceof ValidationError) {
+//                 return res.status(400).json({ message: error.message, data: error })
+//             }
+//             const message = `Echec Utilisateur non créé.`
+//             res.status(500).json({ message, data: error })
+//         })
+// })
 
 /**
   * @openapi
@@ -106,27 +106,27 @@ usersController.post("/", async (req, res) => {
   *        200:
   *          description: Delete an user. 
   */
-usersController.delete("/:id", (req, res) => {
-    User.findByPk(req.params.id).then((user: userId) => {
-        if (user === null) {
-            const message = "L'utilisateur n'existe pas."
-            return res.status(404).json({ message: message })
-        }
+// usersController.delete("/:id", (req, res) => {
+//     User.findByPk(req.params.id).then((user: userId) => {
+//         if (user === null) {
+//             const message = "L'utilisateur n'existe pas."
+//             return res.status(404).json({ message: message })
+//         }
 
-        const userDeleted = user;
-        return User.destroy({
-            where: { id: user.id }
-        })
-            .then(() => {
-                const message = `Utilisateur ${userDeleted.id} supprimé avec succes.`
-                res.json({ message, data: userDeleted })
-            })
-    })
-        .catch((error: ApiException) => {
-            const message = `Echec lors de la suppression de l'Utilisateur`;
-            res.status(500).json({ message, data: error });
-        });
-})
+//         const userDeleted = user;
+//         return User.destroy({
+//             where: { id: user.id }
+//         })
+//             .then(() => {
+//                 const message = `Utilisateur ${userDeleted.id} supprimé avec succes.`
+//                 res.json({ message, data: userDeleted })
+//             })
+//     })
+//         .catch((error: ApiException) => {
+//             const message = `Echec lors de la suppression de l'Utilisateur`;
+//             res.status(500).json({ message, data: error });
+//         });
+// })
 
 /**
  * @openapi
