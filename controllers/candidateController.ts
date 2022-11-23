@@ -27,7 +27,7 @@ const candidateController = Router();
   *         in: body
   *         required: true
   *         type: object
-  *         default: {"candidate": {"firstname": "luc","lastname": "fate","birthday": "1999-01-01", "wantToBe": "animateur"},"users": {"password": "string", "passwordconf": "string","email": "lucfate@test.com","phone": 2345676,"isActif": true},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}],"degrees": [{"id":1}]}
+  *         default: {"candidate": {"firstname": "luc","lastname": "fate","birthday": "1999-01-01", "wantToBe": "animateur"},"users": {"password": "string", "passwordconf": "string","email": "lucfate@test.com","phone": "2345676","isActif": true},"localisation": {"address": "address","zipCode": 62176,"city": "city"},"periods": [{    "id":1},{    "id":3}],"degrees": [{"id":1}]}
   *      responses:
   *        200:
   *          description: Create a new candidate.
@@ -37,6 +37,9 @@ candidateController.post('/', async (req, res) => {
     if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
 
     req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
+    if (!Number.isInteger(Number (req.body.users.phone) )){
+        return res.status(400).json({message: "Le numero de telephone doit être un nombre", data: req.body.users.phone})
+    }
 
     try {
         User.create(req.body.users).then(async (user: any) => {
@@ -73,7 +76,7 @@ candidateController.post('/', async (req, res) => {
             res.status(500).json({ message, data: error })
         })
     } catch (error) {
-        return res.json(error)
+        return res.status(500).json(error)
     }
 })
 
@@ -272,6 +275,10 @@ candidateController.put('/form/:id', async (req, res) => {
     if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
 
     req.body.users.password && (req.body.users.password = await bcrypt.hash(req.body.users.password, 10))
+
+    if (!Number.isInteger(Number (req.body.users.phone) )){
+        return res.status(400).json({message: "Le numero de telephone doit être un nombre", data: req.body.users.phone})
+    }
 
     try {
         Candidate.update(req.body.candidate, { where: { id: req.params.id } }).then(() => {

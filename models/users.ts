@@ -38,9 +38,6 @@ module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
             validate: {
                 isAlphanumeric: true
             }
-            // validate : {
-            //     is: /^$|^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/g
-            // }
         },
         isActif: {
             type: dataTypes.BOOLEAN,

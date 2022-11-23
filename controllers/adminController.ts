@@ -3,8 +3,11 @@ import { ValidationError } from "sequelize";
 import { User, Role, RoleUser } from "../database/connect";
 import { ApiException } from "../types/exception";
 import bcrypt from 'bcrypt';
+import authenticateToken from "../middleware";
 
 const adminController = Router();
+
+
 
 /**
   * @openapi
@@ -24,7 +27,7 @@ const adminController = Router();
   *        200:
   *          description: Create a new user with role.
   */
-adminController.post('/', async (req, res) => {
+adminController.post('/', authenticateToken, async (req, res) => {
     if (!req.body.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
 
     req.body.password = await bcrypt.hash(req.body.password, 10);
@@ -56,7 +59,7 @@ adminController.post('/', async (req, res) => {
  *        200:
  *          description: Get the list of all admin users.
  */
-adminController.get('/all', async (req, res) => {
+adminController.get('/all',async (req, res) => {
     User.findAll({
         include: [
             {

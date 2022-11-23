@@ -39,6 +39,10 @@ employerController.post('/', async (req, res) => {
 
   req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
 
+  if (!Number.isInteger(Number (req.body.users.phone) )){
+    return res.status(400).json({message: "Le numero de telephone doit être un nombre", data: req.body.users.phone})
+}
+
   try {
     User.create(req.body.users).then(async (user: any) => {
 
@@ -265,6 +269,10 @@ employerController.put('/form/:id', async (req, res) => {
   if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
 
   req.body.users.password && (req.body.users.password = await bcrypt.hash(req.body.users.password, 10))
+
+  if (!Number.isInteger(Number (req.body.users.phone) )){
+    return res.status(400).json({message: "Le numero de telephone doit être un nombre", data: req.body.users.phone})
+}
 
   try {
     Employer.update(req.body.employer, { where: { id: req.params.id } }).then(() => {
