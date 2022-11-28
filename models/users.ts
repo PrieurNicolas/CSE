@@ -34,7 +34,10 @@ module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
         phone: {
             type: dataTypes.INTEGER,
             allowNull: false,
-            unique: true
+            unique: true,
+            validate: {
+                isAlphanumeric: true
+            }
         },
         isActif: {
             type: dataTypes.BOOLEAN,
