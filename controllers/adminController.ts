@@ -27,7 +27,7 @@ const adminController = Router();
   *        200:
   *          description: Create a new user with role.
   */
-adminController.post('/', authenticateToken, async (req, res) => {
+adminController.post('/', async (req, res) => {
     if (!req.body.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
 
     req.body.password = await bcrypt.hash(req.body.password, 10);
