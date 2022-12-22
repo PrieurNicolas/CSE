@@ -1,22 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize"
-import { tokenTypes } from "../types/token"
 import { userTypes } from "../types/user"
-import { users } from './mock-user'
-import { localisationTypes } from "../types/localisation"
-import { candidateTypes } from "../types/candidate"
-import { employerTypes } from "../types/employer"
-import { degreeTypes } from "../types/degree"
-import { roleTypes } from "../types/role"
-import { periodTypes } from "../types/period"
-import { messageTypes } from "../types/message"
-import { candidates } from './mock-candidate'
-import { tokens } from './mock-token'
-import { localisations } from './mock-localisation'
-import { employers } from './mock-employer'
-import {degrees} from './mock-degree'
-import { roles } from './mock-role'
-import { periods } from './mock-period'
-import {messages } from './mock-message'
 
 const UserModel = require('../models/users')
 const TokenModel = require('../models/tokens')
@@ -96,87 +79,6 @@ User.belongsToMany(User, { through: { model: Message, unique: false }, as: "from
 
 export const initDb = () => {
     return sequelize.sync({ force: true }).then(() => {
-        localisations.map((localisation: localisationTypes) => {
-            Localisation.create({
-                address: localisation.address,
-                zipCode: localisation.zipCode,
-                city: localisation.city
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        periods.map((period: periodTypes) => {
-            Period.create({
-                periodname: period.periodname
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        roles.map((role: roleTypes) => {
-            Role.create({
-                role: role.role
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        degrees.map((degree: degreeTypes) => {
-            Degree.create({
-                degreename: degree.degreename
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        users.map((user: userTypes, index: number) => {
-            User.create({
-                email: user.email,
-                phone: user.phone,
-                isActif: user.isActif,
-                password: user.password,
-                LocalisationId: user.LocalisationId,
-            }).then(async (req: any) => {
-
-                for (let i = 0; i < 10; i++) {
-                    const periodRow = await Period.findByPk(Math.floor(Math.random() * (Object.keys(Period).length - 1 + 1) + 1));
-                    await req.addPeriod(periodRow, { through: PeriodUser })
-                }
-
-                const roleRow = await Role.findByPk(index + 1);
-                await req.addRole(roleRow, { through: RoleUser })
-
-                const degreeRow = await Degree.findByPk(index + 1);
-                await req.addDegree(degreeRow, { through: DegreeUser })
-            })
-        })
-
-        tokens.map((token: tokenTypes) => {
-            Token.create({
-                refreshToken: token.refreshToken,
-                tokenPush: token.tokenPush,
-                UserId: token.UserId
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-    candidates.map((candidate: candidateTypes, index: number) => {
-        Candidate.create({
-            firstname: candidate.firstname,
-            lastname: candidate.lastname,
-            birthday: candidate.birthday,
-            wantToBe: candidate.wantToBe,
-            UserId: index + 1
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-    })
-
-        employers.map((employer: employerTypes) => {
-            Employer.create({
-                UserId: 3,
-                siret: employer.siret,
-                structurename: employer.structurename
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        messages.map((message: messageTypes) => {
-            Message.create({
-                from: message.from,
-                to: message.to,
-                message: message.message
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
 
         console.log('Database created')
     })

@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name:'hello CSE',
+            name:'TopDoc',
             script: './dist/server.js'
         }
     ]
