@@ -138,10 +138,20 @@ candidateController.get('/', async (req, res) => {
                 model: User,
                 required: false,
                 attributes: {exclude: ['password']},
-                include: {
-                    model: Localisation,
-                    require: false
-                }
+                include:[
+                    {
+                        model: Degree,
+                        required: false
+                    },
+                    {
+                        model: Localisation,
+                        required: false
+                    },
+                    {
+                        model: Role,
+                        required: false
+                    }
+                ]
             }
         ]
     })

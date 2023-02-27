@@ -6,7 +6,7 @@ const httpServer = createServer(app);
 httpServer.listen(5001)
 export const io = new Server(httpServer, { /* path: "/api/messages" */
     cors: {
-        origin: `${process.env.urlFront}`
+        origin: `*`
     }
 });
 

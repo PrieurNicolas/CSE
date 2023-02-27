@@ -1,8 +1,5 @@
 import { Router } from "express";
-import { Role } from "../database/connect";
-import { roleTypes, roleId } from "../types/role";
-import { ApiException } from "../types/exception";
-import { ValidationError } from "sequelize";
+import { roleHandler } from "../inject";
 const roleController = Router();
 
 /**
@@ -21,15 +18,7 @@ const roleController = Router();
  *        200:
  *          description: Get the list of all roles.
  */
-roleController.get('/', async (req, res) => {
-    Role.findAll()
-        .then((roles: roleTypes) => {
-            res.status(200).json(roles)
-        })
-        .catch((error: ApiException) => {
-            res.status(500).json(error)
-        })
-})
+roleController.get('/', roleHandler.getRoles)
 
 /**
   * @openapi
@@ -49,18 +38,7 @@ roleController.get('/', async (req, res) => {
   *        200:
   *          description: Create a new role.
   */
-roleController.post('/', async (req, res) => {
-    Role.create(req.body).then((role: roleTypes) => {
-        const message: string = `role crée avec succes`;
-        res.json({ message, data: role });
-    }).catch((error: ApiException) => {
-        if (error instanceof ValidationError) {
-            return res.status(400).json({ message: error.message, data: error })
-        }
-        const message = `Echec de l'insertion du nouveau role.`
-        res.status(500).json({ message, data: error })
-    })
-})
+roleController.post('/', roleHandler.postRole)
 
 /**
   * @openapi
@@ -77,14 +55,7 @@ roleController.post('/', async (req, res) => {
   *        200:
   *          description: Delete a role. 
   */
-roleController.delete('/:id', async (req, res) => {
-    return Role.destroy({
-        where: { id: req.params.id }
-    }).then((role: any) => {
-        const message = `Le role avec l'identifiant n°${req.params.id} a bien été supprimé.`
-        res.json({ message, data: role })
-    })
-})
+roleController.delete('/:id', roleHandler.deleteRole)
 
 /**
  * @openapi
@@ -101,15 +72,7 @@ roleController.delete('/:id', async (req, res) => {
  *        200:
  *          description: Get one specifique role.
  */
-roleController.get('/:id', async (req, res) => {
-    Role.findByPk(req.params.id)
-        .then((role: roleTypes) => {
-            res.status(200).json(role)
-        })
-        .catch((error: ApiException) => {
-            res.status(500).json(error)
-        })
-})
+roleController.get('/:id', roleHandler.getRoleId)
 
 /**
   * @openapi
@@ -134,20 +97,6 @@ roleController.get('/:id', async (req, res) => {
   *        200:
   *          description: Update the role of given id.
   */
-roleController.put('/:id', async (req, res) => {
-    return Role.update(req.body, {
-        where: { id: req.params.id }
-    }).then(() => {
-        const message = `role mis à jour`;
-        res.json({ message });
-    })
-        .catch((error: ApiException) => {
-            if (error instanceof ValidationError) {
-                return res.status(400).json({ message: error.message, data: error })
-            }
-            const message = `Pas réussi à mettre à jour le role.`;
-            res.status(500).json({ message, data: error });
-        });
-})
+roleController.put('/:id', roleHandler.updateRole)
 
 export { roleController }
