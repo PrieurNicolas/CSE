@@ -36,7 +36,6 @@ adminController.post('/', async (req, res) => {
         const roleRow = await Role.findByPk(1)
         user.addRole(roleRow, { through: RoleUser })
 
-
         const message: string = `Utilisateur créé avec succes.`;
         res.json({ message, data: user });
     })

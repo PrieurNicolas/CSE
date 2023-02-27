@@ -4,21 +4,39 @@ import { Response, Request, NextFunction } from 'express';
 import { userTypes } from "./types/user";
 import { apiController } from './controllers/apiController';
 import { initDb } from './database/connect';
-const express = require("express")
+import helmet from 'helmet';
 import cors from 'cors';
+const express = require("express")
 require("./socket")
-
 const app = express()
 app.disable('x-powered-by');
 
 // Pour recréer DB, à commenter sinon
-initDb()
+// initDb()
 
 //
 
 app.use(cors())
 app.use(express.json())
+app.use(helmet());
 
+
+import morgan from 'morgan';
+import path from 'path';
+if (process.env.Prod == "prod"){
+    const rfs = require("rotating-file-stream")
+    const accesLogStream = rfs.createStream("log.log", {
+        interval: '1d',
+        compress: "gzip",
+        maxFiles: 10,
+        path: path.join(__dirname, 'log')
+    })
+    app.use(morgan('combined', { stream: accesLogStream}))
+}else {
+    app.use(morgan('dev', {
+        skip: function (req, res) { return res.statusCode < 400 }
+      }))
+}
 
 const port = process.env.PORT || 5000
 app.listen(port, () => {
