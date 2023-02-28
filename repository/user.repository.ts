@@ -14,7 +14,8 @@ export class UserRepository implements IRepository<UserDTO>{
         return User.create(t).then(async (user: any) => UserMapper.mapToDto(user))
     }
     async delete(id: number): Promise<number | boolean> {
-        return User.destroy({where: {id: id}}).then((good: boolean) => good)
+        return User.destroy({where: {id: id}}).then((good: boolean) => good).catch((error:any) => console.log("eeeeeeeeee", error)
+        )
     }
     async update(t: UserDTO, id: number): Promise<number | boolean> {
         return User.update(t, {where: {id: id}}).then(((good: boolean[]) => good[0]))

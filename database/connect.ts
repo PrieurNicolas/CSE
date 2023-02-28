@@ -31,7 +31,7 @@ const DegreeUserModel = require('../models/degreeUsers')
 const RoleUserModel = require('../models/roleUsers')
 const MessageModel = require('../models/messages')
 
-const sequelize = new Sequelize(
+export const sequelize = new Sequelize(
 //    "DatabaseCse",
 //     'alexis',
 //     '123456',
@@ -95,89 +95,7 @@ User.belongsToMany(User, { through: { model: Message, unique: false }, as: "to",
 User.belongsToMany(User, { through: { model: Message, unique: false }, as: "from", foreignKey: "from" })
 
 export const initDb = () => {
-    return sequelize.sync({ force: true }).then(() => {
-        localisations.map((localisation: localisationTypes) => {
-            Localisation.create({
-                address: localisation.address,
-                zipCode: localisation.zipCode,
-                city: localisation.city
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
+    return sequelize.sync({ alter: true }).then(() => {
 
-        periods.map((period: periodTypes) => {
-            Period.create({
-                periodname: period.periodname
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        roles.map((role: roleTypes) => {
-            Role.create({
-                role: role.role
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        degrees.map((degree: degreeTypes) => {
-            Degree.create({
-                degreename: degree.degreename
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        users.map((user: userTypes, index: number) => {
-            User.create({
-                email: user.email,
-                phone: user.phone,
-                isActif: user.isActif,
-                password: user.password,
-                LocalisationId: user.LocalisationId,
-            }).then(async (req: any) => {
-
-                for (let i = 0; i < 10; i++) {
-                    const periodRow = await Period.findByPk(Math.floor(Math.random() * (Object.keys(Period).length - 1 + 1) + 1));
-                    await req.addPeriod(periodRow, { through: PeriodUser })
-                }
-
-                const roleRow = await Role.findByPk(index + 1);
-                await req.addRole(roleRow, { through: RoleUser })
-
-                const degreeRow = await Degree.findByPk(index + 1);
-                await req.addDegree(degreeRow, { through: DegreeUser })
-            })
-        })
-
-        tokens.map((token: tokenTypes) => {
-            Token.create({
-                refreshToken: token.refreshToken,
-                tokenPush: token.tokenPush,
-                UserId: token.UserId
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-    candidates.map((candidate: candidateTypes, index: number) => {
-        Candidate.create({
-            firstname: candidate.firstname,
-            lastname: candidate.lastname,
-            birthday: candidate.birthday,
-            wantToBe: candidate.wantToBe,
-            UserId: index + 1
-        }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-    })
-
-        employers.map((employer: employerTypes) => {
-            Employer.create({
-                UserId: 3,
-                siret: employer.siret,
-                structurename: employer.structurename
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        messages.map((message: messageTypes) => {
-            Message.create({
-                from: message.from,
-                to: message.to,
-                message: message.message
-            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
-        })
-
-        console.log('Database created')
     })
 }

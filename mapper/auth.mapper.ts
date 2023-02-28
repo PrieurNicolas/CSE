@@ -1,5 +1,5 @@
 import { AuthDTO } from "../DTO/auth.dto";
-import { userLoginDTO } from "../DTO/user.dto";
+import { UserLoginDTO } from "../DTO/user.dto";
 import { tokenId } from "../types/token";
 
 export class AuthMapper {
@@ -13,11 +13,11 @@ export class AuthMapper {
         return dto;
     }
 
-    static mapToLoginDto(user: any): userLoginDTO {
+    static mapToLoginDto(user: any): UserLoginDTO {
         if (user === null){
             return null as any;
         } 
-        const dto : userLoginDTO = {
+        const dto : UserLoginDTO = {
             id: user.id,
             email: user.email,
             password: user.password,

@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
 import { IServiceToken } from "../services/core/service.interface";
 import { AuthDTO } from "../DTO/auth.dto";
-import { userLoginDTO } from "../DTO/user.dto";
+import { UserLoginDTO } from "../DTO/user.dto";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 export class AuthHandler {
 
-    private authService: IServiceToken<AuthDTO, userLoginDTO>;
+    private authService: IServiceToken<AuthDTO, UserLoginDTO>;
 
-    constructor(service: IServiceToken<AuthDTO, userLoginDTO>) {
+    constructor(service: IServiceToken<AuthDTO, UserLoginDTO>) {
         this.authService = service;
     }
 

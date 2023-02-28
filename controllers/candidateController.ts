@@ -4,6 +4,7 @@ import { User, Candidate, Localisation, Period, PeriodUser, Degree, DegreeUser, 
 import { ApiException } from "../types/exception";
 import bcrypt from 'bcrypt';
 import { candidateId, candidateTypes } from "../types/candidate";
+import { candidateHandler } from "../inject";
 
 const candidateController = Router();
 
@@ -32,53 +33,54 @@ const candidateController = Router();
   *        200:
   *          description: Create a new candidate.
   */
-candidateController.post('/', async (req, res) => {
-    if (!req.body.users.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
-    if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
+candidateController.post('/', candidateHandler.postCandidate)
+// candidateController.post('/', async (req, res) => {
+//     if (!req.body.users.password) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe requis.' })
+//     if (req.body.users.password !== req.body.users.passwordconf) return res.status(400).json({ passwordRequired: true, message: 'Mot de passe doit être identique.' })
 
-    req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
-    if (!Number.isInteger(Number (req.body.users.phone) )){
-        return res.status(400).json({message: "Le numero de telephone doit être un nombre", data: req.body.users.phone})
-    }
+//     req.body.users.password = await bcrypt.hash(req.body.users.password, 10)
+//     if (!Number.isInteger(Number (req.body.users.phone) )){
+//         return res.status(400).json({message: "Le numero de telephone doit être un nombre", data: req.body.users.phone})
+//     }
 
-    try {
-        User.create(req.body.users).then(async (user: any) => {
-            Candidate.create(req.body.candidate).then((c: any) => {
-                c.setUser(user)
-            })
+//     try {
+//         User.create(req.body.users).then(async (user: any) => {
+//             Candidate.create(req.body.candidate).then((c: any) => {
+//                 c.setUser(user)
+//             })
 
-            Localisation.create(req.body.localisation).then((local: any) => {
-                user.setLocalisation(local)
-            })
+//             Localisation.create(req.body.localisation).then((local: any) => {
+//                 user.setLocalisation(local)
+//             })
 
-            req.body.periods?.map(async (period: any) => {
-                const periodRow = await Period.findByPk(period.id)
-                user.addPeriod(periodRow, { through: PeriodUser })
-            })
+//             req.body.periods?.map(async (period: any) => {
+//                 const periodRow = await Period.findByPk(period.id)
+//                 user.addPeriod(periodRow, { through: PeriodUser })
+//             })
 
-            req.body.degrees ? req.body.degrees.map(async (degree: any) => {
-                const degreeRow = await Degree.findByPk(degree.id)
-                user.addDegree(degreeRow, { through: DegreeUser })
-            }) : user.addDegree(await Degree.findByPk(5), { through: DegreeUser })
+//             req.body.degrees ? req.body.degrees.map(async (degree: any) => {
+//                 const degreeRow = await Degree.findByPk(degree.id)
+//                 user.addDegree(degreeRow, { through: DegreeUser })
+//             }) : user.addDegree(await Degree.findByPk(5), { through: DegreeUser })
 
 
-            const roleRow = await Role.findByPk(2)
-            user.addRole(roleRow, { through: RoleUser })
+//             const roleRow = await Role.findByPk(2)
+//             user.addRole(roleRow, { through: RoleUser })
 
-        }).then((candidates: any) => {
-            const message: string = `Candidat créé avec succes.`;
-            res.json({ message, data: candidates });
-        }).catch((error: ApiException) => {
-            if (error instanceof ValidationError) {
-                return res.status(400).json({ message: error.message, data: error })
-            }
-            const message = `Echec lors de la création du candidat.`
-            res.status(500).json({ message, data: error })
-        })
-    } catch (error) {
-        return res.status(500).json(error)
-    }
-})
+//         }).then((candidates: any) => {
+//             const message: string = `Candidat créé avec succes.`;
+//             res.json({ message, data: candidates });
+//         }).catch((error: ApiException) => {
+//             if (error instanceof ValidationError) {
+//                 return res.status(400).json({ message: error.message, data: error })
+//             }
+//             const message = `Echec lors de la création du candidat.`
+//             res.status(500).json({ message, data: error })
+//         })
+//     } catch (error) {
+//         return res.status(500).json(error)
+//     }
+// })
 
 /**
   * @openapi
@@ -95,32 +97,7 @@ candidateController.post('/', async (req, res) => {
   *        200:
   *          description: Delete a candidate 
   */
-candidateController.delete('/:id', async (req, res) => {
-    Candidate.findByPk(req.params.id).then(async (candidat: candidateId) => {
-        if (candidat === null) {
-            const message = "Le Candidat demandé n'existe pas. Réessayer avec un autre identifiant."
-            return res.status(404).json({ message })
-        }
-
-        const candidatDeleted = candidat;
-        let local = await User.findByPk(candidatDeleted.UserId)
-
-        return User.destroy({
-            where: { id: candidat.UserId }
-        }).then(() => {
-            Localisation.destroy({
-                where: { id: local.LocalisationId }
-            })
-
-            const message = `Le Candidat avec l'identifiant n°${candidatDeleted.id} a bien été supprimé.`
-            res.json({ message, data: candidatDeleted })
-        })
-    })
-        .catch((error: ApiException) => {
-            const message = `Le Candidat n'a pas pu être supprimé. Réessayer dans quelques instants.`;
-            res.status(500).json({ message, data: error });
-        });
-})
+candidateController.delete('/:id', candidateHandler.deleteCandidate)
 
 /**
  * @openapi
@@ -131,38 +108,7 @@ candidateController.delete('/:id', async (req, res) => {
  *        200:
  *          description: Get the list of all candidate.
  */
-candidateController.get('/', async (req, res) => {
-    Candidate.findAll({
-        include: [
-            {
-                model: User,
-                required: false,
-                attributes: {exclude: ['password']},
-                include:[
-                    {
-                        model: Degree,
-                        required: false
-                    },
-                    {
-                        model: Localisation,
-                        required: false
-                    },
-                    {
-                        model: Role,
-                        required: false
-                    }
-                ]
-            }
-        ]
-    })
-        .then((candidates: candidateTypes) => {
-            res.status(200).json(candidates)
-        })
-        .catch((error: ApiException) => {
-            res.status(500).json(error)
-        })
-
-})
+candidateController.get('/', candidateHandler.getCandidates)
 
 /**
  * @openapi
@@ -179,41 +125,7 @@ candidateController.get('/', async (req, res) => {
  *        200:
  *          description: Get one specifique candidate.
  */
-candidateController.get('/:id', async (req, res) => {
-    Candidate.findByPk(req.params.id, {
-        include: [
-            {
-                model: User,
-                required: false,
-                attributes: {exclude: ['password']},
-                include: [
-                    {
-                        model: Localisation,
-                        require: false
-                    },
-                    {
-                        model: Degree,
-                        require: false,
-                    },
-                    {
-                        model: Period,
-                        require: false,
-                    },
-                    {
-                        model: Role,
-                        require: false,
-                    }
-                ]
-            }
-        ]
-    })
-        .then((candidates: candidateTypes) => {
-            res.status(200).json(candidates)
-        })
-        .catch((error: ApiException) => {
-            res.status(500).json(error)
-        })
-})
+candidateController.get('/:id', candidateHandler.getCandidateId)
 
 /**
   * @openapi
