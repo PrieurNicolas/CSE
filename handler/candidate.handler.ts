@@ -56,7 +56,10 @@ export class CandidateHandler {
         const id = parseInt(req.params.id);
         try {
             const result = await this.CandidateService.update(req.body, id);
-            res.status(200).json(result ? "mis a jour" : "fail");
+            if(result.toString().length < 5 && result.toString() !== "0"){
+                return res.status(200).json( "mis a jour" );
+            } else 
+            return res.status(500).json( result ?  result : "fail" );
         } catch (err) {
             res.status(500).json(err)
         }

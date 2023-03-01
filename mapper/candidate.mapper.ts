@@ -14,6 +14,7 @@ export class CandidateMapper {
                 email: candidate.User.email,
                 phone: candidate.User.phone,
                 Localisation: {
+                    id: candidate.User.Localisation.id,
                     address: candidate.User.Localisation.address,
                     zipCode: candidate.User.Localisation.zipCode,
                     city: candidate.User.Localisation.city,
