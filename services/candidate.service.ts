@@ -66,7 +66,6 @@ export class CandidateService implements IService<CandidateDTO> {
 
 
         return this.CandidateRepository.update(t,id).then(good => good)
-        return 0
     }
 
 }
