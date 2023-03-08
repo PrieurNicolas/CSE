@@ -36,6 +36,9 @@ export class CandidateHandler {
     postCandidate = async (req: Request, res: Response) => {
         try {
             const result = await this.CandidateService.create(req.body);
+            if(null) {
+                return  res.status(500).json("Email ou telephone deja utilisé")
+            }
             res.status(200).json(result)
         } catch (err) {
             res.status(500).json(err)
