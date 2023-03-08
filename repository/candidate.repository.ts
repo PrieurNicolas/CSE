@@ -77,7 +77,7 @@ export class CandidateRepository implements IRepositoryS<CandidateDTO>{
                 await Localisation.create(t.localisation, { transaction: transaction }).then(async (l: any) => await user.setLocalisation(l, { transaction: transaction }))
 
 
-                const roleRow = await Role.findByPk(2)
+                const roleRow = await Role.findAll({where: {role : "CANDIDAT"}})
                 await user.addRole(roleRow, { through: RoleUser, transaction: transaction })
                 await Promise.all(promises);
                 await transaction.commit();

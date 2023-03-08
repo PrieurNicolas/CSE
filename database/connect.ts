@@ -96,6 +96,22 @@ User.belongsToMany(User, { through: { model: Message, unique: false }, as: "from
 
 export const initDb = () => {
     return sequelize.sync({ alter: true }).then(() => {
+        periods.map((period: periodTypes) => {
+            Period.create({
+                periodname: period.periodname
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
 
+        roles.map((role: roleTypes) => {
+            Role.create({
+                role: role.role
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
+
+        degrees.map((degree: degreeTypes) => {
+            Degree.create({
+                degreename: degree.degreename
+            }).then((response: { toJSON: () => string }) => console.log(response.toJSON()))
+        })
     })
 }
