@@ -19,7 +19,8 @@ export class EmployerMapper {
                 Degree: Employer.User.Degrees.map((d: degreeTypes) => ({ degreename: d.degreename })),
             },
             siret: Employer.siret,
-            structurename: Employer.structurename
+            structurename: Employer.structurename,
+            id: Employer.id
         }
         return dto;
     }

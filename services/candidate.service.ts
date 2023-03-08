@@ -37,6 +37,8 @@ export class CandidateService implements IService<CandidateDTO> {
             return "Le numero de telephone doit être un nombre" as any
         }
 
+        t.users.email = t.users.email.toLowerCase();
+
         return this.CandidateRepository.create(t).then(CandidateDTO => {
             if(CandidateDTO === null) return null;
             return CandidateDTO
@@ -62,6 +64,10 @@ export class CandidateService implements IService<CandidateDTO> {
             if (!Number.isInteger(Number (t.users.phone) )){
                 return "Le numero de telephone doit être un nombre" as any
             }
+        }
+
+        if(t.users.email) {
+            t.users.email = t.users.email.toLowerCase();
         }
 
 

@@ -15,7 +15,7 @@ export class AuthService implements IServiceToken<AuthDTO, UserLoginDTO> {
         })
     }
     findUser(email: string): Promise<UserLoginDTO | null> {
-        return this.authRepo.findUser(email).then(user => {
+        return this.authRepo.findUser(email.toLowerCase()).then(user => {
             return user
         })
     }

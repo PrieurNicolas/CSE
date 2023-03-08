@@ -4,7 +4,8 @@ export class PeriodMapper {
     static mapToDto(period: any): PeriodDTO | null {
         if (period === null) return null;
         const dto: PeriodDTO = {
-            periodname: period.periodname
+            periodname: period.periodname,
+            id: period.id
         }
 
         return dto;

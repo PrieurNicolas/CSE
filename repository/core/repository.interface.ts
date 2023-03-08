@@ -11,7 +11,7 @@ export interface IRepositoryAuth<T, D> {
     update(t: T, id: number): Promise<number |boolean>;
     findToken(token:string): Promise<T | null>;
     findUser(email: string): Promise<D | null>;
-    findUserToken(id: number): Promise<D | null>; 
+    findUserToken(id: number): Promise<D | null>;
 }
 
 export interface IRepositoryS<T> {

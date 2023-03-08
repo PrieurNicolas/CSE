@@ -4,7 +4,8 @@ export class DegreeMapper {
     static mapToDto(Degree: any): DegreeDTO | null {
         if (Degree === null) return null;
         const dto: DegreeDTO = {
-            degreename: Degree.degreename
+            degreename: Degree.degreename,
+            id: Degree.id
         }
 
         return dto;

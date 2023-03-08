@@ -32,7 +32,7 @@ export class EmployerService implements IService<EmployerDTO> {
             return "mot de passe doit etre plus long" as any
         }
         t.users.password && (t.users.password = await bcrypt.hash(t.users.password, 10))
-
+        t.users.email = t.users.email.toLowerCase();
         if (!Number.isInteger(Number (t.users.phone) )){
             return "Le numero de telephone doit être un nombre" as any
         }
@@ -62,6 +62,10 @@ export class EmployerService implements IService<EmployerDTO> {
             if (!Number.isInteger(Number (t.users.phone) )){
                 return "Le numero de telephone doit être un nombre" as any
             }
+        }
+
+        if(t.users.email) {
+            t.users.email = t.users.email.toLowerCase();
         }
 
 
