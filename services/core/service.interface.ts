@@ -8,7 +8,7 @@ export interface IService<T> {
 
 export interface IServiceToken<T, D> {
     findToken(t: string): Promise<T | null>;
-    create(t: Omit<T, 'id'>): Promise<T | null>;
+    create(t: any): Promise<T | null>;
     update(t: Partial<T>, id: number): Promise<number |boolean>;
     findUser(email: string): Promise<D | null>;
     findUT(id: number): Promise<D | null>; 

@@ -59,25 +59,27 @@ export class EmployerRepository implements IRepositoryS<EmployerDTO>{
         const transaction = await sequelize.transaction();
         let u: any
         try {
+            const promises: any = [];
             await User.create(t.users, { transaction: transaction }).then(async (user: any) => {
                 await Employer.create(t.employer, { transaction: transaction }).then(async (em: any) => {
                     await em.setUser(user, { transaction: transaction });
                     u = em
                 })
-                await Localisation.create(t.localisation, { transaction: transaction }).then(async (l: any) => await user.setLocalisation(l, { transaction: transaction }))
-
                 t.periods?.map(async (p: any) => {
                     const periodRow = await Period.findByPk(p.id)
-                    await user.addPeriod(periodRow, { through: PeriodUser, transaction: transaction })
+                    promises.push(user.addPeriod(periodRow, { through: PeriodUser, transaction: transaction }))
                 })
 
-                t.period ? t.period.map(async (d: any) => {
+                t.degrees ? t.degrees.map(async (d: any) => {
                     const degreeRow = await Degree.findByPk(d.id)
-                    await user.addDegree(degreeRow, { through: DegreeUser, transaction: transaction })
+                    promises.push(user.addDegree(degreeRow, { through: DegreeUser, transaction: transaction }))
                 }) : await user.addDegree(await Degree.findByPk(5), { through: DegreeUser, transaction: transaction })
+                await Localisation.create(t.localisation, { transaction: transaction }).then(async (l: any) => await user.setLocalisation(l, { transaction: transaction }))
+
 
                 const roleRow = await Role.findByPk(2)
                 await user.addRole(roleRow, { through: RoleUser, transaction: transaction })
+                await Promise.all(promises);
                 await transaction.commit();
             })
             return await this.findById(u!.id)

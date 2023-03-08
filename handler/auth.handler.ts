@@ -48,7 +48,7 @@ export class AuthHandler {
                 const token = await this.authService.findUT(user.id);
 
                 if (token == null) {
-                    await this.authService.create({ refreshToken: refreshToken, UserId: user.id })
+                    await this.authService.create({ refreshToken: refreshToken, UserId: user.id, tokenPush: refreshToken })
                 } else {
                     await this; this.authService.update({ refreshToken: refreshToken }, user.id)
                 }
