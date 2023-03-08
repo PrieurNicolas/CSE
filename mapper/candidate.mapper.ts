@@ -19,9 +19,10 @@ export class CandidateMapper {
                     zipCode: candidate.User.Localisation.zipCode,
                     city: candidate.User.Localisation.city,
                 },
-                Period: candidate.User.Periods.map((p:periodTypes) => ({periodname: p.periodname})),
-                Degree: candidate.User.Degrees.map((d:degreeTypes) => ({degreename: d.degreename})),
-            }
+                Period: candidate.User.Periods.map((p: periodTypes) => ({ periodname: p.periodname })),
+                Degree: candidate.User.Degrees.map((d: degreeTypes) => ({ degreename: d.degreename })),
+            },
+            id: candidate.id
         }
         return dto;
     }
