@@ -77,7 +77,7 @@ export class EmployerRepository implements IRepositoryS<EmployerDTO>{
                 await Localisation.create(t.localisation, { transaction: transaction }).then(async (l: any) => await user.setLocalisation(l, { transaction: transaction }))
 
 
-                const roleRow = await Role.findByPk(2)
+                const roleRow = await Role.findByPk(3)
                 await user.addRole(roleRow, { through: RoleUser, transaction: transaction })
                 await Promise.all(promises);
                 await transaction.commit();
