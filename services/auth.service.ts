@@ -7,7 +7,7 @@ export class AuthService implements IServiceToken<AuthDTO, UserLoginDTO> {
     private authRepo: IRepositoryAuth<AuthDTO, UserLoginDTO>;
 
     constructor(_authRepo: IRepositoryAuth<AuthDTO, UserLoginDTO>) {
-        this.authRepo =_authRepo;
+        this.authRepo = _authRepo;
     }
     findUT(id: number): Promise<UserLoginDTO | null> {
         return this.authRepo.findUserToken(id).then(user => {
@@ -25,14 +25,35 @@ export class AuthService implements IServiceToken<AuthDTO, UserLoginDTO> {
             return authdto
         })
     }
-    create(t: AuthDTO): Promise<AuthDTO | null> {
+    async create(t: AuthDTO): Promise<AuthDTO | null> {
         return this.authRepo.create(t).then(authdto => {
-            if(authdto === null) return null;
+            if (authdto === null) return null;
             return authdto
         })
     }
-    update(t: AuthDTO, id: number): Promise<number | boolean> {
-        return this.authRepo.update(t,id).then(good => good)
+    async update(t: AuthDTO, id: number): Promise<number | boolean> {
+        return this.authRepo.update(t, id).then(good => good)
+    }
+
+    async email(mailData: any): Promise<any> {
+        let nodemailer = require("nodemailer");
+        const transporter = nodemailer.createTransport({
+            port: 465,
+            host: "smtp.gmail.com",
+            auth: {
+                user: process.env.EMAIL!,
+                pass: process.env.MDP_EMAIL,
+            },
+            secure: true,
+
+        });
+        try {
+            await transporter.sendMail(mailData);
+            return true
+          } catch (error) {
+            return false
+          }
+        
     }
 
 }

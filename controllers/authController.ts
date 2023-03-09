@@ -121,49 +121,6 @@ authController.post('/token', authHandler.token)
         })
  })
 
- authController.post('/forgetPassword', async (req, res) => {
-    console.log(req.body.email)
-    let nodemailer = require("nodemailer");
-    const transporter = nodemailer.createTransport({
-        port: 465,
-        host: "smtp.gmail.com",
-        auth: {
-            user: process.env.email!,
-            pass: process.env.emailpsw,
-        },
-        secure: true,
-
-    });
-
-    const user: any = []
-    // await service.findUser(req.body.email)
-
-    if (user) {
-        const refresh_token = jwt.sign({ id: user[0].user_id, user_nom: user[0].user_nom }, process.env.JWT_TOKEN, { algorithm: "HS256", expiresIn: '15min' });
-        const link = `"http://localhost:3000/reset?token=" + ${refresh_token}`
-
-        const mailData: { from: string, to: string, subject: string, text: string, html: string } = {
-            from: process.env.email!,
-            to: req.body.email,
-            subject: 'Forgot password',
-            text: 'Forgot password',
-            html: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-                'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                link + '\n\n' +
-                'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-        }
-        await transporter.sendMail(mailData, function (err: any, info: any) {
-            if (err)
-                res.sendStatus(500)
-            else
-                res.sendStatus(200)
-        })
-
-    } else {
-        res.status(401).json("email incorrect")
-    }
-
-
-})
+ authController.post('/forgetPassword', authHandler.forgotpsw)
 
 export { authController }

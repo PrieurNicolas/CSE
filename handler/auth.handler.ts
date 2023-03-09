@@ -34,7 +34,7 @@ export class AuthHandler {
 
         try {
             const user = await this.authService.findUser(req.body.email);
-            
+
 
             if (user == null) {
                 return res.status(401).json({ userFound: false, message: "utilisateur non trouvé" })
@@ -61,5 +61,31 @@ export class AuthHandler {
             return res.status(500).json(error)
         }
 
+    }
+
+    forgotpsw = async (req: Request, res: Response) => {
+        const user = await this.authService.findUser(req.body.email)
+        if (user) {
+            const refresh_token = jwt.sign({ id: user.id, user_nom: user.email }, process.env.REFRESH_TOKEN_SECRET!, { algorithm: "HS256", expiresIn: '15min' });
+            const link = `${process.env.urlFront!}/reset?token=${refresh_token}`
+
+            const data = await this.authService.email({
+                from: process.env.EMAIL!, to: user.email, subject: 'Forgot password', text: 'Forgot password',
+                html: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+                    'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+                    link + '\n\n' +
+                    'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+            })
+
+            console.log(data);
+            
+
+            if(data) {
+                return res.status(200).json("email envoyé")
+            }
+            return res.status(500).json("email non envoyé")
+        } else {
+            return res.status(401).json("email incorrect")
+        }
     }
 }
