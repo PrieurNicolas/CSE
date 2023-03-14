@@ -55,24 +55,6 @@ authController.post('/login', authHandler.login)
   */
 authController.post('/token', authHandler.token)
 
-/**
-  * @openapi
-  * /api/auth/loginAdmin:
-  *  post:
-  *      tags: [Authentification]
-  *      description: Login
-  *      consumes:
-  *       - application/json
-  *      parameters:
-  *       - name: JSON
-  *         in: body
-  *         required: true
-  *         type: object
-  *         default: {"email": "string", "password": "string"}
-  *      responses:
-  *        200:
-  *          description: Login. Returns tokens if successful login.
-  */
  authController.post('/loginAdmin', async (req, res) => {
     User.findAll({ include: [
         {

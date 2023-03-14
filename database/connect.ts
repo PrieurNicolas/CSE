@@ -51,10 +51,10 @@ export const sequelize = new Sequelize(
     }
 )
 
-sequelize.authenticate()
-    .then(() => console.log('Link established'))
-    .catch((error: Error) => console.error(`Error: ${error}`)
-    )
+// sequelize.authenticate()
+//     .then(() => console.log('Link established'))
+//     .catch((error: Error) => console.error(`Error: ${error}`)
+//     )
 
 export const User = UserModel(sequelize, DataTypes)
 export const Token = TokenModel(sequelize, DataTypes)

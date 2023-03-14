@@ -4,12 +4,15 @@ import { AuthDTO } from "../DTO/auth.dto";
 import { UserLoginDTO } from "../DTO/user.dto";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
+import { EmailService } from "../services/email.service";
 export class AuthHandler {
 
     private authService: IServiceToken<AuthDTO, UserLoginDTO>;
+    private emailService: EmailService;
 
-    constructor(service: IServiceToken<AuthDTO, UserLoginDTO>) {
+    constructor(service: IServiceToken<AuthDTO, UserLoginDTO>, emailService: EmailService) {
         this.authService = service;
+        this.emailService = emailService;
     }
 
     token = async (req: Request, res: Response) => {
@@ -69,17 +72,14 @@ export class AuthHandler {
             const refresh_token = jwt.sign({ id: user.id, user_nom: user.email }, process.env.REFRESH_TOKEN_SECRET!, { algorithm: "HS256", expiresIn: '15min' });
             const link = `${process.env.urlFront!}/reset?token=${refresh_token}`
 
-            const data = await this.authService.email({
-                from: process.env.EMAIL!, to: user.email, subject: 'Forgot password', text: 'Forgot password',
-                html: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+            const data = await this.emailService.sendMail(
+                  user.email, 'Forgot password',
+                 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                     link + '\n\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-            })
-
-            console.log(data);
+            )
             
-
             if(data) {
                 return res.status(200).json("email envoyé")
             }

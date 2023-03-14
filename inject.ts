@@ -22,6 +22,7 @@ import { AdminService } from "./services/admin.service";
 import { AuthService } from "./services/auth.service";
 import { CandidateService } from "./services/candidate.service";
 import { DegreeService } from "./services/degree.service";
+import { EmailService } from "./services/email.service";
 import { EmployerService } from "./services/employer.service";
 import { LocalisationService } from "./services/localisation.service";
 import { PeriodService } from "./services/period.service";
@@ -36,6 +37,6 @@ export const roleHandler = new RoleHandler(new RoleService(new RoleRepository())
 export const periodHandler = new PeriodHandler(new PeriodService(new PeriodRepository()));
 export const localisationHandler = new LocalisationHandler(new LocalisationService(new LocalisationRepository()));
 export const degreeHandler = new DegreeHandler(new DegreeService(new DegreeRepository()));
-export const authHandler = new AuthHandler(new AuthService(new AuthRepository()));
+export const authHandler = new AuthHandler(new AuthService(new AuthRepository()), new EmailService());
 export const candidateHandler = new CandidateHandler(new CandidateService(new CandidateRepository(), new UserRepository()));
 export const employerHandler = new EmployerHandler(new EmployerService(new EmployerRepository(), new UserRepository()));

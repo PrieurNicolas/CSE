@@ -12,5 +12,5 @@ export interface IServiceToken<T, D> {
     update(t: Partial<T>, id: number): Promise<number |boolean>;
     findUser(email: string): Promise<D | null>;
     findUT(id: number): Promise<D | null>; 
-    email(t:any) : Promise<any>;
+    // email(t:any) : Promise<any>;
 }
