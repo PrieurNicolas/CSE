@@ -12,7 +12,8 @@ export interface UserLoginDTO {
     id: number,
     email: string,
     password: string,
-    role: string
+    role: string,
+    idCE: number
 }
 export interface UserDTOAffichage {
     email: string,

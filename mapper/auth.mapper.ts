@@ -21,7 +21,8 @@ export class AuthMapper {
             id: user.id,
             email: user.email,
             password: user.password,
-            role: user.Roles[0].role
+            role: user.Roles[0].role,
+            idCE: user.idCE
         }
 
         return dto;

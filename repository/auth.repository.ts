@@ -1,4 +1,4 @@
-import { Role, Token, User } from "../database/connect";
+import { Candidate, Employer, Role, Token, User } from "../database/connect";
 import { AuthDTO } from "../DTO/auth.dto";
 import { UserLoginDTO } from "../DTO/user.dto";
 import { AuthMapper } from "../mapper/auth.mapper";
@@ -6,12 +6,34 @@ import { tokenId } from "../types/token";
 import { IRepositoryAuth } from "./core/repository.interface";
 
 export class AuthRepository implements IRepositoryAuth<AuthDTO, UserLoginDTO> {
-    findUser(email: string): Promise<UserLoginDTO | null> {
-        return User.findOne({
+    async findUser(email: string): Promise<UserLoginDTO | null> {
+        const user =await User.findOne({
             where: { email: email }, include: {
                 model: Role,
             }
-        }).then((user: any) => AuthMapper.mapToLoginDto(user))
+        })
+
+        let test = await Employer.findOne({
+            where: { UserId: user?.id}
+        })
+        console.log(user);
+        
+        // return user
+        if (test) {
+            user.idCE = test.id
+            console.log("contient")
+  
+        } else {
+            test = await Candidate.findOne({
+                where: { UserId: user?.id || 0}
+            })
+            console.log("ici c'est null : ", test);
+            
+            user.idCE = test.id
+        }
+
+        return AuthMapper.mapToLoginDto(user)
+
     }
     findUserToken(id: number): Promise<UserLoginDTO | null> {
         return Token.findOne({ where: { UserId: id } }).then((token: any) => AuthMapper.mapToDto(token))

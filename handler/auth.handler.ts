@@ -56,7 +56,7 @@ export class AuthHandler {
                     await this; this.authService.update({ refreshToken: refreshToken }, user.id)
                 }
 
-                return res.status(200).json({ successfullLogin: 'bien connecte', accessToken: accessToken, refreshToken: refreshToken, user: user.id, role: user.role })
+                return res.status(200).json({ successfullLogin: 'bien connecte', accessToken: accessToken, refreshToken: refreshToken, user: user.id, role: user.role, idCE: user.idCE })
             } else {
                 return res.status(401).json({ successfullLogin: false, message: 'non connecter' })
             }
