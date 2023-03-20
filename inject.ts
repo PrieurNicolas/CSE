@@ -37,6 +37,6 @@ export const roleHandler = new RoleHandler(new RoleService(new RoleRepository())
 export const periodHandler = new PeriodHandler(new PeriodService(new PeriodRepository()));
 export const localisationHandler = new LocalisationHandler(new LocalisationService(new LocalisationRepository()));
 export const degreeHandler = new DegreeHandler(new DegreeService(new DegreeRepository()));
-export const authHandler = new AuthHandler(new AuthService(new AuthRepository()), new EmailService());
+export const authHandler = new AuthHandler(new AuthService(new AuthRepository()), new EmailService(null));
 export const candidateHandler = new CandidateHandler(new CandidateService(new CandidateRepository(), new UserRepository()));
 export const employerHandler = new EmployerHandler(new EmployerService(new EmployerRepository(), new UserRepository()));

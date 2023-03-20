@@ -88,15 +88,6 @@ describe('RoleRepository', () => {
         })
     })
 
-    // describe('remove role', () => {
-    //     it("doit retourne supprime", async () => {
-    //         throw new Error
-    //     })
-    //     it("doit retourne non supprimé", async () => {
-    //         throw new Error
-    //     })
-    // })
-
     describe('Role update', () => {
         it("doit retourne les details du Role", async () => {
 
@@ -116,16 +107,14 @@ describe('RoleRepository', () => {
             expect(result).toEqual(expected)
             expect(Role.create).toHaveBeenCalledTimes(1)
 
-            const mockReponseU: RoleDTO = {
+            const mockResponseU: RoleDTO = {
                 role: "update"
             }
 
-            Role.update = jest.fn().mockResolvedValue(mockReponseU)
-            const result8 = await repo.update(mockReponseU, 1)
-
-            result!.role = mockReponseU.role
-
-            expect(result).toEqual(mockReponseU)
+            Role.update = jest.fn().mockResolvedValue(mockResponseU)
+            const a = Role.update(result)
+            
+            expect(await a).toEqual(mockResponseU)
             expect(Role.update).toHaveBeenCalledTimes(1)
         })
     })
