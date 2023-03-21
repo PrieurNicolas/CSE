@@ -1,6 +1,6 @@
 import { EmployerDTO } from "../DTO/employer.dto";
-import { degreeTypes } from "../types/degree";
-import { periodTypes } from "../types/period";
+import { degreeId, degreeTypes } from "../types/degree";
+import { periodId, periodTypes } from "../types/period";
 
 export class EmployerMapper {
     static mapToDto(Employer: any): EmployerDTO | null {
@@ -15,8 +15,8 @@ export class EmployerMapper {
                     zipCode: Employer.User.Localisation.zipCode,
                     city: Employer.User.Localisation.city,
                 },
-                Period: Employer.User.Periods.map((p: periodTypes) => ({ periodname: p.periodname })),
-                Degree: Employer.User.Degrees.map((d: degreeTypes) => ({ degreename: d.degreename })),
+                Period: Employer.User.Periods.map((p: periodId) => ({ periodname: p.periodname, id: p.id })),
+                Degree: Employer.User.Degrees.map((d: degreeId) => ({ degreename: d.degreename , id: d.id})),
             },
             siret: Employer.siret,
             structurename: Employer.structurename,
