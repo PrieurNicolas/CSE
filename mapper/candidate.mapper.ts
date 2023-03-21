@@ -10,6 +10,7 @@ export class CandidateMapper {
             lastname: candidate.lastname,
             birthday: candidate.birthday,
             wantToBe: candidate.wantToBe,
+            permis: candidate.permis,
             User: {
                 email: candidate.User.email,
                 phone: candidate.User.phone,

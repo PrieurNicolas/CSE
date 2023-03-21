@@ -39,5 +39,10 @@ module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
                 notEmpty: { msg: concatRequiredMessage('wantToBe missing') }
             }
         },
+        permis: {
+            type: dataTypes.STRING,
+            allowNull: false,
+            defaultValue: false
+        },
     })
 }

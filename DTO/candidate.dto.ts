@@ -6,5 +6,6 @@ export interface CandidateDTO {
     lastname: string,
     birthday: Date,
     wantToBe: string,
-    User : UserDTOAffichage,
+    permis: boolean,
+    User: UserDTOAffichage,
 }
