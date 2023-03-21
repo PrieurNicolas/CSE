@@ -36,8 +36,9 @@ export class CandidateHandler {
     postCandidate = async (req: Request, res: Response) => {
         try {
             const result = await this.CandidateService.create(req.body);
-            if(null) {
-                return  res.status(400).json("Email ou telephone deja utilisé")
+            
+            if(typeof result == "string"){
+                return  res.status(400).json(result)
             }
             res.status(200).json(result)
         } catch (err) {
@@ -59,6 +60,9 @@ export class CandidateHandler {
         const id = parseInt(req.params.id);
         try {
             const result = await this.CandidateService.update(req.body, id);
+            if(typeof result == "string") {
+                return  res.status(400).json(result)
+            }
             if(result.toString().length < 5 && result.toString() !== "0"){
                 return res.status(200).json( "mis a jour" );
             } else 

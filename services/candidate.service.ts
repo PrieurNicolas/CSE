@@ -24,17 +24,17 @@ export class CandidateService implements IService<CandidateDTO> {
             return CandidateDTO
         })
     }
-    async create(t: any): Promise<CandidateDTO | null> {
+    async create(t: any): Promise<CandidateDTO | null |string> {
         if (t.users.password.length > 4){
-            if (t.users.password !== t.users.passwordconf) return "mot de passe doit être identique a la confirmation mot de passe" as any
+            if (t.users.password !== t.users.passwordconf) return "mot de passe doit être identique a la confirmation mot de passe"
 
         }else {
-            return "mot de passe doit etre plus long" as any
+            return "mot de passe doit etre plus long"
         }
         t.users.password && (t.users.password = await bcrypt.hash(t.users.password, 10))
 
         if (!Number.isInteger(Number (t.users.phone) )){
-            return "Le numero de telephone doit être un nombre" as any
+            return "Le numero de telephone doit être un nombre"
         }
 
         t.users.email = t.users.email.toLowerCase();
@@ -49,20 +49,20 @@ export class CandidateService implements IService<CandidateDTO> {
             return good;
         })
     }
-    async update(t: any, id: number): Promise<number | boolean> {
+    async update(t: any, id: number): Promise<number | boolean |string> {
         if (t.users.password) {
             if (t.users.password.length > 4){
-                if (t.users.password !== t.users.passwordconf) return "mot de passe doit être identique a la confirmation mot de passe" as any
+                if (t.users.password !== t.users.passwordconf) return "mot de passe doit être identique a la confirmation mot de passe"
     
             }else {
-                return "mot de passe doit etre plus long" as any
+                return "mot de passe doit etre plus long"
             }
             t.users.password && (t.users.password = await bcrypt.hash(t.users.password, 10))
         }
 
         if (t.users.phone) {
             if (!Number.isInteger(Number (t.users.phone) )){
-                return "Le numero de telephone doit être un nombre" as any
+                return "Le numero de telephone doit être un nombre"
             }
         }
 
