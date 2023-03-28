@@ -42,6 +42,11 @@ module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
         isActif: {
             type: dataTypes.BOOLEAN,
             allowNull: false
+        },
+        image: {
+            type: dataTypes.STRING,
+            allowNull: false,
+            defaultValue: ""
         }
 
     })

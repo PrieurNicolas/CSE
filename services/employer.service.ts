@@ -3,13 +3,15 @@ import { UserDTO } from "../DTO/user.dto";
 import { IRepository, IRepositoryS } from "../repository/core/repository.interface";
 import { IService } from "./core/service.interface";
 import bcrypt from 'bcrypt'
+import ImageService from "./image.service";
 export class EmployerService implements IService<EmployerDTO> {
     private EmployerRepository: IRepositoryS<EmployerDTO>;
     private UserRepository: IRepository<UserDTO>;
-
+    private imageService: ImageService;
     constructor(_EmployerRepository: IRepositoryS<EmployerDTO>, _UserRepository: IRepository<UserDTO>) {
         this.EmployerRepository =_EmployerRepository;
         this.UserRepository =_UserRepository;
+        this.imageService = new ImageService();
     }
 
     findById(id: number): Promise<EmployerDTO | null> {
@@ -37,6 +39,14 @@ export class EmployerService implements IService<EmployerDTO> {
             return "Le numero de telephone doit être un nombre"
         }
 
+        if(t.files) {
+            try {
+                t.users.image = this.imageService.upload(t.files, t.candidate)
+            } catch (error) {
+                return error as any
+            }
+        }
+
         return this.EmployerRepository.create(t).then(EmployerDTO => {
             if(EmployerDTO === null) return null;
             return EmployerDTO
@@ -61,6 +71,14 @@ export class EmployerService implements IService<EmployerDTO> {
         if (t.users.phone) {
             if (!Number.isInteger(Number (t.users.phone) )){
                 return "Le numero de telephone doit être un nombre"
+            }
+        }
+
+        if(t.files) {
+            try {
+                t.users.image = this.imageService.upload(t.files, t.candidate)
+            } catch (error) {
+                return error as any
             }
         }
 

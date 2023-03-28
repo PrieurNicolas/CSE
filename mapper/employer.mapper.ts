@@ -9,6 +9,7 @@ export class EmployerMapper {
             User: {
                 email: Employer.User.email,
                 phone: Employer.User.phone,
+                image: process.env.local +Employer.User.image,
                 Localisation: {
                     id: Employer.User.Localisation.id,
                     address: Employer.User.Localisation.address,

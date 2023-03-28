@@ -3,13 +3,15 @@ import { UserDTO } from "../DTO/user.dto";
 import { IRepository, IRepositoryS } from "../repository/core/repository.interface";
 import { IService } from "./core/service.interface";
 import bcrypt from 'bcrypt'
+import ImageService from "./image.service";
 export class CandidateService implements IService<CandidateDTO> {
     private CandidateRepository: IRepositoryS<CandidateDTO>;
     private UserRepository: IRepository<UserDTO>;
-
+    private imageService: ImageService;
     constructor(_CandidateRepository: IRepositoryS<CandidateDTO>, _UserRepository: IRepository<UserDTO>) {
         this.CandidateRepository =_CandidateRepository;
         this.UserRepository =_UserRepository;
+        this.imageService = new ImageService();
     }
 
     findById(id: number): Promise<CandidateDTO | null> {
@@ -35,6 +37,14 @@ export class CandidateService implements IService<CandidateDTO> {
 
         if (!Number.isInteger(Number (t.users.phone) )){
             return "Le numero de telephone doit être un nombre"
+        }
+
+        if(t.files) {
+            try {
+                t.users.image = this.imageService.upload(t.files, t.candidate)
+            } catch (error) {
+                return error as any
+            }
         }
 
         t.users.email = t.users.email.toLowerCase();
@@ -63,6 +73,14 @@ export class CandidateService implements IService<CandidateDTO> {
         if (t.users.phone) {
             if (!Number.isInteger(Number (t.users.phone) )){
                 return "Le numero de telephone doit être un nombre"
+            }
+        }
+
+        if(t.files) {
+            try {
+                t.users.image = this.imageService.upload(t.files, t.candidate)
+            } catch (error) {
+                return error as any
             }
         }
 

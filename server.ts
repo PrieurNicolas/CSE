@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import log from './log';
 import fileUpload from 'express-fileupload';
+import ImageService from './services/image.service';
 
 const express = require("express")
 require("./socket")
@@ -25,11 +26,25 @@ app.use(fileUpload({
     tempFileDir: '/tmp/'
 }))
 
-app.post('/upload', function (req: any, res: any) { 
+
+//
+app.post('/upload', function (req: any, res: any) {
+    let a = new ImageService()
+    const result = a.upload(req.files, req.body)
+    return res.status(200).send(result)
 });
 
-
+////
 log(app);
+
+
+
+const cron = require('node-cron');
+
+cron.schedule('* * * * *', () => {
+  console.log('running a task every minutes');
+});
+
 
 const port = process.env.PORT || 5000
 app.listen(port, () => {

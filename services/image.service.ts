@@ -1,35 +1,42 @@
 export default class ImageService {
-    upload(req:any, res:any) {
+    upload(files: any, personne: any): string| void {
         const fs = require('fs');
         const path = require('path');
         let sampleFile;
         let uploadPath;
 
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).send('No files were uploaded.');
+        if (!files || Object.keys(files).length === 0) {
+            throw new Error('No files were uploaded.') ;
         }
 
         // Create img directory if it doesn't exist
-        const imgDir = path.join(__dirname, 'img');
+        const imgDir = path.join(__dirname, '../', 'img');
         if (!fs.existsSync(imgDir)) {
             fs.mkdirSync(imgDir);
         }
-        const date = (new Date(req.body.date).toLocaleDateString("fr-FR", {
-            month: "2-digit",
-            day: "2-digit"
-        }).split('/').join(''))
 
         // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-        sampleFile = req.files.sampleFile;
+        sampleFile = files.sampleFile;
         const defragFileName = sampleFile.name.split('.').length
         const extension = '.' + sampleFile.name.split('.')[defragFileName - 1]
-        uploadPath = path.join(imgDir, req.body.nom + req.body.prenom + date + extension);
+        let fileRegister = "";
+        if (personne.siret) {
+            uploadPath = path.join(imgDir, personne.siret + extension);
+        } else {
+            const date = (new Date(personne.birthday).toLocaleDateString("fr-FR", {
+                month: "2-digit",
+                day: "2-digit"
+            }).split('/').join(''))
+            fileRegister = personne.lastname + personne.firstname + date + extension
+            uploadPath = path.join(imgDir, fileRegister);
+        }
 
         // Use the mv() method to place the file somewhere on your server
-        sampleFile.mv(uploadPath, function (err: any) {
+        return sampleFile.mv(uploadPath, function (err: any) {
             if (err)
-                return res.status(500).send(err);
-            return res.status(200).send('File uploaded!');
+                throw new Error(err) ;
+            return fileRegister;
         });
+
     }
 };

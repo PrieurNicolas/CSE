@@ -18,6 +18,7 @@ export interface UserLoginDTO {
 export interface UserDTOAffichage {
     email: string,
     phone: number,
+    image: string,
     Localisation : LocalisationDTO,
     Period : PeriodDTO[],
     Degree: DegreeDTO[]
