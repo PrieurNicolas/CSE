@@ -30,6 +30,8 @@ const PeriodUserModel = require('../models/periodUsers')
 const DegreeUserModel = require('../models/degreeUsers')
 const RoleUserModel = require('../models/roleUsers')
 const MessageModel = require('../models/messages')
+const BannisModel = require('../models/bannis')
+const ReportModel = require('../models/report')
 
 export const sequelize = new Sequelize(
 //    "DatabaseCse",
@@ -68,6 +70,8 @@ export const PeriodUser = PeriodUserModel(sequelize, DataTypes)
 export const DegreeUser = DegreeUserModel(sequelize, DataTypes)
 export const RoleUser = RoleUserModel(sequelize, DataTypes)
 export const Message = MessageModel(sequelize, DataTypes)
+export const Bannis = BannisModel(sequelize, DataTypes)
+export const Report = ReportModel(sequelize, DataTypes)
 
 
 User.hasOne(Token, { onDelete: 'cascade', hooks: true })
@@ -81,6 +85,9 @@ Candidate.belongsTo(User, { foreignKey: 'UserId', onDelete: 'cascade', hooks: tr
 
 User.hasOne(Employer, { onDelete: 'cascade', hooks: true })
 Employer.belongsTo(User, { onDelete: 'cascade', hooks: true })
+
+User.hasOne(Report, { onDelete: 'cascade', hooks: true, as: "reporteur" })
+Report.belongsTo(User, { onDelete: 'cascade', hooks: true, as:"reporteur" })
 
 Degree.belongsToMany(User, { through: DegreeUser })
 User.belongsToMany(Degree, { through: DegreeUser })

@@ -8,6 +8,8 @@ import { roleController } from "./roleController"
 import { periodController } from './periodController';
 import { localisationController } from './localisationController';
 import { authController } from "./authController";
+import { bannisController } from "./bannisController";
+import { reportController } from "./reportController";
 
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
@@ -42,5 +44,7 @@ apiController.use('/employers', employerController)
 apiController.use('/degrees', degreeController)
 apiController.use('/candidates', candidateController)
 apiController.use('/auth', authController)
+apiController.use('/ban', bannisController)
+apiController.use('/report', reportController)
 
 export { apiController }

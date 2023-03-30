@@ -26,18 +26,7 @@ app.use(fileUpload({
     tempFileDir: '/tmp/'
 }))
 
-
-//
-app.post('/upload', function (req: any, res: any) {
-    let a = new ImageService()
-    const result = a.upload(req.files, req.body)
-    return res.status(200).send(result)
-});
-
-////
 log(app);
-
-
 
 const cron = require('node-cron');
 
