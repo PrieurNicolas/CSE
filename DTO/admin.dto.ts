@@ -1,5 +1,6 @@
 export interface AdminDTO {
     id: number,
     email: number,
-    role: string
+    role: string,
+    isActif: boolean
 }

@@ -6,7 +6,8 @@ export class AdminMapper {
         const dto: AdminDTO = {
             id: admin.id,
             email: admin.email,
-            role: admin.Roles[0].role
+            role: admin.Roles[0].role,
+            isActif: admin.isActif
         }
 
         return dto;

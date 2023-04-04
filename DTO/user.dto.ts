@@ -20,6 +20,7 @@ export interface UserDTOAffichage {
     phone: number,
     image: string,
     Localisation : LocalisationDTO,
+    isActif: boolean,
     Period : PeriodDTO[],
     Degree: DegreeDTO[]
 }
