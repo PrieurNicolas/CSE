@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import log from './log';
 import fileUpload from 'express-fileupload';
-import ImageService from './services/image.service';
+import dailyTask from './cron';
 
 const express = require("express")
 require("./socket")
@@ -27,13 +27,7 @@ app.use(fileUpload({
 }))
 
 log(app);
-
-const cron = require('node-cron');
-
-cron.schedule('* * * * *', () => {
-  console.log('running a task every minutes');
-});
-
+dailyTask();
 
 const port = process.env.PORT || 5000
 app.listen(port, () => {

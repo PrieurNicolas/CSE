@@ -47,6 +47,11 @@ module.exports = (sequelize: Sequelize, dataTypes: typeof DataTypes) => {
             type: dataTypes.STRING,
             allowNull: false,
             defaultValue: ""
+        },
+        lastConnection: {
+            type: dataTypes.DATE,
+            allowNull: false,
+            defaultValue: new Date()
         }
 
     })

@@ -6,6 +6,9 @@ export interface UserDTO {
     id: number,
     email: string,
     phone: number,
+    lastConnection: Date,
+    isActif: boolean,
+    LocalisationId: number
 }
 
 export interface UserLoginDTO {

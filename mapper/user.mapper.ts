@@ -7,7 +7,10 @@ export class UserMapper {
         const dto: UserDTO = {
             id: user.id,
             email: user.email,
-            phone: user.phone
+            phone: user.phone,
+            lastConnection: user.lastConnection,
+            isActif: user.isActif,
+            LocalisationId: user.LocalisationId
         }
 
         return dto;

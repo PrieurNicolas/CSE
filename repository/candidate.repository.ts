@@ -98,7 +98,7 @@ export class CandidateRepository implements IRepositoryS<CandidateDTO>{
                 where: {
                     email: c!.User.email
                 }
-            })
+            }, {transaction:transaction})
             await Localisation.destroy({ where: { id: c!.User.Localisation.id } }, { transaction: transaction })
             await transaction.commit();
 
