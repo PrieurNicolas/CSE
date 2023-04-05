@@ -71,21 +71,25 @@ export class AuthHandler {
         if (user) {
             const refresh_token = jwt.sign({ id: user.id, user_nom: user.email }, process.env.REFRESH_TOKEN_SECRET!, { algorithm: "HS256", expiresIn: '15min' });
             const link = `${process.env.urlFront!}/reset?token=${refresh_token}`
-
-            const data = await this.emailService.sendMail(
-                  user.email, 'Forgot password',
-                 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+            try {
+                const data = await this.emailService.sendMail(
+                    user.email, 'Forgot password',
+                    'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                     'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                     link + '\n\n' +
                     'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-            )
-            
-            if(data) {
-                return res.status(200).json("email envoyé")
+                )
+
+                if (data) {
+                    return res.status(200).json("email envoyé")
+                }
+                return res.status(500).json("email non envoyé")
+            } catch (error) {
+                return res.status(500).json("email non envoyé")
             }
-            return res.status(500).json("email non envoyé")
+
         } else {
-            return res.status(401).json("email incorrect")
+            return res.status(400).json("email incorrect")
         }
     }
 }

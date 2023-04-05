@@ -34,26 +34,4 @@ export class AuthService implements IServiceToken<AuthDTO, UserLoginDTO> {
     async update(t: AuthDTO, id: number): Promise<number | boolean> {
         return this.authRepo.update(t, id).then(good => good)
     }
-
-    // async email(mailData: any): Promise<any> {
-    //     let nodemailer = require("nodemailer");
-    //     const transporter = nodemailer.createTransport({
-    //         port: 465,
-    //         host: "smtp.gmail.com",
-    //         auth: {
-    //             user: process.env.EMAIL!,
-    //             pass: process.env.MDP_EMAIL,
-    //         },
-    //         secure: true,
-
-    //     });
-    //     try {
-    //         await transporter.sendMail(mailData);
-    //         return true
-    //       } catch (error) {
-    //         return false
-    //       }
-        
-    // }
-
 }
