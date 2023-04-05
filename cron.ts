@@ -2,6 +2,8 @@ import { UserRepository } from "./repository/user.repository";
 
 
 const cron = require('node-cron');
+
+//fonction pour calculer le temps en année entre deux date
 function dateDiff(dateold: Date, datenew: Date) {
     const ynew = datenew.getFullYear();
     const mnew = datenew.getMonth();
@@ -26,6 +28,7 @@ function dateDiff(dateold: Date, datenew: Date) {
 export default function dailyTask() {
     cron.schedule('0 0 23 * * *', async () => {
         let userRepository = new UserRepository()
+        //application non ouvert depuis un ans = inactif
         const usersActif = (await userRepository.findAll()).filter(user => {
             if (!user.isActif) return false
             let annee = dateDiff(user.lastConnection, new Date())
@@ -36,6 +39,7 @@ export default function dailyTask() {
             userRepository.update(user, user.id)
         })
 
+        //inactif depuis plus de deux ans = viré  
         const usersInactif = (await userRepository.findAll()).filter(user => {
             if (user.isActif) return false
             let annee = dateDiff(user.lastConnection, new Date())

@@ -34,9 +34,6 @@ const BannisModel = require('../models/bannis')
 const ReportModel = require('../models/report')
 
 export const sequelize = new Sequelize(
-//    "DatabaseCse",
-//     'alexis',
-//     '123456',
     `${process.env.NAME_DATABASE}`,
     `${process.env.HOST_DATABASE}`,
     `${process.env.PASS_DATABASE}`,
@@ -52,11 +49,6 @@ export const sequelize = new Sequelize(
         timezone: '+02:00'
     }
 )
-
-// sequelize.authenticate()
-//     .then(() => console.log('Link established'))
-//     .catch((error: Error) => console.error(`Error: ${error}`)
-//     )
 
 export const User = UserModel(sequelize, DataTypes)
 export const Token = TokenModel(sequelize, DataTypes)

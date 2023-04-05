@@ -8,28 +8,35 @@ import log from './log';
 import fileUpload from 'express-fileupload';
 import dailyTask from './cron';
 
-const express = require("express")
-require("./socket")
-const app = express()
+const express = require("express");
+require("./socket");
+const app = express();
 app.disable('x-powered-by');
 
 // Pour recréer DB, à commenter sinon
 // initDb()
 //
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
+//utilisation de helmet pour modifier le header de reponse 
 app.use(helmet());
-app.use('/img', express.static('img'))
+
+//utilise le dossier image comme route pour recupéré celle ci
+app.use('/img', express.static('img'));
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: '/tmp/'
 }))
 
+// function qui permet d'avoir les logs de l'application
 log(app);
+
+// fonction pour les taches crons 
 dailyTask();
 
-const port = process.env.PORT || 5000
+// le port sur lequel le serveur tourne sois defini par l'environnement soit 5000 par default
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`)
 })

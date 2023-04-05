@@ -1,6 +1,7 @@
 import { NextFunction } from "express"
 import jwt from 'jsonwebtoken'
 
+//fonction qui verifie si le haeders a le token valide pour acceder a une route specifique
 export default function authenticateToken(req: any, res: any, next: NextFunction) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]

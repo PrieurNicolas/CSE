@@ -1,4 +1,4 @@
-import { createTransport, Transporter } from 'nodemailer';
+import { Transporter } from 'nodemailer';
 import { SentMessageInfo } from 'nodemailer';
 import { Options } from 'nodemailer/lib/smtp-transport';
 
@@ -33,7 +33,7 @@ export class EmailService {
           subject,
           text,
         };
-        // console.log(this.transporter)
+
         const info = await this.transporter.sendMail(message);
         return info;
       }
