@@ -36,6 +36,7 @@
     "nodemon": "^2.0.20",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
+    "rotating-file-stream": "^3.1.0",
     "sequelize": "^6.23.1",
     "socket.io": "^4.5.3",
     "swagger-jsdoc": "^6.2.5",

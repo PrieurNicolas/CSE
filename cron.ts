@@ -1,4 +1,5 @@
 import { UserRepository } from "./repository/user.repository";
+import { EmailService } from "./services/email.service";
 
 
 const cron = require('node-cron');
@@ -29,25 +30,44 @@ export default function dailyTask() {
     cron.schedule('0 0 23 * * *', async () => {
         let userRepository = new UserRepository()
         //application non ouvert depuis un ans = inactif
+
         const usersActif = (await userRepository.findAll()).filter(user => {
             if (!user.isActif) return false
             let annee = dateDiff(user.lastConnection, new Date())
             return annee
         })
+
         usersActif.forEach((user) => {
             user.isActif = false
             userRepository.update(user, user.id)
         })
 
-        //inactif depuis plus de deux ans = viré  
+    
+        //inactif depuis plus de 3 ans = viré  
         const usersInactif = (await userRepository.findAll()).filter(user => {
             if (user.isActif) return false
             let annee = dateDiff(user.lastConnection, new Date())
-            if (annee >= 2) return true
+            if (annee >= 3) return true
             return false
         })
-        usersInactif.forEach((user) => {
-            userRepository.delete(user.id)
+
+        let emailService = new EmailService(null)
+        usersInactif.forEach(async (user) => {
+            try {
+                const data = await emailService.sendMail(
+                    user.email, 'end service',
+                   'Hello, tu reçois ce mail pour te dire que nous supprimont toutes tes données, si tu veux revenir il faudra t\'inscrire '
+                )
+                if (data) {
+                    console.log(data)
+                }else {
+                    console.log("pas reussi")
+                }
+            } catch (error) {
+                console.log(error)
+            }
+
+            await userRepository.delete(user.id)
         })
     });
 

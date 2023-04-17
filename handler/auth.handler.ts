@@ -53,9 +53,9 @@ export class AuthHandler {
                 if (token == null) {
                     await this.authService.create({ refreshToken: refreshToken, UserId: user.id, tokenPush: refreshToken })
                 } else {
-                    await this; this.authService.update({ refreshToken: refreshToken }, user.id)
+                    await this.authService.update({ refreshToken: refreshToken }, user.id)
                 }
-
+                //TODO set isActif true for candidates only, entreprise directement supprimé apres 3ans d'inactivité
                 return res.status(200).json({ successfullLogin: 'bien connecte', accessToken: accessToken, refreshToken: refreshToken, user: user.id, role: user.role, idCE: user.idCE })
             } else {
                 return res.status(401).json({ successfullLogin: false, message: 'non connecter' })
@@ -67,11 +67,11 @@ export class AuthHandler {
     }
 
     forgotpsw = async (req: Request, res: Response) => {
-        const user = await this.authService.findUser(req.body.email)
-        if (user) {
-            const refresh_token = jwt.sign({ id: user.id, user_nom: user.email }, process.env.REFRESH_TOKEN_SECRET!, { algorithm: "HS256", expiresIn: '15min' });
-            const link = `${process.env.urlFront!}/reset?token=${refresh_token}`
-            try {
+        try {
+            const user = await this.authService.findUser(req.body.email)
+            if (user) {
+                const refresh_token = jwt.sign({ id: user.id, user_nom: user.email }, process.env.REFRESH_TOKEN_SECRET!, { algorithm: "HS256", expiresIn: '15min' });
+                const link = `${process.env.urlFront!}/reset?token=${refresh_token}`
                 const data = await this.emailService.sendMail(
                     user.email, 'Forgot password',
                     'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -84,12 +84,12 @@ export class AuthHandler {
                     return res.status(200).json("email envoyé")
                 }
                 return res.status(500).json("email non envoyé")
-            } catch (error) {
+
+            } else {
                 return res.status(500).json("email non envoyé")
             }
-
-        } else {
-            return res.status(400).json("email incorrect")
+        } catch (error) {
+            return res.status(500).json("email non envoyé")
         }
     }
 }
