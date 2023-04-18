@@ -1,3 +1,4 @@
+import { CandidateRepository } from "./repository/candidate.repository";
 import { UserRepository } from "./repository/user.repository";
 import { EmailService } from "./services/email.service";
 
@@ -28,18 +29,21 @@ function dateDiff(dateold: Date, datenew: Date) {
 
 export default function dailyTask() {
     cron.schedule('0 0 23 * * *', async () => {
+        let candidatRepository = new CandidateRepository()
         let userRepository = new UserRepository()
         //application non ouvert depuis un ans = inactif
+        // TODO pour candidat uniquement
 
-        const usersActif = (await userRepository.findAll()).filter(user => {
-            if (!user.isActif) return false
-            let annee = dateDiff(user.lastConnection, new Date())
+
+        const usersActif = (await candidatRepository.findAll()).filter(user => {
+            if (!user.User.isActif) return false
+            let annee = dateDiff(user.User.lastConnection, new Date())
             return annee
         })
 
         usersActif.forEach((user) => {
-            user.isActif = false
-            userRepository.update(user, user.id)
+            user.User.isActif = false
+            candidatRepository.update(user, user.id)
         })
 
     

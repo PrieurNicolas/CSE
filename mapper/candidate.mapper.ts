@@ -16,6 +16,7 @@ export class CandidateMapper {
                 phone: candidate.User.phone,
                 image: process.env.local +candidate.User.image,
                 isActif: candidate.User.isActif,
+                lastConnection: candidate.User.lastConnection,
                 Localisation: {
                     id: candidate.User.Localisation.id,
                     address: candidate.User.Localisation.address,

@@ -16,18 +16,15 @@ export class AuthRepository implements IRepositoryAuth<AuthDTO, UserLoginDTO> {
         let test = await Employer.findOne({
             where: { UserId: user?.id}
         })
-        console.log(user);
         
         // return user
         if (test) {
             user.idCE = test.id
-            console.log("contient")
   
         } else {
             test = await Candidate.findOne({
                 where: { UserId: user?.id || 0}
             })
-            console.log("ici c'est null : ", test);
             
             user.idCE = test.id
         }

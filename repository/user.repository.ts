@@ -32,7 +32,7 @@ export class UserRepository implements IRepository<UserDTO>{
             return false
         }
     }
-    async update(t: UserDTO, id: number): Promise<number | boolean> {
+    async update(t: any, id: number): Promise<number | boolean> {
         return User.update(t, {where: {id: id}}).then(((good: boolean[]) => good[0]))
     }
 

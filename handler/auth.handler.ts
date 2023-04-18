@@ -5,6 +5,8 @@ import { UserLoginDTO } from "../DTO/user.dto";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import { EmailService } from "../services/email.service";
+import { UserService } from "../services/user.service";
+import { UserRepository } from "../repository/user.repository";
 export class AuthHandler {
 
     private authService: IServiceToken<AuthDTO, UserLoginDTO>;
@@ -46,6 +48,11 @@ export class AuthHandler {
             if (await bcrypt.compare(req.body.password, user.password)) {
                 const accessToken = jwt.sign({ name: user.id }, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: '15s' })
                 const refreshToken = jwt.sign({ name: user.id }, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: '1Y' })
+                if(user.role == "CANDIDAT"){
+                    let userRepo = new UserRepository()
+                    await userRepo.update({isActif: true}, user.id)
+                }
+                console.log(user.role)
 
 
                 const token = await this.authService.findUT(user.id);
@@ -55,7 +62,7 @@ export class AuthHandler {
                 } else {
                     await this.authService.update({ refreshToken: refreshToken }, user.id)
                 }
-                //TODO set isActif true for candidates only, entreprise directement supprimé apres 3ans d'inactivité
+                //TODO set isActif true for candidates only
                 return res.status(200).json({ successfullLogin: 'bien connecte', accessToken: accessToken, refreshToken: refreshToken, user: user.id, role: user.role, idCE: user.idCE })
             } else {
                 return res.status(401).json({ successfullLogin: false, message: 'non connecter' })

@@ -11,6 +11,7 @@ export class EmployerMapper {
                 phone: Employer.User.phone,
                 image: process.env.local +Employer.User.image,
                 isActif: Employer.User.isActif,
+                lastConnection: Employer.User.lastConnection,
                 Localisation: {
                     id: Employer.User.Localisation.id,
                     address: Employer.User.Localisation.address,
