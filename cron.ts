@@ -32,8 +32,6 @@ export default function dailyTask() {
         let candidatRepository = new CandidateRepository()
         let userRepository = new UserRepository()
         //application non ouvert depuis un ans = inactif
-        // TODO pour candidat uniquement
-
 
         const usersActif = (await candidatRepository.findAll()).filter(user => {
             if (!user.User.isActif) return false

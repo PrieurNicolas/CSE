@@ -52,8 +52,6 @@ export class AuthHandler {
                     let userRepo = new UserRepository()
                     await userRepo.update({isActif: true}, user.id)
                 }
-                console.log(user.role)
-
 
                 const token = await this.authService.findUT(user.id);
 
@@ -62,7 +60,7 @@ export class AuthHandler {
                 } else {
                     await this.authService.update({ refreshToken: refreshToken }, user.id)
                 }
-                //TODO set isActif true for candidates only
+                
                 return res.status(200).json({ successfullLogin: 'bien connecte', accessToken: accessToken, refreshToken: refreshToken, user: user.id, role: user.role, idCE: user.idCE })
             } else {
                 return res.status(401).json({ successfullLogin: false, message: 'non connecter' })
