@@ -11,11 +11,11 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER_NAME }}
         key: ${{ secrets.PRIVATE_KEY }}
-        port: 22
+        port: 50555
         script: |
-          cd ~/DevCda/CSE
+          cd ~/CSE/CSE
           pwd
-          git pull origin master
+          git pull origin gaetan
           git status
           npm install
           npm run build

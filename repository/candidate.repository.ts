@@ -139,8 +139,8 @@ export class CandidateRepository implements IRepositoryS<CandidateDTO>{
             if (t.users) {
                 await User.update(t.users, { where: { id: candidatFull.UserId }, transaction: transaction })
             }
-            if (t.candidat) {
-                await Candidate.update(t.candidat, { where: { id: id }, transaction: transaction })
+            if (t.candidate) {
+                await Candidate.update(t.candidate, { where: { id: id }, transaction: transaction })
             }
 
             const user = await User.findByPk(candidatFull.UserId, { transaction: transaction });
