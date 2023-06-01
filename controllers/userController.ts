@@ -27,6 +27,11 @@ const usersController = Router();
  */
 usersController.get("/", userHandler.getUsers)
 
+
+
+
+usersController.post("/contact", userHandler.contact)
+
 /**
  * @openapi
  * /api/users/{id}:

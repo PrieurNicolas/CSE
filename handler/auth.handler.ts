@@ -36,15 +36,11 @@ export class AuthHandler {
     }
 
     login = async (req: Request, res: Response) => {
-
         try {
             const user = await this.authService.findUser(req.body.email);
-
-
             if (user == null) {
                 return res.status(401).json({ userFound: false, message: "utilisateur non trouvé" })
             }
-
             if (await bcrypt.compare(req.body.password, user.password)) {
                 const accessToken = jwt.sign({ name: user.id }, process.env.ACCESS_TOKEN_SECRET!, { expiresIn: '15s' })
                 const refreshToken = jwt.sign({ name: user.id }, process.env.REFRESH_TOKEN_SECRET!, { expiresIn: '1Y' })
@@ -53,14 +49,13 @@ export class AuthHandler {
                     await userRepo.update({isActif: true}, user.id)
                 }
 
+                
                 const token = await this.authService.findUT(user.id);
-
                 if (token == null) {
                     await this.authService.create({ refreshToken: refreshToken, UserId: user.id, tokenPush: refreshToken })
                 } else {
                     await this.authService.update({ refreshToken: refreshToken }, user.id)
                 }
-                
                 return res.status(200).json({ successfullLogin: 'bien connecte', accessToken: accessToken, refreshToken: refreshToken, user: user.id, role: user.role, idCE: user.idCE })
             } else {
                 return res.status(401).json({ successfullLogin: false, message: 'non connecter' })

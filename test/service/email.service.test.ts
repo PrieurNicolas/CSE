@@ -24,5 +24,4 @@ describe('EmailService', () => {
         
         expect(info).toBeDefined();
     });
-
 });

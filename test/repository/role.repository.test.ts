@@ -23,9 +23,7 @@ describe('RoleRepository', () => {
 
             const repo = new RoleRepository()
             Role.findOne = jest.fn().mockResolvedValue(mockReponse)
-
             const result = await repo.findById(id)
-
             expect(result).toEqual(expected)
             expect(Role.findOne).toHaveBeenCalledTimes(1)
             expect(Role.findOne).toBeCalledWith({

@@ -1,12 +1,12 @@
 import { UserDTO } from "../DTO/user.dto";
-import { IService } from "../services/core/service.interface";
+import { IServiceU } from "../services/core/service.interface";
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 
 export class UserHandler {
-    private UserService: IService<UserDTO>;
+    private UserService: IServiceU<UserDTO>;
 
-    constructor(service: IService<UserDTO>) {
+    constructor(service: IServiceU<UserDTO>) {
         this.UserService = service;
     }
 
@@ -64,6 +64,17 @@ export class UserHandler {
             }
             const result = await this.UserService.update(req.body, id);
             res.status(200).json(result ? "mis a jour" : "fail");
+        } catch (err) {
+            res.status(500).json(err)
+        }
+    }
+
+    contact = async (req: Request, res: Response) => {
+        const id = parseInt(req.params.id);
+        try {
+            
+            const result = await this.UserService.contact(req.body.email, req.body.connecter);
+            res.status(200).json(result ? "envoyé" : "non envoyé");
         } catch (err) {
             res.status(500).json(err)
         }
