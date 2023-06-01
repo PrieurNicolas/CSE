@@ -6,7 +6,7 @@ jobs:
 
     steps:
     - name: Deploy using ssh
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@gaetan
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USER_NAME }}
