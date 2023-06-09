@@ -19,15 +19,19 @@ describe('CandidateRepository', () => {
                 User: {
                     email: "lucfate@test.com",
                     phone: 2345676,
-                    Localisation : {
+                    Localisation: {
                         id: 1,
                         address: "address",
                         zipCode: 62176,
                         city: "city"
                     },
-                    Period : [],
-                    Degree: []
-                }
+                    Period: [],
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
+                },
+                permis: false
             }
 
             Candidate.findOne = jest.fn().mockResolvedValue(expected)
@@ -47,14 +51,17 @@ describe('CandidateRepository', () => {
                     firstname: "a",
                     lastname: "a",
                     birthday: new Date("1999-01-01"),
-                    wantToBe: "a"
+                    wantToBe: "a",
+                    permis:false
                   },
                   users: {
                     password: "string",
                     passwordconf: "string",
                     email: "lucfate@test.com",
                     phone: "2345676",
-                    isActif: true
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                   },
                   localisation: {
                     address: "address",
@@ -75,6 +82,7 @@ describe('CandidateRepository', () => {
                 lastname: "a",
                 birthday: new Date("1999-01-01"),
                 wantToBe: "a",
+                permis: false,
                 User: {
                     email: "lucfate@test.com",
                     phone: 2345676,
@@ -85,7 +93,11 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period : [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
+                    
                 }
             }]
 
@@ -108,14 +120,17 @@ describe('CandidateRepository', () => {
                     firstname: "a",
                     lastname: "a",
                     birthday: new Date("1999-01-01"),
-                    wantToBe: "a"
+                    wantToBe: "a",
+                    permis: false
                   },
                   users: {
                     password: "string",
                     passwordconf: "string",
                     email: "lucfate@test.com",
                     phone: "2345676",
-                    isActif: true
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                   },
                   localisation: {
                     address: "address",
@@ -139,15 +154,19 @@ describe('CandidateRepository', () => {
                 User: {
                     email: "lucfate@test.com",
                     phone: 2345676,
-                    Localisation : {
+                    Localisation: {
                         id: 1,
                         address: "address",
                         zipCode: 62176,
                         city: "city"
                     },
-                    Period : [],
-                    Degree: []
-                }
+                    Period: [],
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
+                },
+                permis: false
             }
 
             Candidate.create = jest.fn().mockResolvedValue(expected)
@@ -169,14 +188,17 @@ describe('CandidateRepository', () => {
                     firstname: "a",
                     lastname: "a",
                     birthday: new Date("1999-01-01"),
-                    wantToBe: "a"
+                    wantToBe: "a",
+                    permis:false
                   },
                   users: {
                     password: "string",
                     passwordconf: "string",
                     email: "lucfate@test.com",
                     phone: "2345676",
-                    isActif: true
+                    isActif: true,
+                    image: '',
+                    lastConnection: new Date('2000-01-01')
                   },
                   localisation: {
                     address: "address",
@@ -197,6 +219,7 @@ describe('CandidateRepository', () => {
                 lastname: "a",
                 birthday: new Date("1999-01-01"),
                 wantToBe: "a",
+                permis: false,
                 User: {
                     email: "lucfate@test.com",
                     phone: 2345676,
@@ -207,7 +230,10 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period : [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 }
             }
 
@@ -225,6 +251,7 @@ describe('CandidateRepository', () => {
                 lastname: "a",
                 birthday: new Date("1999-01-01"),
                 wantToBe: "a",
+                permis:false,
                 User: {
                     email: "lucfate@test.com",
                     phone: 2345676,
@@ -235,7 +262,10 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period : [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 }
             }
 

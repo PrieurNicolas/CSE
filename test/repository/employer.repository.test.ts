@@ -25,7 +25,10 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period: [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 }
             }
 
@@ -51,7 +54,9 @@ describe('CandidateRepository', () => {
                     passwordconf: "string",
                     email: "lucfate@test.com",
                     phone: "2345676",
-                    isActif: true
+                    isActif: true,
+                    image: '',
+                    lastConnection: new Date('2000-01-01')
                 },
                 localisation: {
                     address: "address",
@@ -80,7 +85,10 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period: [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 }
             }]
 
@@ -108,7 +116,9 @@ describe('CandidateRepository', () => {
                     passwordconf: "string",
                     email: "lucfate@test.com",
                     phone: "2345676",
-                    isActif: true
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 },
                 localisation: {
                     address: "address",
@@ -137,7 +147,10 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period: [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 }
             }
 
@@ -165,7 +178,9 @@ describe('CandidateRepository', () => {
                     passwordconf: "string",
                     email: "lucfate@test.com",
                     phone: "2345676",
-                    isActif: true
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 },
                 localisation: {
                     address: "address",
@@ -194,7 +209,10 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period: [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 }
             }
 
@@ -220,7 +238,10 @@ describe('CandidateRepository', () => {
                         city: "city"
                     },
                     Period: [],
-                    Degree: []
+                    Degree: [],
+                    image: '',
+                    isActif: true,
+                    lastConnection: new Date('2000-01-01')
                 }
             }
 

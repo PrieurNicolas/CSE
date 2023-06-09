@@ -57,7 +57,7 @@ export default function dailyTask() {
         usersInactif.forEach(async (user) => {
             try {
                 const data = await emailService.sendMail(
-                    user.email, 'end service',
+                    user.email, 'Fin du service',
                    'Hello, tu reçois ce mail pour te dire que nous supprimont toutes tes données, si tu veux revenir il faudra t\'inscrire '
                 )
                 if (data) {
